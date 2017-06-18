@@ -6,190 +6,108 @@
 
 void MeritFunction::setMeritFunction(int intParam){
 
-    int wordLength = 1;
+    int photons = 3;
+    int modesAlice = 2;
+    int modesBob = 2;
 
-    int ancillaPhotons = 0;
-    int ancillaModes = 0;
+    int ancillaPhotons = 1;
+    int ancillaModes = 2;
 
-    int photons = 2 * wordLength + ancillaPhotons;
-    int modes = 4 * wordLength + ancillaModes;
+    int numberOfStates = 8;
 
-    Eigen::MatrixXi inBasis, outBasis;
+    int totalPhotons = photons + ancillaPhotons;
+    int totalModes = modesAlice + modesBob + ancillaModes;
 
-    setToFullHilbertSpace(photons,modes,outBasis);
+    UAlice.resize(numberOfStates);
 
-    setInbasisAndPsi(inBasis,wordLength,ancillaPhotons,ancillaModes);
+    for(int i=0;i<numberOfStates;i++) UAlice.at(i) = Eigen::MatrixXcd::Identity(modesAlice,modesAlice);
+
+    UBob = Eigen::MatrixXcd::Identity( totalModes,totalModes );
+
+    int initialStateDim = g(photons,modesAlice + modesBob);
+
+    int ancillaStateDim = g(ancillaPhotons,ancillaModes);
+
+    funcDimension = 2 * initialStateDim + 2 * ancillaStateDim + numberOfStates * modesAlice * modesAlice + totalModes * totalModes;
+
+    Eigen::MatrixXi inBasis,outBasis,ancillaBasis;
+
+    setToFullHilbertSpace(totalPhotons,totalModes,outBasis);
+
+    setToFullHilbertSpace(ancillaPhotons,ancillaModes,ancillaBasis);
+
+    setInBasis(ancillaBasis,photons,modesAlice+modesBob,inBasis);
+
+    std::cout << "InBasis:\n" << inBasis << std::endl << std::endl;
+    std::cout << "OutBasis: \n" << outBasis << std::endl << std::endl;
 
     LOCircuit.initializeCircuit(inBasis,outBasis);
 
-    funcDimension = modes * modes;
-
-    U = Eigen::MatrixXcd::Identity(modes,modes);
-
     return;
 
 }
 
-void MeritFunction::setInbasisAndPsi(Eigen::MatrixXi& inBasis,int wordLength,int ancillaPhotons,int ancillaModes){
 
-    int photons = 2 * wordLength + ancillaPhotons;
-    int modes = 4 * wordLength + ancillaModes;
 
-    Eigen::VectorXcd psiBell[4];
+Eigen::VectorXd MeritFunction::setInitialPosition(){
 
-    Eigen::VectorXi psiBellBasis[4];
+    Eigen::VectorXd output = PI * Eigen::VectorXd::Random(funcDimension);
 
-    for(int i=0;i<4;i++) psiBell[i].resize(4);
-    for(int i=0;i<4;i++) psiBellBasis[i].resize(4);
+    int aSize;
 
-    psiBellBasis[0] << 1,0,1,0;
-    psiBellBasis[1] << 0,1,0,1;
-    psiBellBasis[2] << 1,0,0,1;
-    psiBellBasis[3] << 0,1,1,0;
-
-    psiBell[0] << 1.0/sqrt(2.0),  1.0/sqrt(2.0),                 0,    0;
-    psiBell[1] << 1.0/sqrt(2.0), -1.0/sqrt(2.0),                 0,    0;
-    psiBell[2] << 0,                          0,      1.0/sqrt(2.0),   1.0/sqrt(2.0);
-    psiBell[3] << 0,                          0,      1.0/sqrt(2.0),  -1.0/sqrt(2.0);
-
-    Eigen::MatrixXcd nonOrthPsiGen(4,4);
     std::complex<double> I(0.0,1.0);
 
-    nonOrthPsiGen <<    0.977274,	-0.074431+0.198483*I,	0,	0,
-                        0.074431 +0.198483*I,	0.977274,	0,	0,
-                        0,	0,	1.,	0,
-                        0,	0,	0,	1.;
+    for(int i=0;i<UAlice.size();i++){
 
+        for(int j=0;j<INITIAL_CONDITION_RANDOM_DEGREE;j++){
 
-
-
-
-    psiBell[0] = nonOrthPsiGen * psiBell[0];
-
-//    nonOrthPsiGen << 0.168868 +0.30214 *I,	-0.2906-0.363023 *I,	-0.512209-0.4431 *I,	0.434652 -0.127838 *I,
-//                    -0.516986-0.166408 *I,	-0.0274105+0.627316 *I,	-0.151741-0.120282 *I,	0.522702 +0.00679282 *I,
-//                    -0.679094+0.315506 *I,	-0.411681-0.277595 *I,	-0.11694+0.333938 *I,	-0.218589+0.140632 *I,
-//                    0.154368 +0.026212 *I,	0.375968 -0.0399698 *I,	-0.473875+0.39251 *I,	0.173005 +0.651139 *I;
-//
-//    psiBell[1] = nonOrthPsiGen * psiBell[1];
-//
-//    nonOrthPsiGen << 0.891312 -0.102086 *I,	0.15643 -0.152356 *I,	-0.0825417-0.366368 *I,	0.0111417 +0.0793449 *I,
-//                    -0.103664+0.0599398 *I,	0.640907 -0.697416 *I,	-0.0142119+0.29628 *I,	0.0203012 -0.0106868 *I,
-//                    -0.0598877-0.418335 *I,	0.210226 +0.0828867 *I,	0.842687 -0.140316 *I,	-0.154087+0.12958 *I,
-//                     0.0227513 +0.0411567 *I,	-0.0497852+0.0402866 *I,	0.0168252 +0.202197 *I,	0.46339 +0.858947 *I;
-//
-//    psiBell[2] = nonOrthPsiGen * psiBell[2];
-//
-//    nonOrthPsiGen << 0.195441 +0.861182 *I,	0.115601 -0.292968 *I,	0.285417 +0.153207 *I,	-0.118407-0.0449431 *I,
-//                     0.260656 +0.155068 *I,	0.145408 +0.900742 *I,	0.129887 +0.152903 *I,	0.0509187 -0.180804 *I,
-//                     0.216913 -0.25571 *I,	-0.0587541-0.158796 *I,	-0.11961+0.857281 *I,	-0.275643-0.183511 *I,
-//                     0.0603394 +0.110008 *I,	0.134624 +0.146748 *I,	-0.285373+0.15537 *I,	-0.161075+0.901707 *I;
-//
-//    psiBell[3] = nonOrthPsiGen * psiBell[3];
-
-    psi.resize( std::pow(4,wordLength) , std::pow(4,wordLength) );
-
-    inBasis.resize( std::pow(4,wordLength) , 4 * wordLength + ancillaModes);
-
-    for(int i=0;i<inBasis.rows();i++) for(int j=0;j<ancillaPhotons;j++){
-
-        inBasis(i,j) = 1;
-
-    }
-
-    int ii[wordLength];
-
-    for(int i=0;i<wordLength;i++) ii[i] = 0;
-
-    int k = 0;
-
-    do{
-
-        Eigen::VectorXcd psiColTemp = psiBell[ ii[0] ];
-
-        for(int i=1;i<wordLength;i++){
-
-            psiColTemp = Eigen::kroneckerProduct( psiColTemp,psiBell[ ii[i] ] ).eval();
+            Eigen::VectorXd a = Eigen::VectorXd::Random( UAlice[i].cols() * UAlice[i].cols() );
+            a *= 2000 * PI;
+            Eigen::MatrixXcd Utemp( UAlice[i].rows() , UAlice[i].cols() );
+            Utemp = genUnitary(a);
+            UAlice[i] *= Utemp;
 
         }
 
-        psi.col(k) = psiColTemp;
+        Eigen::MatrixXcd H( UAlice[i].rows() , UAlice[i].cols() );
 
-        Eigen::VectorXi basisVectorRowTemp( 4 * wordLength );
+        H = matrixLog(UAlice[i]) / I;
 
-        for(int i=0;i<wordLength;i++) basisVectorRowTemp.segment(4*i,4) = psiBellBasis[ ii[i] ];
+        Eigen::VectorXd a = convertHermittoA(H);
 
-        inBasis.block(k,ancillaPhotons,1,4*wordLength) = basisVectorRowTemp.transpose();
+        output.segment( i * ( a.size() ), a.size() ) = a;
 
-        k++;
-
-    } while( iterate( ii,wordLength ) );
-
-    for(int i=0;i<std::pow(4,wordLength);i++){
-
-            psi.col(i).normalize();
-
-            //std::cout << "Norm Check: " << std::setprecision(16) << psi.col(i).norm() << std::endl;
+        aSize = a.size();
 
     }
 
-    for(int i=0;i<psi.cols();i++) for(int j=i;j<psi.cols();j++){
+    for(int j=0;j<INITIAL_CONDITION_RANDOM_DEGREE;j++){
 
-        //std::cout << i << "\t" << j << "\t" << std::setprecision(16) << (psi.col(i).conjugate().transpose() * psi.col(j)).norm() << std::endl;
-
-    }
-
-    printVonNeumannEntropy(psi);
-
-    return;
-
-}
-
-void MeritFunction::printVonNeumannEntropy(Eigen::MatrixXcd& psi){
-
-    Eigen::MatrixXcd rho = Eigen::MatrixXcd::Zero(psi.rows(),psi.rows());
-
-    for(int i=0;i<psi.cols();i++) rho += (1.0 / psi.cols() ) * (psi.col(i) * psi.col(i).conjugate().transpose());
-
-    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXcd> ces;
-
-    ces.compute(rho);
-
-    double S = 0.0;
-
-    for(int i=0;i<rho.rows();i++) S -= ces.eigenvalues()(i) * log2( ces.eigenvalues()(i) );
-
-    std::ofstream outfile("results.dat",std::ofstream::app);
-
-    outfile << "S(rho): " << S << std::endl << std::endl;
-
-    outfile.close();
-
-    return;
-
-}
-
-bool MeritFunction::iterate(int ii[],int wordLength){
-
-    ii[ wordLength-1 ]++;
-
-    for(int i=wordLength-1;i>=1;i--){
-
-        if( ii[i] >= 4 ){
-
-            ii[i] = 0;
-
-            ii[ i-1 ]++;
-
-        }
+        Eigen::VectorXd a = Eigen::VectorXd::Random( UBob.cols() * UBob.cols() );
+        a *= 2000 * PI;
+        Eigen::MatrixXcd Utemp( UBob.rows() , UBob.cols() );
+        Utemp = genUnitary(a);
+        UBob *= Utemp;
 
     }
 
-    if( ii[0] >= 4 ) return false;
+    Eigen::MatrixXcd H( UBob.rows() , UBob.cols() );
 
-    return true;
+    H = matrixLog(UBob) / I;
+
+    Eigen::VectorXd a = convertHermittoA(H);
+
+    output.segment( aSize * UAlice.size() , a.size() ) = a;
+
+    std::cout << output << std::endl << std::endl;
+
+    assert(false);
+
+    return output;
 
 }
+
+
 
 void MeritFunction::printArr( int arr[] ,int size ){
 
@@ -203,13 +121,7 @@ void MeritFunction::printArr( int arr[] ,int size ){
 
 double MeritFunction::f(Eigen::VectorXd& position){
 
-    U = genUnitary(position);
-
-    LOCircuit.setOmega(U);
-
-    psiPrime = LOCircuit.omega * psi;
-
-    return conditionalEntropy(psiPrime);
+    return 2.0;
 
 }
 
@@ -240,51 +152,8 @@ double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime){
 
 void MeritFunction::printReport(Eigen::VectorXd& position){
 
-    U = genUnitary(position);
-
-    LOCircuit.setOmega(U);
-
-    psiPrime = LOCircuit.omega * psi;
-
-    double output = conditionalEntropy(psiPrime);
-
-    std::cout << "H(X:Y): ";
-
-    std::cout << log2( psi.cols() ) - ( 1.0 / psi.cols() ) * output << std::endl;
-
-    std::ofstream outfile("results.dat",std::ofstream::app);
-
-    outfile << "H(X:Y): " << log2( psi.cols() ) - ( 1.0 / psi.cols() ) * output << std::endl << std::endl;
-
-    outfile << U << std::endl << std::endl << std::endl;
-
-    outfile.close();
 
     return;
-
-}
-
-
-
-Eigen::VectorXd MeritFunction::setInitialPosition(){
-
-    std::complex<double> I(0.0,1.0);
-
-    for(int i=0;i<INITIAL_CONDITION_RANDOM_DEGREE;i++){
-        Eigen::VectorXd a = Eigen::VectorXd::Random( funcDimension );
-        a *= 2000 * PI;
-        Eigen::MatrixXcd Utemp( U.rows() , U.cols() );
-        Utemp = genUnitary(a);
-        U *= Utemp;
-    }
-
-    Eigen::MatrixXcd H( U.rows(),U.cols() );
-
-    H = matrixLog(U) / I;
-
-    Eigen::VectorXd a = convertHermittoA(H);
-
-    return a;
 
 }
 
@@ -329,6 +198,30 @@ void MeritFunction::setToFullHilbertSpace(const int& subPhotons, const int& subM
     return;;
 }
 
+
+void MeritFunction::setInBasis(Eigen::MatrixXi& ancillaBasis,int photons,int modes,Eigen::MatrixXi& inBasis){
+
+    Eigen::MatrixXi compBasis;
+
+    setToFullHilbertSpace(photons,modes,compBasis);
+
+    inBasis.resize( compBasis.rows() * ancillaBasis.rows(), compBasis.cols() + ancillaBasis.cols() );
+
+    for(int i=0;i<ancillaBasis.rows();i++){
+
+        inBasis.block(i*compBasis.rows(),ancillaBasis.cols(),compBasis.rows(),compBasis.cols()) = compBasis;
+
+        for(int j=i*compBasis.rows();j<(i+1)*compBasis.rows();j++){
+
+            inBasis.block( j,0,1,ancillaBasis.cols() ) = ancillaBasis.block(i,0,1,ancillaBasis.cols() );
+
+        }
+
+    }
+
+    return;
+
+}
 
 Eigen::MatrixXcd MeritFunction::genUnitary(Eigen::VectorXd& a){
 

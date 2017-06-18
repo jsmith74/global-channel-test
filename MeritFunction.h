@@ -23,15 +23,11 @@ class MeritFunction{
     private:
 
         LinearOpticalTransform LOCircuit;
-        Eigen::MatrixXcd psi,psiPrime;
 
         void setToFullHilbertSpace(const int& subPhotons, const int& subModes,Eigen::MatrixXi& nv);
-        void setInbasisAndPsi(Eigen::MatrixXi& inBasis,int wordLength,int ancillaPhotons,int ancillaModes);
-        bool iterate(int ii[],int wordLength);
+        void setInBasis(Eigen::MatrixXi& ancillaBasis,int photons,int modes,Eigen::MatrixXi& inBasis);
         void printArr( int arr[] ,int size );
         double conditionalEntropy(Eigen::MatrixXcd& psiPrime);
-        void printVonNeumannEntropy(Eigen::MatrixXcd& psi);
-
 
         Eigen::MatrixXcd genUnitary(Eigen::VectorXd& a);
         Eigen::MatrixXcd matrixLog(Eigen::MatrixXcd X);
@@ -39,7 +35,9 @@ class MeritFunction{
         Eigen::MatrixXcd genHermitian(Eigen::VectorXd& a);
         Eigen::VectorXd convertHermittoA(Eigen::MatrixXcd& H);
 
-        Eigen::MatrixXcd U;
+        std::vector<Eigen::MatrixXcd> UAlice;
+
+        Eigen::MatrixXcd UBob;
 
         inline int g(const int& n,const int& m);
         inline double doublefactorial(int x);

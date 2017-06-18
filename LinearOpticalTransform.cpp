@@ -7,7 +7,6 @@ LinearOpticalTransform::LinearOpticalTransform(){
 
 void LinearOpticalTransform::setOmega(Eigen::MatrixXcd& U){
 
-//#pragma omp parallel for schedule(dynamic,250)
     for(int i=0;i<omega.rows();i++){
 
         omega.row(i) = Eigen::VectorXcd::Zero(omega.cols());

@@ -6,7 +6,6 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
-#include <omp.h>
 
 class LinearOpticalTransform{
 
