@@ -6,14 +6,16 @@
 
 void MeritFunction::setMeritFunction(int intParam){
 
-    int photons = 3;
+    int photons = 2;
     int modesAlice = 2;
     int modesBob = 2;
 
-    int ancillaPhotons = 1;
-    int ancillaModes = 2;
+    int ancillaPhotons = 0;
+        ancillaModes = 0;
 
-    int numberOfStates = 8;
+    int numberOfStates = intParam;
+
+    fileNumber = numberOfStates;
 
     int totalPhotons = photons + ancillaPhotons;
     int totalModes = modesAlice + modesBob + ancillaModes;
@@ -21,6 +23,8 @@ void MeritFunction::setMeritFunction(int intParam){
     UAlice.resize(numberOfStates);
 
     for(int i=0;i<numberOfStates;i++) UAlice.at(i) = Eigen::MatrixXcd::Identity(modesAlice,modesAlice);
+
+    UAliceFull = Eigen::MatrixXcd::Identity( totalModes,totalModes );
 
     UBob = Eigen::MatrixXcd::Identity( totalModes,totalModes );
 
@@ -41,6 +45,9 @@ void MeritFunction::setMeritFunction(int intParam){
     std::cout << "InBasis:\n" << inBasis << std::endl << std::endl;
     std::cout << "OutBasis: \n" << outBasis << std::endl << std::endl;
 
+    psiC.resize( initialStateDim );
+    psiA.resize( ancillaStateDim );
+
     LOCircuit.initializeCircuit(inBasis,outBasis);
 
     return;
@@ -48,8 +55,191 @@ void MeritFunction::setMeritFunction(int intParam){
 }
 
 
+double MeritFunction::f(Eigen::VectorXd& position){
+
+    int vecSize = UAlice[0].rows() * UAlice[0].rows();
+
+    for(int i=0;i<UAlice.size();i++){
+
+        UAlice[i] = genUnitary( position.segment(i*vecSize,vecSize) );
+
+    }
+
+    UBob = genUnitary( position.segment( UAlice.size() * vecSize , UBob.rows() * UBob.rows() ) );
+
+    setAncillaVec( position, UAlice.size() * vecSize + UBob.rows() * UBob.rows() );
+
+    setCompVec( position, UAlice.size() * vecSize + UBob.rows() * UBob.rows() + 2 * psiA.size() );
+
+    if( psiA.size() > 0 ) psi = Eigen::kroneckerProduct(psiA,psiC);
+
+    else psi = psiC;
+
+    Eigen::MatrixXcd psiPrime( LOCircuit.omega.rows(),UAlice.size()+1 );
+
+    for(int i=0;i<UAlice.size();i++){
+
+        UAliceFull.block( ancillaModes , ancillaModes ,UAlice[i].rows(),UAlice[i].cols()) = UAlice[i];
+
+        Eigen::MatrixXcd U = UAliceFull * UBob;
+
+        LOCircuit.setOmega(U);
+
+        psiPrime.col(i) = LOCircuit.omega * psi;
+
+    }
+
+    LOCircuit.setOmega(UBob);
+
+    psiPrime.col( UAlice.size() ) = LOCircuit.omega * psi;
+
+    return conditionalEntropy(psiPrime);
+
+}
+
+
+void MeritFunction::printReport(Eigen::VectorXd& position){
+
+    int vecSize = UAlice[0].rows() * UAlice[0].rows();
+
+    for(int i=0;i<UAlice.size();i++){
+
+        UAlice[i] = genUnitary( position.segment(i*vecSize,vecSize) );
+
+    }
+
+    UBob = genUnitary( position.segment( UAlice.size() * vecSize , UBob.rows() * UBob.rows() ) );
+
+    setAncillaVec( position, UAlice.size() * vecSize + UBob.rows() * UBob.rows() );
+
+    setCompVec( position, UAlice.size() * vecSize + UBob.rows() * UBob.rows() + 2 * psiA.size() );
+
+    if( psiA.size() > 0 ) psi = Eigen::kroneckerProduct(psiA,psiC);
+
+    else psi = psiC;
+
+    Eigen::MatrixXcd psiPrime( LOCircuit.omega.rows(),UAlice.size()+1 );
+
+    for(int i=0;i<UAlice.size();i++){
+
+        UAliceFull.block( ancillaModes , ancillaModes ,UAlice[i].rows(),UAlice[i].cols()) = UAlice[i];
+
+        Eigen::MatrixXcd U = UAliceFull * UBob;
+
+        LOCircuit.setOmega(U);
+
+        psiPrime.col(i) = LOCircuit.omega * psi;
+
+    }
+
+    LOCircuit.setOmega(UBob);
+
+    psiPrime.col( UAlice.size() ) = LOCircuit.omega * psi;
+
+    double X = UAlice.size() + 1;
+
+    double mutualEntropy = log2( X ) - ( 1.0 / X ) * conditionalEntropy( psiPrime );
+
+    std::cout << "H(X:Y): " << mutualEntropy << std::endl;
+
+    std::string filename = "";
+
+    generateFilename( filename );
+
+    std::ifstream infile( filename.c_str() );
+
+    if(!infile.is_open()){
+
+        std::ofstream outfile( filename.c_str() );
+
+        outfile << std::setprecision(16) << mutualEntropy;
+
+        outfile.close();
+
+    }
+
+    else{
+
+        double globalTest;
+
+        infile >> globalTest;
+
+        infile.close();
+
+        if(mutualEntropy >= globalTest){
+
+            std::ofstream outfile( filename.c_str() );
+
+            outfile << std::setprecision(16) <<  mutualEntropy;
+
+            outfile.close();
+
+        }
+
+    }
+
+    return;
+
+}
+
+void MeritFunction::generateFilename(std::string& filename){
+
+    std::stringstream ss;
+
+    ss << fileNumber;
+
+    ss >> filename;
+
+    filename = "globalMonitor_" + filename + ".dat";
+
+    return;
+
+}
+
+void MeritFunction::setCompVec(Eigen::VectorXd& position,int startPoint){
+
+    std::complex<double> I(0.0,1.0);
+
+    for(int i=0;i<psiC.size();i++){
+
+        psiC(i) = position( 2 * i + startPoint );
+
+        psiC(i) *= std::exp( I * position(2 * i + startPoint + 1) );
+
+    }
+
+    psiC.normalize();
+
+    return;
+
+}
+
+void MeritFunction::setAncillaVec(Eigen::VectorXd& position,int startPoint){
+
+    std::complex<double> I(0.0,1.0);
+
+    for(int i=0;i<psiA.size();i++){
+
+        psiA(i) = position( 2 * i + startPoint );
+
+        psiA(i) *= std::exp( I * position( 2 * i + startPoint + 1) );
+
+    }
+
+    psiA.normalize();
+
+    return;
+
+}
+
 
 Eigen::VectorXd MeritFunction::setInitialPosition(){
+
+    for(int i=0;i<UAlice.size();i++) UAlice.at(i) = Eigen::MatrixXcd::Identity(UAlice.at(i).rows(),UAlice.at(i).cols());
+
+    UAliceFull = Eigen::MatrixXcd::Identity( UAliceFull.rows(),UAliceFull.cols() );
+
+    UBob = Eigen::MatrixXcd::Identity( UBob.rows(),UBob.cols() );
 
     Eigen::VectorXd output = PI * Eigen::VectorXd::Random(funcDimension);
 
@@ -93,37 +283,16 @@ Eigen::VectorXd MeritFunction::setInitialPosition(){
 
     Eigen::MatrixXcd H( UBob.rows() , UBob.cols() );
 
-    H = matrixLog(UBob) / I;
+    H = matrixLog( UBob ) / I;
 
     Eigen::VectorXd a = convertHermittoA(H);
 
     output.segment( aSize * UAlice.size() , a.size() ) = a;
 
-    std::cout << output << std::endl << std::endl;
-
-    assert(false);
-
     return output;
 
 }
 
-
-
-void MeritFunction::printArr( int arr[] ,int size ){
-
-    for(int i=0;i<size;i++) std::cout << arr[i] << "\t";
-
-    std::cout << std::endl;
-
-    return;
-
-}
-
-double MeritFunction::f(Eigen::VectorXd& position){
-
-    return 2.0;
-
-}
 
 double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime){
 
@@ -150,14 +319,6 @@ double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime){
 }
 
 
-void MeritFunction::printReport(Eigen::VectorXd& position){
-
-
-    return;
-
-}
-
-
 MeritFunction::MeritFunction(){
 
 
@@ -166,6 +327,15 @@ MeritFunction::MeritFunction(){
 
 
 void MeritFunction::setToFullHilbertSpace(const int& subPhotons, const int& subModes,Eigen::MatrixXi& nv){
+
+    if(subPhotons==0 && subModes == 0){
+
+        nv.resize(0,0);
+
+        return;
+
+    }
+
     int markers = subPhotons + subModes - 1;
     int myints[markers];
     int i = 0;
@@ -205,6 +375,14 @@ void MeritFunction::setInBasis(Eigen::MatrixXi& ancillaBasis,int photons,int mod
 
     setToFullHilbertSpace(photons,modes,compBasis);
 
+    if( ancillaBasis.rows() == 0 ){
+
+        inBasis = compBasis;
+
+        return;
+
+    }
+
     inBasis.resize( compBasis.rows() * ancillaBasis.rows(), compBasis.cols() + ancillaBasis.cols() );
 
     for(int i=0;i<ancillaBasis.rows();i++){
@@ -223,7 +401,7 @@ void MeritFunction::setInBasis(Eigen::MatrixXi& ancillaBasis,int photons,int mod
 
 }
 
-Eigen::MatrixXcd MeritFunction::genUnitary(Eigen::VectorXd& a){
+Eigen::MatrixXcd MeritFunction::genUnitary(Eigen::VectorXd a){
 
     return matrixExp(genHermitian(a));
 
@@ -352,3 +530,13 @@ Eigen::MatrixXcd MeritFunction::matrixLog(Eigen::MatrixXcd X){
     return result;
 }
 
+
+void MeritFunction::printArr( int arr[] ,int size ){
+
+    for(int i=0;i<size;i++) std::cout << arr[i] << "\t";
+
+    std::cout << std::endl;
+
+    return;
+
+}

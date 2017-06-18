@@ -4,7 +4,10 @@ LFLAGS = -Ofast -funroll-loops
 OMPFLAGS = -fopenmp
 OBJS = LinearOpticalTransform.o main.o MeritFunction.o BFGS_Optimization.o
 
-all: LinearOpticalSimulation
+all: LinearOpticalSimulation Script
+
+Script: script.cpp
+	$(CC) $(OMPFLAGS) script.cpp -o Script
 
 LinearOpticalSimulation: $(OBJS)
 	$(CC) $(LFLAGS) $(OMPFLAGS) $(OBJS) -o LinearOpticalSimulation
@@ -22,4 +25,4 @@ BFGS_Optimization.o: BFGS_Optimization.cpp
 	$(CC) $(CFLAGS) BFGS_Optimization.cpp
 
 clean:
-	rm *.o LinearOpticalSimulation
+	rm *.o LinearOpticalSimulation *.dat Script

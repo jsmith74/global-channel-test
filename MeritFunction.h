@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 #include <unsupported/Eigen/KroneckerProduct>
 #include "LinearOpticalTransform.h"
 
@@ -22,6 +23,8 @@ class MeritFunction{
 
     private:
 
+        int ancillaModes,fileNumber;
+
         LinearOpticalTransform LOCircuit;
 
         void setToFullHilbertSpace(const int& subPhotons, const int& subModes,Eigen::MatrixXi& nv);
@@ -29,15 +32,19 @@ class MeritFunction{
         void printArr( int arr[] ,int size );
         double conditionalEntropy(Eigen::MatrixXcd& psiPrime);
 
-        Eigen::MatrixXcd genUnitary(Eigen::VectorXd& a);
+        Eigen::MatrixXcd genUnitary(Eigen::VectorXd a);
         Eigen::MatrixXcd matrixLog(Eigen::MatrixXcd X);
         Eigen::MatrixXcd matrixExp(Eigen::MatrixXcd X);
         Eigen::MatrixXcd genHermitian(Eigen::VectorXd& a);
         Eigen::VectorXd convertHermittoA(Eigen::MatrixXcd& H);
 
-        std::vector<Eigen::MatrixXcd> UAlice;
+        void setAncillaVec(Eigen::VectorXd& position,int startPoint);
+        void setCompVec(Eigen::VectorXd& position,int startPoint);
+        void generateFilename(std::string& filename);
 
-        Eigen::MatrixXcd UBob;
+        std::vector<Eigen::MatrixXcd> UAlice;
+        Eigen::MatrixXcd UAliceFull,UBob;
+        Eigen::VectorXcd psiC,psiA,psi;
 
         inline int g(const int& n,const int& m);
         inline double doublefactorial(int x);

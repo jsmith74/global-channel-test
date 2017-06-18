@@ -1,14 +1,56 @@
 
 #include "BFGS_Optimization.h"
 
+void generateFilename(std::string& filename,int fileNumber);
 
-int main(){
+int main( int argc, char *argv[] ){
 
-    BFGS_Optimization optimizer(4e-4,20.0,1);
+    if(argc != 2){
 
-    for(int i=0;i<300;i++) optimizer.minimize();
+        std::cout << "./LinearOpticalSimulation [number of encoding states]" << std::endl;
+
+        return 0;
+
+    }
+
+    int encodingStates = std::atoi(argv[1]);
+
+    BFGS_Optimization optimizer(4e-6,20.0,encodingStates);
+
+    for(int i=0;i<90;i++) optimizer.minimize();
+
+    std::string filename;
+
+    generateFilename(filename,encodingStates);
+
+    double globalResult;
+
+    std::ifstream infile( filename.c_str() );
+
+    infile >> globalResult;
+
+    infile.close();
+
+    std::ofstream outfile( "globalResults.dat",std::ofstream::app );
+
+    outfile << encodingStates + 1 << "\t" << std::setprecision(16) << globalResult << std::endl;
+
+    outfile.close();
 
     return 0;
 
 }
 
+void generateFilename(std::string& filename,int fileNumber){
+
+    std::stringstream ss;
+
+    ss << fileNumber;
+
+    ss >> filename;
+
+    filename = "globalMonitor_" + filename + ".dat";
+
+    return;
+
+}
