@@ -7,7 +7,7 @@
 int main(){
 
 #pragma omp parallel for schedule(dynamic)
-    for(int i=1;i<50;i++){
+    for(int i=1;i<16;i++){
 
         std::string commandLine;
 

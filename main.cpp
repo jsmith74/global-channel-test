@@ -23,17 +23,21 @@ int main( int argc, char *argv[] ){
 
     generateFilename(filename,encodingStates);
 
-    double globalResult;
+    double globalResult,quantumEntropy,upperBound;
 
     std::ifstream infile( filename.c_str() );
 
     infile >> globalResult;
 
+    infile >> quantumEntropy;
+
+    infile >> upperBound;
+
     infile.close();
 
     std::ofstream outfile( "globalResults.dat",std::ofstream::app );
 
-    outfile << encodingStates + 1 << "\t" << std::setprecision(16) << globalResult << std::endl;
+    outfile << encodingStates + 1 << "\t" << std::setprecision(16) << globalResult << "\t" << quantumEntropy << "\t" << upperBound << std::endl;
 
     outfile.close();
 

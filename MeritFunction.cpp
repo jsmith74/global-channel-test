@@ -4,6 +4,7 @@
 
 #define INITIAL_CONDITION_RANDOM_DEGREE 2000
 
+
 void MeritFunction::setMeritFunction(int intParam){
 
     int photons = 2;
@@ -14,6 +15,8 @@ void MeritFunction::setMeritFunction(int intParam){
         ancillaModes = 0;
 
     int numberOfStates = intParam;
+
+    upperBound = log2( setUpperBound(photons,modesAlice,modesBob) );
 
     fileNumber = numberOfStates;
 
@@ -41,9 +44,6 @@ void MeritFunction::setMeritFunction(int intParam){
     setToFullHilbertSpace(ancillaPhotons,ancillaModes,ancillaBasis);
 
     setInBasis(ancillaBasis,photons,modesAlice+modesBob,inBasis);
-
-    std::cout << "InBasis:\n" << inBasis << std::endl << std::endl;
-    std::cout << "OutBasis: \n" << outBasis << std::endl << std::endl;
 
     psiC.resize( initialStateDim );
     psiA.resize( ancillaStateDim );
@@ -94,7 +94,25 @@ double MeritFunction::f(Eigen::VectorXd& position){
     psiPrime.col( UAlice.size() ) = LOCircuit.omega * psi;
 
     return conditionalEntropy(psiPrime);
+    //return -vonNeumannEntropy(psiPrime);
 
+}
+
+double MeritFunction::vonNeumannEntropy(Eigen::MatrixXcd& psiPrime){
+
+    Eigen::MatrixXcd rho = ( 1.0/psiPrime.cols() ) * psiPrime.col(0) * psiPrime.col(0).conjugate().transpose();
+
+    for(int i=1;i<psiPrime.cols();i++) rho += (1.0/psiPrime.cols()) * psiPrime.col(i) * psiPrime.col(i).conjugate().transpose();
+
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXcd> ces;
+
+    ces.compute(rho);
+
+    double output = 0.0;
+
+    for(int i=0;i<ces.eigenvalues().size();i++) if(ces.eigenvalues()(i) > 0) output -= ces.eigenvalues()(i) * log2( ces.eigenvalues()(i) );
+
+    return output;
 }
 
 
@@ -140,7 +158,11 @@ void MeritFunction::printReport(Eigen::VectorXd& position){
 
     double mutualEntropy = log2( X ) - ( 1.0 / X ) * conditionalEntropy( psiPrime );
 
+    double quantumEntropy = vonNeumannEntropy( psiPrime );
+
     std::cout << "H(X:Y): " << mutualEntropy << std::endl;
+
+    std::cout << "S(rho): " << quantumEntropy << std::endl;
 
     std::string filename = "";
 
@@ -152,7 +174,7 @@ void MeritFunction::printReport(Eigen::VectorXd& position){
 
         std::ofstream outfile( filename.c_str() );
 
-        outfile << std::setprecision(16) << mutualEntropy;
+        outfile << std::setprecision(16) << mutualEntropy << "\t" << quantumEntropy << "\t" << upperBound;
 
         outfile.close();
 
@@ -170,7 +192,7 @@ void MeritFunction::printReport(Eigen::VectorXd& position){
 
             std::ofstream outfile( filename.c_str() );
 
-            outfile << std::setprecision(16) <<  mutualEntropy;
+            outfile << std::setprecision(16) <<  mutualEntropy << "\t" << quantumEntropy << "\t" << upperBound;
 
             outfile.close();
 
@@ -528,6 +550,24 @@ Eigen::MatrixXcd MeritFunction::matrixLog(Eigen::MatrixXcd X){
     }
 
     return result;
+}
+
+
+int MeritFunction::f_ds(int Na,int Ma,int Nb,int Mb){
+
+    return g(Na,Ma) * std::min( g(Na,Ma),g(Nb,Mb) );
+
+}
+
+
+int MeritFunction::setUpperBound(int N,int Ma,int Mb){
+
+    int output = 0;
+
+    for(int n=0;n<=N;n++) output += f_ds(n,Ma,N-n,Mb);
+
+    return output;
+
 }
 
 

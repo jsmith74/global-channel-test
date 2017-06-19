@@ -1,6 +1,7 @@
 #ifndef MERITFUNCTION_H_INCLUDED
 #define MERITFUNCTION_H_INCLUDED
 
+#include <omp.h>
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
 #include <iostream>
@@ -25,12 +26,15 @@ class MeritFunction{
 
         int ancillaModes,fileNumber;
 
+        double upperBound;
+
         LinearOpticalTransform LOCircuit;
 
         void setToFullHilbertSpace(const int& subPhotons, const int& subModes,Eigen::MatrixXi& nv);
         void setInBasis(Eigen::MatrixXi& ancillaBasis,int photons,int modes,Eigen::MatrixXi& inBasis);
         void printArr( int arr[] ,int size );
         double conditionalEntropy(Eigen::MatrixXcd& psiPrime);
+        double vonNeumannEntropy(Eigen::MatrixXcd& psiPrime);
 
         Eigen::MatrixXcd genUnitary(Eigen::VectorXd a);
         Eigen::MatrixXcd matrixLog(Eigen::MatrixXcd X);
@@ -48,6 +52,8 @@ class MeritFunction{
 
         inline int g(const int& n,const int& m);
         inline double doublefactorial(int x);
+        int f_ds(int Na,int Ma,int Nb,int Mb);
+        int setUpperBound(int N,int Ma,int Mb);
 };
 
 
