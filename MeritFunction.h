@@ -33,8 +33,10 @@ class MeritFunction{
         void setToFullHilbertSpace(const int& subPhotons, const int& subModes,Eigen::MatrixXi& nv);
         void setInBasis(Eigen::MatrixXi& ancillaBasis,int photons,int modes,Eigen::MatrixXi& inBasis);
         void printArr( int arr[] ,int size );
-        double conditionalEntropy(Eigen::MatrixXcd& psiPrime);
-        double vonNeumannEntropy(Eigen::MatrixXcd& psiPrime);
+
+        double shannonEntropy(Eigen::VectorXd& position);
+        double conditionalEntropy(Eigen::MatrixXcd& psiPrime,Eigen::VectorXd& position);
+        double vonNeumannEntropy(Eigen::MatrixXcd& psiPrime,Eigen::VectorXd& position);
 
         Eigen::MatrixXcd genUnitary(Eigen::VectorXd a);
         Eigen::MatrixXcd matrixLog(Eigen::MatrixXcd X);

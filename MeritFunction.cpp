@@ -5,6 +5,15 @@
 #define INITIAL_CONDITION_RANDOM_DEGREE 2000
 
 
+/** ===== Fix Uniform Probabilities ================================ */
+
+//#define USE_UNIFORM_PROBABILITIES
+
+#define ALLOW_PROBABILITIES_TO_MOVE
+
+/** ================================================================ */
+
+
 void MeritFunction::setMeritFunction(int intParam){
 
     int photons = 2;
@@ -35,7 +44,17 @@ void MeritFunction::setMeritFunction(int intParam){
 
     int ancillaStateDim = g(ancillaPhotons,ancillaModes);
 
-    funcDimension = 2 * initialStateDim + 2 * ancillaStateDim + numberOfStates * modesAlice * modesAlice + totalModes * totalModes;
+    #ifdef USE_UNIFORM_PROBABILITIES
+
+        funcDimension = 2 * initialStateDim + 2 * ancillaStateDim + numberOfStates * modesAlice * modesAlice + totalModes * totalModes;
+
+    #endif // USE_UNIFORM_PROBABILITIES
+
+    #ifdef ALLOW_PROBABILITIES_TO_MOVE
+
+        funcDimension = 2 * initialStateDim + 2 * ancillaStateDim + numberOfStates * modesAlice * modesAlice + totalModes * totalModes + numberOfStates + 1;
+
+    #endif // ALLOW_PROBABILITIES_TO_MOVE
 
     Eigen::MatrixXi inBasis,outBasis,ancillaBasis;
 
@@ -93,16 +112,36 @@ double MeritFunction::f(Eigen::VectorXd& position){
 
     psiPrime.col( UAlice.size() ) = LOCircuit.omega * psi;
 
-    return conditionalEntropy(psiPrime);
-    //return -vonNeumannEntropy(psiPrime);
+    return conditionalEntropy(psiPrime,position) - shannonEntropy(position);
+    //return -vonNeumannEntropy(psiPrime,position);
 
 }
 
-double MeritFunction::vonNeumannEntropy(Eigen::MatrixXcd& psiPrime){
+double MeritFunction::vonNeumannEntropy(Eigen::MatrixXcd& psiPrime,Eigen::VectorXd& position){
+
+    #ifdef USE_UNIFORM_PROBABILITIES
 
     Eigen::MatrixXcd rho = ( 1.0/psiPrime.cols() ) * psiPrime.col(0) * psiPrime.col(0).conjugate().transpose();
 
     for(int i=1;i<psiPrime.cols();i++) rho += (1.0/psiPrime.cols()) * psiPrime.col(i) * psiPrime.col(i).conjugate().transpose();
+
+    #endif // USE_UNIFORM_PROBABILITIES
+
+    #ifdef ALLOW_PROBABILITIES_TO_MOVE
+
+    int numberOfStates = UAlice.size() + 1;
+
+    Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
+
+    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
+
+    probabilityVector.normalize();
+
+    Eigen::MatrixXcd rho = probabilityVector(0) * psiPrime.col(0) * psiPrime.col(0).conjugate().transpose();
+
+    for(int i=1;i<psiPrime.cols();i++) rho += probabilityVector(i) * psiPrime.col(i) * psiPrime.col(i).conjugate().transpose();
+
+    #endif // ALLOW_PROBABILITIES_TO_MOVE
 
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXcd> ces;
 
@@ -115,6 +154,34 @@ double MeritFunction::vonNeumannEntropy(Eigen::MatrixXcd& psiPrime){
     return output;
 }
 
+
+double MeritFunction::shannonEntropy(Eigen::VectorXd& position){
+
+    int numberOfStates = UAlice.size() + 1;
+
+    #ifdef USE_UNIFORM_PROBABILITIES
+
+    return log2( numberOfStates );
+
+    #endif // USE_UNIFORM_PROBABILITIES
+
+    #ifdef ALLOW_PROBABILITIES_TO_MOVE
+
+    Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
+
+    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
+
+    probabilityVector.normalize();
+
+    double output = 0.0;
+
+    for(int x=0;x<probabilityVector.size();x++) output -= probabilityVector(x) * log2( probabilityVector(x) );
+
+    return output;
+
+    #endif // ALLOW_PROBABILITIES_TO_MOVE
+
+}
 
 void MeritFunction::printReport(Eigen::VectorXd& position){
 
@@ -154,11 +221,9 @@ void MeritFunction::printReport(Eigen::VectorXd& position){
 
     psiPrime.col( UAlice.size() ) = LOCircuit.omega * psi;
 
-    double X = UAlice.size() + 1;
+    double mutualEntropy = shannonEntropy(position) - conditionalEntropy( psiPrime,position );
 
-    double mutualEntropy = log2( X ) - ( 1.0 / X ) * conditionalEntropy( psiPrime );
-
-    double quantumEntropy = vonNeumannEntropy( psiPrime );
+    double quantumEntropy = vonNeumannEntropy( psiPrime,position );
 
     std::cout << "H(X:Y): " << mutualEntropy << std::endl;
 
@@ -311,14 +376,28 @@ Eigen::VectorXd MeritFunction::setInitialPosition(){
 
     output.segment( aSize * UAlice.size() , a.size() ) = a;
 
+//    #ifdef ALLOW_PROBABILITIES_TO_MOVE
+//
+//        int numberOfStates = UAlice.size() + 1;
+//
+//        Eigen::VectorXd probabilityVector = Eigen::VectorXd::Random(numberOfStates);
+//
+//        probabilityVector.normalize();
+//
+//        output.segment( funcDimension - numberOfStates,numberOfStates ) = probabilityVector;
+//
+//    #endif // ALLOW_PROBABILITIES_TO_MOVE
+
     return output;
 
 }
 
 
-double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime){
+double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime,Eigen::VectorXd& position){
 
     double output = 0.0;
+
+    #ifdef USE_UNIFORM_PROBABILITIES
 
     for(int y=0;y<psiPrime.rows();y++){
 
@@ -335,6 +414,38 @@ double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime){
         }
 
     }
+
+    output *= 1.0 / ( UAlice.size() + 1 );
+
+    #endif // USE_UNIFORM_PROBABILITIES
+
+    #ifdef ALLOW_PROBABILITIES_TO_MOVE
+
+    int numberOfStates = UAlice.size() + 1;
+
+    Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
+
+    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
+
+    probabilityVector.normalize();
+
+    for(int y=0;y<psiPrime.rows();y++){
+
+        double sumTemp =0;
+
+        for(int xx=0;xx<psiPrime.cols();xx++) sumTemp += probabilityVector(xx) * std::norm( psiPrime(y,xx) );
+
+        for(int x=0;x<psiPrime.cols();x++){
+
+            double pyx = probabilityVector(x) * std::norm( psiPrime(y,x) );
+
+            if(pyx != 0) output += pyx * log2( sumTemp / pyx );
+
+        }
+
+    }
+
+    #endif // ALLOW_PROBABILITIES_TO_MOVE
 
     return output;
 
