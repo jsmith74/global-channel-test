@@ -175,7 +175,7 @@ double MeritFunction::shannonEntropy(Eigen::VectorXd& position){
 
     double output = 0.0;
 
-    for(int x=0;x<probabilityVector.size();x++) output -= probabilityVector(x) * log2( probabilityVector(x) );
+    for(int x=0;x<probabilityVector.size();x++) if(probabilityVector(x) != 0) output -= probabilityVector(x) * log2( probabilityVector(x) );
 
     return output;
 

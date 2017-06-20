@@ -17,7 +17,7 @@ int main( int argc, char *argv[] ){
 
     BFGS_Optimization optimizer(4e-6,20.0,encodingStates);
 
-    for(int i=0;i<90;i++) optimizer.minimize();
+    for(int i=0;i<600;i++) optimizer.minimize();
 
     std::string filename;
 
