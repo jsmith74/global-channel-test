@@ -117,6 +117,36 @@ double MeritFunction::f(Eigen::VectorXd& position){
 
 }
 
+
+double MeritFunction::shannonEntropy(Eigen::VectorXd& position){
+
+    int numberOfStates = UAlice.size() + 1;
+
+    #ifdef USE_UNIFORM_PROBABILITIES
+
+    return log2( numberOfStates );
+
+    #endif // USE_UNIFORM_PROBABILITIES
+
+    #ifdef ALLOW_PROBABILITIES_TO_MOVE
+
+    Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
+
+    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
+
+    probabilityVector.normalize();
+
+    double output = 0.0;
+
+    for(int x=0;x<probabilityVector.size();x++) if(probabilityVector(x) != 0) output -= probabilityVector(x) * log2( probabilityVector(x) );
+
+    return output;
+
+    #endif // ALLOW_PROBABILITIES_TO_MOVE
+
+}
+
+
 double MeritFunction::vonNeumannEntropy(Eigen::MatrixXcd& psiPrime,Eigen::VectorXd& position){
 
     #ifdef USE_UNIFORM_PROBABILITIES
@@ -155,17 +185,35 @@ double MeritFunction::vonNeumannEntropy(Eigen::MatrixXcd& psiPrime,Eigen::Vector
 }
 
 
-double MeritFunction::shannonEntropy(Eigen::VectorXd& position){
+double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime,Eigen::VectorXd& position){
 
-    int numberOfStates = UAlice.size() + 1;
+    double output = 0.0;
 
     #ifdef USE_UNIFORM_PROBABILITIES
 
-    return log2( numberOfStates );
+    for(int y=0;y<psiPrime.rows();y++){
+
+        double sumTemp =0;
+
+        for(int xx=0;xx<psiPrime.cols();xx++) sumTemp += std::norm( psiPrime(y,xx) );
+
+        for(int x=0;x<psiPrime.cols();x++){
+
+            double pyx = std::norm( psiPrime(y,x) );
+
+            if(pyx != 0) output += pyx * log2( sumTemp / pyx );
+
+        }
+
+    }
+
+    output *= 1.0 / ( UAlice.size() + 1 );
 
     #endif // USE_UNIFORM_PROBABILITIES
 
     #ifdef ALLOW_PROBABILITIES_TO_MOVE
+
+    int numberOfStates = UAlice.size() + 1;
 
     Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
 
@@ -173,15 +221,28 @@ double MeritFunction::shannonEntropy(Eigen::VectorXd& position){
 
     probabilityVector.normalize();
 
-    double output = 0.0;
+    for(int y=0;y<psiPrime.rows();y++){
 
-    for(int x=0;x<probabilityVector.size();x++) if(probabilityVector(x) != 0) output -= probabilityVector(x) * log2( probabilityVector(x) );
+        double sumTemp =0;
 
-    return output;
+        for(int xx=0;xx<psiPrime.cols();xx++) sumTemp += probabilityVector(xx) * std::norm( psiPrime(y,xx) );
+
+        for(int x=0;x<psiPrime.cols();x++){
+
+            double pyx = probabilityVector(x) * std::norm( psiPrime(y,x) );
+
+            if(pyx != 0) output += pyx * log2( sumTemp / pyx );
+
+        }
+
+    }
 
     #endif // ALLOW_PROBABILITIES_TO_MOVE
 
+    return output;
+
 }
+
 
 void MeritFunction::printReport(Eigen::VectorXd& position){
 
@@ -375,77 +436,6 @@ Eigen::VectorXd MeritFunction::setInitialPosition(){
     Eigen::VectorXd a = convertHermittoA(H);
 
     output.segment( aSize * UAlice.size() , a.size() ) = a;
-
-//    #ifdef ALLOW_PROBABILITIES_TO_MOVE
-//
-//        int numberOfStates = UAlice.size() + 1;
-//
-//        Eigen::VectorXd probabilityVector = Eigen::VectorXd::Random(numberOfStates);
-//
-//        probabilityVector.normalize();
-//
-//        output.segment( funcDimension - numberOfStates,numberOfStates ) = probabilityVector;
-//
-//    #endif // ALLOW_PROBABILITIES_TO_MOVE
-
-    return output;
-
-}
-
-
-double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime,Eigen::VectorXd& position){
-
-    double output = 0.0;
-
-    #ifdef USE_UNIFORM_PROBABILITIES
-
-    for(int y=0;y<psiPrime.rows();y++){
-
-        double sumTemp =0;
-
-        for(int xx=0;xx<psiPrime.cols();xx++) sumTemp += std::norm( psiPrime(y,xx) );
-
-        for(int x=0;x<psiPrime.cols();x++){
-
-            double pyx = std::norm( psiPrime(y,x) );
-
-            if(pyx != 0) output += pyx * log2( sumTemp / pyx );
-
-        }
-
-    }
-
-    output *= 1.0 / ( UAlice.size() + 1 );
-
-    #endif // USE_UNIFORM_PROBABILITIES
-
-    #ifdef ALLOW_PROBABILITIES_TO_MOVE
-
-    int numberOfStates = UAlice.size() + 1;
-
-    Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
-
-    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
-
-    probabilityVector.normalize();
-
-    for(int y=0;y<psiPrime.rows();y++){
-
-        double sumTemp =0;
-
-        for(int xx=0;xx<psiPrime.cols();xx++) sumTemp += probabilityVector(xx) * std::norm( psiPrime(y,xx) );
-
-        for(int x=0;x<psiPrime.cols();x++){
-
-            double pyx = probabilityVector(x) * std::norm( psiPrime(y,x) );
-
-            if(pyx != 0) output += pyx * log2( sumTemp / pyx );
-
-        }
-
-    }
-
-    #endif // ALLOW_PROBABILITIES_TO_MOVE
 
     return output;
 
