@@ -132,9 +132,9 @@ double MeritFunction::shannonEntropy(Eigen::VectorXd& position){
 
     Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
 
-    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
-
     probabilityVector.normalize();
+
+    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
 
     double output = 0.0;
 
@@ -163,9 +163,9 @@ double MeritFunction::vonNeumannEntropy(Eigen::MatrixXcd& psiPrime,Eigen::Vector
 
     Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
 
-    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
-
     probabilityVector.normalize();
+
+    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
 
     Eigen::MatrixXcd rho = probabilityVector(0) * psiPrime.col(0) * psiPrime.col(0).conjugate().transpose();
 
@@ -217,9 +217,9 @@ double MeritFunction::conditionalEntropy(Eigen::MatrixXcd& psiPrime,Eigen::Vecto
 
     Eigen::VectorXd probabilityVector = position.segment( funcDimension - numberOfStates,numberOfStates );
 
-    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
-
     probabilityVector.normalize();
+
+    for(int i=0;i<probabilityVector.size();i++) probabilityVector(i) *= probabilityVector(i);
 
     for(int y=0;y<psiPrime.rows();y++){
 
