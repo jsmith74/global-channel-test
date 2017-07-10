@@ -47,6 +47,7 @@
 \affiliation{Tulane University, Department of Physics, New Orleans, Louisiana 70118, USA}
 
  \begin{abstract}
+ 	Finish the experiment first before writing abstract.
 \end{abstract}                                                               
 \date{\today}
 \pacs{***}
@@ -75,9 +76,7 @@ where $U_{\alpha \beta}$ are the elements of some unitary complex matrix, $U$. T
 \begin{eqnarray}
 \ket{\psi} = \Big(c_1 \frac{(\hat{a}^\dagger_1)^N}{\sqrt{N!}} + c_2 \frac{ (\hat{a}^\dagger_1)^{N-1} \hat{a}^\dagger_2}{\sqrt{(N-1)!}} + \dots \\* + c_{d_H} \frac{(\hat{a}^\dagger_M)^N}{\sqrt{N!}}\Big) \ket{0,0,\dots,0_M} \quad \quad \nonumber
 \end{eqnarray}
-and applies the symbolic transformation~(\ref{LO Creation Operator Transformation}). This may be fine for an optical circuit of few components and small $N$ and $M$, but transforming the creation operators for large systems can otherwise become intractable. 
-
-Instead, we present an efficient numerical protocol for simulating state evolution though the action of~(\ref{LO Creation Operator Transformation}) for large optical circuits consisting of many low-level components. Section~\ref{Section of Facts} will present a series of \textit{facts}. Proofs of these \textit{facts} are available in the appendix (or we could just cite other paper). Section~\ref{Section on Protocol} will present the protocol itself, which will make use of the results presented in~\ref{Section of Facts}. 
+and applies the symbolic transformation~(\ref{LO Creation Operator Transformation}). This may be fine for an optical circuit of few components and small $N$ and $M$, but transforming the creation operators for large systems can otherwise become intractable. Instead, we use a numerical protocol to simulate this process, which we will discuss briefly in the following section.
 
 Before we begin, we can define $A(U)$ as the complex matrix which represents the action of~(\ref{LO Creation Operator Transformation}) on a quantum state in the Fock basis~(\ref{LO State Fock Basis}). The output state of an optical circuit $\ket{\psi^\prime}$ will determined by standard matrix-vector multiplication
 \begin{equation}
@@ -90,17 +89,16 @@ The matrix elements $U_{\alpha \beta}$ in~(\ref{LO Creation Operator Transformat
 \textbf{A} \subset \textbf{GU}(d_H).
 \end{equation}
 Thus, not all quantum logic operations on Fock states can be implemented via linear optical circuits.
-\section{A Collection of Facts}
+\section{Simulating Linear Optical State Evolution}
 \label{Section of Facts}
-\begin{center}\textit{Fact 1} \end{center}
 For an optical circuit of $K$ number of components,
 \begin{equation}
 	\label{Fact 1}
-\boxed{A(U_K) A(U_{K-1}) \dots A(U_1) = A(U_1 U_2 \dots U_K)}
+A(U_K) A(U_{K-1}) \dots A(U_1) = A(U_1 U_2 \dots U_K)
 \end{equation}
 Each component $U_k$ could be a simple beam splitter, phase shifter, or a general integrated circuit consisting of many low-level components.
 (\ref{Fact 1}) allows us to simulate the net effect of a series of low-level linear optical operations with efficiency. We can compile the $K$ optical hardware components via the matrix multiplication $U_1 U_2 \dots U_K$, rather than evolve the state in a series of discrete steps.
-\begin{center}\textit{Fact 2} \end{center}
+
 Rewriting~(\ref{LO State Fock Basis}) as
 \begin{equation}
 \label{LO State Fock Vec Basis}
@@ -115,462 +113,278 @@ are the Fock states, we define
 \label{m definition}
 \ket{\vec{m}(\vec{n})} = \ket{m_1,m_2,\dots,m_N}
 \end{equation}
-as \textit{any} vector where $m_\alpha$ is the mode-location of photon number $\alpha$. There can be many vectors $\ket{\vec{m}(\vec{n})}$ for each $\ket{\vec{n}}$, since photons are generally indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}(\vec{n})}$. Then, the output state of an optical circuit is given by
+as \textit{any} vector where $m_\alpha$ is the mode-location of photon number $\alpha$. There can be many vectors $\ket{\vec{m}(\vec{n})}$ for each $\ket{\vec{n}}$, since photons are generally indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}(\vec{n})}$. Then the elements of $A(U)$ are given by
 \begin{eqnarray}
 \label{Fact 2}
-\ket{\psi^\prime} = \sum_{\vec{n}}     \frac{c_{\vec{n}}}{\prod_{p=1}^{M} \sqrt{n_p !}} \cdot \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \sum^M_{\substack{m_1^\prime = 1\\
-		m_2^\prime = m_1^\prime\\
-		\vdots \\
-		m_N^\prime = m_{N-1}^\prime}} \prod_{p=1}^{M}  \sqrt{n_p^\prime !} \left[ \sum_{perm(\vec{m}^\prime)}
-  U_{m_1 m_1^\prime} \dots U_{m_N m_N^\prime} \right] \nonumber \ket{\vec{n}^\prime} 
+A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{\sqrt{n_p !}} \left[\sum_{perm(\vec{m}^\prime)} U_{m_1 m_1^\prime} U_{m_2 m_2^\prime} \dots U_{m_N m_N^\prime} \right] \outerproduct{\vec{n}^\prime}{\vec{n}} 
 \end{eqnarray}
-where the inner-most summation is over all distinct permutations of integer entries in the vector $\vec{m}^\prime$. $\ket{\vec{n}^\prime}$ is the Fock basis state mapped to by $\ket{\vec{m}^\prime}$ after counting the photons in each mode. 
-\section{The Protocol}
-\label{Section on Protocol}
-\noindent The protocol for simulating a linear optical quantum circuit is separated into an initialization and state evolution stage.
-\newline
-\newline
-\textbf{Initialization Stage:}
-\newline
-\newline
-		(1)  Establish the Fock basis $\{\ket{\vec{n}} \}$ of our input state, $\ket{\psi}$ as in Eq.~(\ref{Matrix Vector Product}). Do not include basis states outside the span of $\ket{\psi}$; any $\ket{\vec{n}}$ such that $c_{\vec{n}}=0$.
-		\newline
-		\newline
-		(2) For each element of the basis set, $\ket{\vec{n}}$, construct a corresponding $\ket{\vec{m}(\vec{n})}$ as defined in Eq.~(\ref{m definition}).
-		\newline
-		\newline
-		(3) Store $\vec{n}$ and $\vec{m}$ as integer vectors in memory.
-		\newline
-		\newline
-\textbf{State Evolution Stage:}
-\newline
-\newline
-		(1)  Compile the total optical circuit composed of K components by performing the matrix multiplication $ U = U_1 U_2 \dots U_K $.
-		\newline
-		\newline
-		(2) Initialize $\ket{\psi^\prime}$ as a complex vector of length $d_H$ with all entries as 0.
-		\newline
-		\newline
-		(3) 
-		\newline
-		\newline
-Initialization needs to only be performed once. Then, one can quickly render $A(U)$ to allow fast, repeated simulation necessary for Monte-carlo techniques or numerical optimization.
-\newline
-\newline
-An implementation of this algorithm written in C++ is available for reference on Github at (include link). Compiling the code will require any C++ compiler and the linear algebra library, Eigen~\cite{EIGEN}.
-\section{Rail Encoding Qubits into Deterministic Blocks}
-\label{Section Block Encoding}
-It is well established that we can build any quantum logic operator acting on a state in the Fock basis using linear optical components if only a single photon is in the system ($N=1$). That is, we can build a universal quantum computer or fully decodible quantum channel in a single-photon rail encoding~\cite{Adami,Review Paper}. However, by forcing $N=1$, we sacrifice the scalability of our hardware. For a system of $N=1$ photons propagating in $M$ optical modes, Eq.~(\ref{Hilbert Space Dimension}) simplifies to
+where the summation is over all distinct permutations of integer entries in the vector $\vec{m}^\prime$. A more complete discussion of the numerical methods used here and proof of Eq.~\ref{Fact 1}-\ref{Fact 2} are available in~\cite{Jake Smith}.
+\section{The Classical Mutual Entropy}
+The purpose of our work here is to improve quantum state discrimination at the receiving end of a quantum communication channel. As a gauge for the success of the quantum measurement, we choose the classical mutual entropy $H(X:Y)$ which is defined as the amount of overlapping information encoded by the sender, Alice, and extracted by the receiver, Bob;
 \begin{equation}
-d_H = M.
+H(X:Y) = \sum_{x \in X} \sum_{y \in Y} p(x,y) \log_2 \frac{p(x,y)}{p(x) p(y)}
 \end{equation}
-Thus, to implement $j$ qubits, we would need to build a system of $M=2^j$ modes; the hardware necessary to hold quantum information in this way scales too quickly to ever be practical. To solve this problem, we can try to group deterministic blocks of logical qubits together in order to establish scalability. For example, two qubits can be encoded into the $N=1,M=4$ system in Table~\ref{Two Qubit Encoding Table}.
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		Logical Qubit State      \quad \quad \quad     & Physical Fock State \\
-		\hline 
-		\quad \quad \quad $\ket{00}$     & $\ket{1,0,0,0}$ \\
-		\quad \quad \quad $\ket{01}$            & $\ket{0,1,0,0}$ \\
-		\quad \quad \quad $\ket{10}$            & $\ket{0,0,1,0}$ \\
-		\quad \quad \quad $\ket{11}$            & $\ket{0,0,0,1}$ \\
-	\end{tabular}
-	\caption{ \label{Two Qubit Encoding Table} Two Qubit Single Photon Encoding}
-\end{center}
-\end{table}
-We can then encode \textit{four} qubits into the $N=2,M=8$ system in Table~\ref{Block Encoding Table}.
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		Logical Qubit State      \quad \quad \quad     & Physical Fock State \\
-		\hline 
-		\quad \quad \quad $\ket{0000}$     & $\ket{1,0,0,0,1,0,0,0}$ \\
-		\quad \quad \quad $\ket{0001}$            & $\ket{1,0,0,0,0,1,0,0}$ \\
-		\quad \quad \quad $\ket{0010}$           & 
-		$\ket{1,0,0,0,0,0,1,0}$ \\
-		\quad \quad \quad $\ket{0011}$           & 
-		$\ket{1,0,0,0,0,0,0,1}$ \\
-		\quad \quad \quad $\ket{0100}$           & 
-		$\ket{0,1,0,0,1,0,0,0}$ \\
-		\quad \quad \quad $\ket{0101}$           & 
-		$\ket{0,1,0,0,0,1,0,0}$ \\
-		\quad \quad \quad $\ket{0110}$           & 
-		$\ket{0,1,0,0,0,0,1,0}$ \\
-		\quad \quad \quad $\ket{0111}$            & $\ket{0,1,0,0,0,0,0,1}$ \\
-		\quad \quad \quad $\ket{1000}$            & $\ket{0,0,1,0,1,0,0,0}$ \\
-		\quad \quad \quad $\ket{1001}$            & $\ket{0,0,1,0,0,1,0,0}$ \\
-		\quad \quad \quad $\ket{1010}$            & $\ket{0,0,1,0,0,0,1,0}$ \\
-		\quad \quad \quad $\ket{1011}$            & $\ket{0,0,1,0,0,0,0,1}$ \\
-		\quad \quad \quad $\ket{1100}$            & $\ket{0,0,0,1,1,0,0,0}$ \\
-		\quad \quad \quad $\ket{1101}$            & $\ket{0,0,0,1,0,1,0,0}$ \\
-		\quad \quad \quad $\ket{1110}$            & $\ket{0,0,0,1,0,0,1,0}$ \\
-		\quad \quad \quad $\ket{1111}$            & $\ket{0,0,0,1,0,0,0,1}$ \\
-	\end{tabular}
-	\caption{ \label{Block Encoding Table} Four Qubits encoded into two single-photon blocks}
-\end{center}
-\end{table}
-Just like in the dual-rail, we can still apply any single qubit rotation or measurement trivially. But now we can apply a deterministic CNOT gate between logical qubits 1 and 2 or between logical qubits 3 and 4 by manipulating only a single photon. The difficulty here will be to apply entangling operations between blocks. For example, we may want to apply the $\mbox{CNOT}_{1,4}$ gate where the control is qubit 1 and the target is qubit 4. As it turns out, we cannot perform this operation using vanilla linear optics. Thus, we use the protocol introduced in section~\ref{Section on Protocol} to test our ability to construct operators like the $\mbox{CNOT}_{1,4}$ gate using probabilistic partial measurements.
-
-The reader should note that the dimension of the Hilbert space of these block systems, $d_H$, is typically larger than the dimension of the computational subspace. We define the dimension of the computational subspace $d_C$, and in the case of Table~\ref{Block Encoding Table},
-\begin{equation}
-d_C = 16 \quad d_H = \frac{9!}{2! 7!} = 36
-\end{equation}
-All elements of the matrix representation of $\mbox{CNOT}_{1,4}$ outside of the 16 columns of the computational subspace are irrelevant since we assume all input states are contained in this subspace. All entries in the matrix representation of $\mbox{CNOT}_{1,4}$ outside the 16 computational rows but in the 16 computational columns are fixed at 0. This is to prevent any state from spreading out of the computational subspace.
-\section{Generalized Block Encoding}
-In the previous section we presented an encoding of a single photon in four modes representing a system of two qubits. More generally, we can encode $q$ qubits into a block of 1 photon and $2^q$ modes. Again, "entangling" operations between qubits contained entirely in a single block will be fully deterministic. Here, we want to test our ability to apply a measurement-assisted $\mbox{CNOT}$ gate between qubits in separate blocks.  We assume a  mapping of Fock states to logical qubit states within a single block as in Table~\ref{q Qubit Block Encoding}.
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		Logical Qubit State      \quad \quad \quad     & Physical Fock State \\
-		\hline 
-		\quad \quad \quad $\ket{0\dots00}$     & $\ket{1,0,0,\dots,0}$ \\
-		\quad \quad \quad $\ket{0\dots01}$            & $\ket{0,1,0,\dots,0}$ \\
-		\quad \quad \quad $\ket{0\dots10}$            & $\ket{0,0,1,\dots,0}$ \\
-		\quad \quad \quad \quad \enspace \vdots & \vdots \\
-		\quad \quad \quad $\ket{1\dots11}$            & $\ket{0,0,0,\dots,1}$ \\
-	\end{tabular}
-	\caption{ \label{q Qubit Block Encoding} q Qubit Single Photon Encoding}
-\end{center}
-\end{table}
-Without loss of generality, we can group two blocks together, choose the first qubit in the first block as a control qubit, and the last qubit in the second block as a target qubit. Then, we can generalize the $\mbox{CNOT}_{1,4}$ gate to the $\mbox{CNOT}_{first,last}$ gate, which swaps all sequential modes in the second block if a photon is in the second half of modes in the first block. 
-\section{Elementary Photon-Entangling Operations}
-\label{Section Elementary Photon Entangling Operations}
-In practice, we find the $\mbox{CNOT}_{first,last}$ gate difficult to simulate numerically, even for small block sizes. We can instead dismantle the full operation into elementary components. Those sub-operations we are able to simulate numerically (with generous room for ancillas) are presented in Tables~\ref{One Control Two Targets}-\ref{Four Controls two Targets}.
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		$\ket{0,0,0}$  &  $\rightarrow$ & $\ket{0,0,0}$ \\ \\
-		$\ket{0,0,1}$  & $\rightarrow$ & $\ket{0,0,1}$ \\
-		$\ket{0,1,0}$ & $\rightarrow$ & $\ket{0,1,0}$ \\
-		$\ket{1,0,0}$ & $\rightarrow$ & $\ket{1,0,0} $ \\ \\
-		$\ket{1,0,1}$ & $\rightarrow$ & $\ket{1,1,0}$ \\
-		$\ket{1,1,0}$ & $\rightarrow$ & $\ket{1,0,1}$ \\
-	\end{tabular}
-	\caption{ \label{One Control Two Targets} An operation acting on three modes expressed as a transformation of Fock basis states. The first mode acts as the control while the second and third modes act as targets. We can build the $\mbox{CNOT}_{first,last}$ gate by applying this operation $2^{2 q -2}$ times.}
-\end{center}
-\end{table}
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		$\ket{0,0,0,0}$  &  $\rightarrow$ & $\ket{0,0,0,0}$ \\ \\
-		$\ket{0,0,0,1}$  & $\rightarrow$ & $\ket{0,0,0,1}$ \\
-		$\ket{0,0,1,0}$ & $\rightarrow$ & $\ket{0,0,1,0}$ \\
-		$\ket{0,1,0,0}$ & $\rightarrow$ & $\ket{0,1,0,0} $ \\ 
-		$\ket{1,0,0,0}$ & $\rightarrow$ & $\ket{1,0,0,0} $ \\ \\
-		$\ket{1,0,0,1}$  & $\rightarrow$ & $\ket{1,0,1,0}$ \\
-		$\ket{1,0,1,0}$ & $\rightarrow$ & $\ket{1,0,0,1}$ \\
-		$\ket{0,1,0,1}$ & $\rightarrow$ & $\ket{0,1,1,0} $ \\ 
-		$\ket{0,1,1,0}$ & $\rightarrow$ & $\ket{0,1,0,1} $ \\ \\
-	\end{tabular}
-	\caption{ \label{Two Controls Two Targets} An operation acting on four modes expressed as a transformation of Fock basis states. The first two modes act as the controls while the last two modes act as targets. We can build the $\mbox{CNOT}_{first,last}$ gate by applying this operation $2^{2 q - 3}$ times.}
-\end{center}
-\end{table}
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		$\ket{0,0,0,0,0}$  &  $\rightarrow$ & $\ket{0,0,0,0,0}$ \\ \\
-		$\ket{0,0,0,0,1}$  & $\rightarrow$ & $\ket{0,0,0,0,1}$ \\
-		$\ket{0,0,0,1,0}$ & $\rightarrow$ & $\ket{0,0,0,1,0}$ \\
-		$\ket{0,0,1,0,0}$ & $\rightarrow$ & $\ket{0,0,1,0,0} $ \\ 
-		$\ket{0,1,0,0,0}$ & $\rightarrow$ & $\ket{0,1,0,0,0} $\\
-		$\ket{1,0,0,0,0}$ & $\rightarrow$ & $\ket{1,0,0,0,0} $ \\ \\
-		$\ket{1,0,0,0,1}$  & $\rightarrow$ & $\ket{1,0,0,1,0}$ \\
-		$\ket{1,0,0,1,0}$  & $\rightarrow$ & $\ket{1,0,0,0,1}$ \\
-		$\ket{1,0,1,0,0}$  & $\rightarrow$ & $\ket{1,1,0,0,0}$ \\
-		$\ket{1,1,0,0,0}$  & $\rightarrow$ & $\ket{1,0,1,0,0}$ \\
-	\end{tabular}
-	\caption{ \label{One Control Four Targets} An operation acting on five modes expressed as a transformation of Fock basis states. The first mode acts as the control while the last four modes act as targets. We can build the $\mbox{CNOT}_{first,last}$ gate by applying this operation $2^{2 q - 3}$ times.}
-\end{center}
-\end{table}
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		$\ket{0,0,0,0,0,0}$  &  $\rightarrow$ & $\ket{0,0,0,0,0,0}$ \\ \\
-		$\ket{0,0,0,0,0,1}$  & $\rightarrow$ & $\ket{0,0,0,0,0,1}$ \\
-		$\ket{0,0,0,0,1,0}$ & $\rightarrow$ & $\ket{0,0,0,0,1,0}$ \\
-		$\ket{0,0,0,1,0,0}$ & $\rightarrow$ & $\ket{0,0,0,1,0,0} $ \\ 
-		$\ket{0,0,1,0,0,0}$ & $\rightarrow$ & $\ket{0,0,1,0,0,0} $\\
-		$\ket{0,1,0,0,0,0}$ & $\rightarrow$ & $\ket{0,1,0,0,0,0} $ \\
-		$\ket{1,0,0,0,0,0}$ & $\rightarrow$ & $\ket{1,0,0,0,0,0} $ \\ \\
-		$\ket{0,1,0,0,0,1}$  & $\rightarrow$ & $\ket{0,1,0,0,1,0}$ \\
-		$\ket{0,1,0,0,1,0}$  & $\rightarrow$ & $\ket{0,1,0,0,0,1}$ \\
-		$\ket{0,1,0,1,0,0}$  & $\rightarrow$ & $\ket{0,1,1,0,0,0}$ \\
-		$\ket{0,1,1,0,0,0}$  & $\rightarrow$ & $\ket{0,1,0,1,0,0}$ \\
-		$\ket{1,0,0,0,0,1}$  & $\rightarrow$ & $\ket{1,0,0,0,1,0}$ \\
-		$\ket{1,0,0,0,1,0}$  & $\rightarrow$ & $\ket{1,0,0,0,0,1}$ \\
-		$\ket{1,0,0,1,0,0}$  & $\rightarrow$ & $\ket{1,0,1,0,0,0}$ \\
-		$\ket{1,0,1,0,0,0}$  & $\rightarrow$ & $\ket{1,0,0,1,0,0}$ \\
-	\end{tabular}
-	\caption{ \label{Two Controls Four Targets} An operation acting on six modes expressed as a transformation of Fock basis states. The first two modes act as the controls while the last four modes act as targets. We can build the $\mbox{CNOT}_{first,last}$ gate by applying this operation $2^{2 q - 4}$ times.}
-\end{center}
-\end{table}
-\begin {table}[h]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		$\ket{0,0,0,0,0,0}$  &  $\rightarrow$ & $\ket{0,0,0,0,0,0}$ \\ \\
-		$\ket{0,0,0,0,0,1}$  & $\rightarrow$ & $\ket{0,0,0,0,0,1}$ \\
-		$\ket{0,0,0,0,1,0}$ & $\rightarrow$ & $\ket{0,0,0,0,1,0}$ \\
-		$\ket{0,0,0,1,0,0}$ & $\rightarrow$ & $\ket{0,0,0,1,0,0} $ \\ 
-		$\ket{0,0,1,0,0,0}$ & $\rightarrow$ & $\ket{0,0,1,0,0,0} $\\
-		$\ket{0,1,0,0,0,0}$ & $\rightarrow$ & $\ket{0,1,0,0,0,0} $ \\
-		$\ket{1,0,0,0,0,0}$ & $\rightarrow$ & $\ket{1,0,0,0,0,0} $ \\ \\
-		
-		$\ket{1,0,0,0,0,1}$  & $\rightarrow$ & $\ket{1,0,0,0,1,0}$ \\
-		$\ket{1,0,0,0,1,0}$  & $\rightarrow$ & $\ket{1,0,0,0,0,1}$ \\
-		$\ket{0,1,0,0,0,1}$  & $\rightarrow$ & $\ket{0,1,0,0,1,0}$ \\
-		$\ket{0,1,0,0,1,0}$  & $\rightarrow$ & $\ket{0,1,0,0,0,1}$ \\
-		$\ket{0,0,1,0,0,1}$  & $\rightarrow$ & $\ket{0,0,1,0,1,0}$ \\
-		$\ket{0,0,1,0,1,0}$  & $\rightarrow$ & $\ket{0,0,1,0,0,1}$ \\
-		$\ket{0,0,0,1,0,1}$  & $\rightarrow$ & $\ket{0,0,0,1,1,0}$ \\
-		$\ket{0,0,0,1,1,0}$  & $\rightarrow$ & $\ket{0,0,0,1,0,1}$ \\
-	\end{tabular}
-	\caption{ \label{Four Controls two Targets} An operation acting on six modes expressed as a transformation of Fock basis states. The first four modes act as the controls while the last two modes act as targets. We can build the $\mbox{CNOT}_{first,last}$ gate by applying this operation $2^{2 q - 4}$ times (for $q>2$).}
-\end{center}
-\end{table} 
-The focus of our work here was to try to build these operators as probabilistic measurement-assisted transformations~\cite{KLM,Uskov}. We augment our optical computational state with an ancilla state, $\ket{\psi_a}$, apply a linear optical transformation $A(U)$, and then do a partial projective measurement. The total action of this non-unitary process can be simulated as a Kraus operator called the \textit{PAULA} operator acting on any optical quantum state in the computational subspace;
-\begin{equation}
-\label{Kraus Paula Operator}
-E = P A(U) L_a
-\end{equation} 
-\begin{equation}
-\ket{\psi^\prime} = E \ket{\psi}
-\end{equation}
-and then re-normalizing the result.  $L_a$ is a sparse operator satisfying $L_a^\dagger L_a = I$ that links the ancilla state $\ket{\psi_a}$ into the circuit;
-\begin{equation}
-\label{Ancilla Linker}
-L_a = \begin{pmatrix} \psi_a(1) & 0 & 0 & \dots & 0 \\
-0 & \psi_a(1) & 0 & \dots & 0 \\
-0 & 0 & \psi_a(1) & \dots & 0 \\
-0 & 0 & 0 & \dots & \psi_a(1) \\
-\psi_a(2) & 0 & 0 & \dots & 0 \\
-0 & \psi_a(2) & 0 & \dots & 0 \\
-0 & 0 & \psi_a(2) & \dots & 0 \\
-0 & 0 & 0 & \dots & \psi_a(2) \\
-\vdots & \vdots & \vdots & & \vdots \end{pmatrix} .
-\end{equation}
-$A(U)$ is the standard, general unitary linear optical transformation defined in Eq.~\ref{Fact 2} and $P$ is a partial projective measurement over the ancilla modes. Note in accordance with \textit{Facts 3 and 4}, we do not construct the entire matrix $A(U)$ - only the columns mapped to by $L_a$ and the rows left after the projection $P$. We assume the projection operator is the outer product of some Fock state
-\begin{equation}
-P = \outerproduct{\vec{n}}{\vec{n}}
-\end{equation}
-containing the same number of photons and modes in the ancilla state, $N_a,M_a$. Thus, $E$ will be represented a $d_H$ by $d_C$ rectangular matrix. 
-
-The goal here is to find an optimal measurement-assisted protocol for achieving perfect gate fidelity in each of the transformations in Tables~\ref{One Control Two Targets}-\ref{Four Controls two Targets}. In each case, we want to simultaneously maximize the the gate fidelity and success probability for each subsystem containing 0, 1 and 2 photons over the same quantum optical circuit and ancilla state. We will demonstrate the details of this in the following section for the transformation acting on the subsystem of modes defined in Table~\ref{One Control Two Targets}. The main ideas can easily be extended to the transformations described in Tables~\ref{Two Controls Two Targets}-\ref{Four Controls two Targets}, so we omit detailed discussion of those cases from this paper.
-\section{Numerical Testing of The operation in Table~\ref{One Control Two Targets}}
-\label{Section Numerical Testing}
-We get the transformation acting on a system of 0 photons for free
-\begin{equation}
-\ket{0,0,0} \rightarrow \ket{0,0,0}
-\end{equation}
-If only a single photon is in our subsystem of modes, we strive for a target operator
-\begin{equation}
-\label{T1 1C2T}
-T_1=	\begin{pmatrix} 1 & 0 & 0  \\ 0 & 1 & 0  \\ 0 & 0 & 1   \end{pmatrix}  
-\end{equation}
-\begin{equation}
-d_H = d_C = 3
-\end{equation}
-\begin{equation}
-\{ \ket{\vec{n}} \} = \{ \ket{\vec{n}^\prime} \} = \{ \ket{0,0,1},\ket{0,1,0},\ket{1,0,0} \}
-\end{equation}
-If two photons are in our subspace, we strive for a target operator 
-\begin{equation}
-\label{T2 1C2T}
-T_2=\begin{pmatrix} 0 & 1  \\ 1 & 0  \\ 0 & 0 \\ 0 & 0 \\ 0 & 0 \\ 0 & 0   \end{pmatrix}.  
-\end{equation}
-\begin{equation}
-d_H = 6 \quad d_C = 2
-\end{equation}
-\begin{equation}
-\{ \ket{\vec{n}} \} = \{ \ket{1,0,1},\ket{1,1,0} \}
-\end{equation}
-\begin{equation}
-\{ \ket{\vec{n}^\prime } \} = \{ \ket{1,0,1},\ket{1,1,0},\ket{2,0,0},\ket{0,2,0},\ket{0,1,1},\ket{0,0,2} \}
-\end{equation}
-We define our measurement-assisted transformations 
-\begin{equation}
-E_1(U,L_a) \quad \quad \quad E_2(U,L_a)
-\end{equation}
-where
-\begin{equation}
-E_\gamma(U,L_a) = P A_\gamma(U) L_a
-\end{equation}
-and numerically maximize the function
-\begin{equation}
-\label{Merit Function For Blocks}
-\small f(U,\psi_a) = F(E_1,T_1) \cdot F(E_2,T_2) +\epsilon S(E_1,T_1) \cdot S(E_2,T_2).
-\end{equation}
-$F(E_n,T_n)$ and $S(E_n,T_n)$ are the gate fidelity and success probability for each system of $n$ photons respectively;
-\begin{equation}
-	\label{Gate Fidelity}
-		F(E,T) = \frac{1}{d_C} \frac{\abs{\tr(E^\dagger T)}^2}{\tr(E^\dagger E)} 
-\end{equation}
-and
-\begin{equation}
-\label{Success Probability} 
-\small	F(E,T) \rightarrow 1 \quad : \quad S(E,T) \approx \frac{\abs{E_{\alpha \beta}}^2}{\abs{T_{\alpha \beta}}^2} \quad \forall \quad T_{\alpha \beta } \ne 0.
-\end{equation}
-$\epsilon \in \{0,1\}$ is just a real numerical weight for the optimization.
-
-Even if we achieve perfect fidelity, $F(E_1,T_1) \cdot F(E_2,T_2) = 1$, a difference in global phases on $T_1$ and $T_2$ will lead to an unwanted relative phase difference when we apply the full operator. Thankfully, we can always correct for this. The reader can verify for themselves that if we have a global phase difference of $e^{-i \phi}$ between $T_1$ and $T_2$, we simply apply a phase shift of $e^{i \phi}$ on every mode at the end of our circuit; we apply $A(U^\prime)$ such that
-\begin{equation}
-U^\prime = \begin{pmatrix}
-e^{i \phi} & 0 & 0 & \dots & 0 \\
-0 & e^{i \phi} & 0 & \dots & 0 \\
-\vdots & \vdots \\
-0 & 0 & 0 & \dots & e^{i \phi}
-\end{pmatrix}.
-\end{equation}
-According to Eq.~\ref{LO Creation Operator Transformation}, any state of a single photon will be adjusted by a global phase;
-\begin{equation}
-A_1(U^\prime) \ket{N=1} = e^{i \phi } \ket{N=1}
-\end{equation}
-and any state composed of two photons will be adjusted by a global phase;
-\begin{equation}
-A_2(U^\prime) \ket{N=2} = e^{2 i \phi} \ket{N=2}
-\end{equation}
-thus the relative phase can be corrected in this way.
-\section{Results}
-\subsection{The Entangling Operation in Table~\ref{One Control Two Targets}}
-This physical operation acting on three modes is of particular importance; it can be applied a single time to two qubits encoded in the dual rail in order to apply an entangling $\mbox{CNOT}$ gate between them. In fact, after extensive numerical optimization of Eq.~\ref{Merit Function For Blocks}, we find the same optimal solution found in~\cite{Uskov}.
+where $X$ is the encoding variable and $Y$ is the decoding variable.
+We can tailor this definition of the mutual information to better suit our needs. First, we can isolate the Shannon information of Alice's classical encoding, $H(X)$,
 \begin{eqnarray}
-& (F(E_1,T_1) \cdot F(E_2,T_2))_{max} = 1 \nonumber \\
-& S_{max}(E_1,T_1) = S_{max}(E_2,T_2) = 2/27 \\
-& N_a,M_a=2 \nonumber \\
-& P = \outerproduct{11}{11} \nonumber	
+\small H(X:Y) = \sum_{x,y} p(x,y) \log_2 \frac{p(x,y)}{p(y)} \\
+- \sum_{x,y} p(x,y) \log_2 p(x) 
 \end{eqnarray}
-Increasing the number of ancilla resources beyond $N_a,M_a=2$ does not improve the success probability as far as we are able to test ($N_a,M_a \le 8$). Thus, for a block size of $q$ qubits, we find a maximum probability of successfully applying a $\mbox{CNOT}_{first,last}$ gate composed of the operation in Table~\ref{One Control Two Targets} using measurement-assisted transformations to be
-\begin{equation}
-\label{1C2T Result}
-p = (2/27)^{2^{2q-2}}
-\end{equation}
-\subsection{The Entangling Operation in Table~\ref{Two Controls Two Targets}}
-Within the number of ancilla resources we are able to test (I've done up to $M_a \le 6,N_a \le 4$, but I can go a little bit higher if we want to do this) we find the optimal solution;
+and apply the law of total probability
 \begin{eqnarray}
-&(F(E_1,T_1) \cdot F(E_2,T_2))_{max} = 1 \nonumber \\
-&S_{max}(E_1,T_1) = S_{max}(E_2,T_2) = 0.02180777 \\
-&N_a = 3,M_a=4 \nonumber \\
-&P = \outerproduct{1110}{1110} \nonumber	
+& -\sum_{x,y} p(x,y) \log_2 p(x) = -\sum_x \log_2 p(x) \sum_y p(x,y) \nonumber \\ & = -\sum_x p(x) \log_2 p(x)
 \end{eqnarray}
-Thus, for a block size of $q$ qubits, we find a maximum probability of successfully applying a $\mbox{CNOT}_{first,last}$ gate composed of the operation in Table~\ref{Two Controls Two Targets} using measurement-assisted transformations to be
+Defining the classical Shannon entropy
 \begin{equation}
-\label{2C2T Result}
-p = (0.02180777)^{2^{2q-3}}
+\label{Shannon Entropy}
+	H(X) = -\sum_{x \in X} p(x) \log_2 p(x)
 \end{equation}
-\subsection{The Entangling Operation in Table~\ref{One Control Four Targets}}
-Within the number of ancilla resources we are able to test (I've done up to $M_a \le 6,N_a \le 4$, but I can go a little bit higher if we want to do this) we find the optimal solution;
+leaves us with
+\begin{equation}
+\label{Mutual Entropy Full}
+\small
+	H(X:Y) = H(X) - \sum_{\substack{x \in X \\ y \in Y}} p(x) p(y|x) \log_2 \frac{\sum_{x^\prime} p(x^\prime) p(y|x^\prime)}{p(x) p(y|x)}.
+\end{equation}
+To maximize the communication efficiency of a quantum channel, we can numerically maximize Eq.~\ref{Mutual Entropy Full}.
+For any ensemble where all $p(x) = 1/\abs{X}$, we can simplify the mutual entropy further,
+\begin{equation}
+\label{Mutual Entropy}
+H(X:Y) = \log_2 \abs{X} - \frac{1}{\abs{X}} \sum_{x,y} p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)}
+\end{equation}
+The conditional entropy
+\begin{equation}
+\label{Conditional Entropy}
+\small H(X|Y) =  \frac{1}{\abs{X}} \sum_{\substack{x \in X \\ y \in Y}} p(y|x) \log_2 \frac{\sum_{x^\prime \in X} p(y|x^\prime)}{p(y|x)}
+\end{equation}
+is sufficient to quantify the success of a quantum measurement in this case. 
+
+The Holevo bound~\cite{Holevo,Jake Smith}
+\begin{equation}
+	H(X:Y) \le S(\rho) \le H(X)
+\end{equation}
+tells us that the mutual information shared between Alice and Bob is limited by the von Neumann entropy of the encoded states,
+\begin{equation}
+	S(\rho) = - \tr( \rho \log_2 \rho )
+\end{equation}
+We'll refer to this quantity as the channel encoding capacity.
+
+\section{Discrimination of the Bell States Encoded in the Dual Rail}
+Previous work in maximizing the encoding capacity of an optical quantum channel~\cite{First Paper} revealed that imposing a \textit{linear optical} encoding (Alice uses only linear optical operations to encode information into a quantum ensemble) does not prevent her from achieving the true channel capacity. But any relationship counselor will tell you that real communication generally requires a good listener; just because Alice was able to optimally compress information into the channel, does not guarantee Bob will be able to extract it. In fact, we typically observe that Bob is not able to fully discriminate an a-priori set of optical quantum states if he is restricted to a linear optical photo-counting von Neumann measurement. Formally, we define our encoded ensemble of quantum states
+\begin{equation}
+\{\ket{\psi_1},\ket{\psi_2},...\ket{\psi_{\abs{X}}}\},
+\end{equation}  
+each sent over the channel with probability $p_x$
+and photo-counting measurement operators
+\begin{equation}
+\{ \outerproduct{\vec{n}_1}{\vec{n}_1}, \outerproduct{\vec{n}_2}{\vec{n}_2}, \dots , \outerproduct{\vec{n}_{\abs{Y}}}{\vec{n}_{\abs{Y}} } \}.
+\end{equation}
+A photo-counting von Neumann measurement is defined here as a unitary linear optical transformation followed by a photo-counting measurement. The probability of measuring outcome $y$ assuming state $x$ was sent will be
 \begin{eqnarray}
-& (F(E_1,T_1) \cdot F(E_2,T_2))_{max} = 1 \nonumber \\
-& S_{max}(E_1,T_1) = S_{max}(E_2,T_2) = 0.0217106 \\
-& N_a = 3,M_a=4 \nonumber \\
-& P = \outerproduct{1110}{1110} \nonumber	
+\label{von Neumann conditional probability part 1}
+\ket{\psi_x^\prime} = A(U) \ket{\psi_x} \\
+\label{von Neumann conditional probability part 2}
+p(y|x) = \abs{\braket{\vec{n}_y}{\psi_x^\prime}}^2.
 \end{eqnarray}
-Thus, for a block size of $q$ qubits, we find a maximum probability of successfully applying a $\mbox{CNOT}_{first,last}$ gate composed of the operation in Table~\ref{One Control Four Targets} using measurement-assisted transformations to be
+Imposing this measurement scheme, the Holevo bound appears to become strict for any optical communication channel
 \begin{equation}
-\label{1C4T Result}
-p = (0.0217106)^{2^{2q-3}}
+	H(X:Y) < S(\rho).
 \end{equation}
-\subsection{The Entangling Operation in Table~\ref{Two Controls Four Targets}}
- Within the number of ancilla resources we are able to test (I've done up to $M_a \le 4,N_a \le 4$, but I can go a little bit higher if we want to do this) we find the optimal solution;
- \begin{eqnarray}
- & (F(E_1,T_1) \cdot F(E_2,T_2))_{max} = 1 \nonumber\\
- & S_{max}(E_1,T_1) = S_{max}(E_2,T_2) = 0.00232161 \\
- & N_a = 4,M_a=4 \nonumber\\
- & P = \outerproduct{1111}{1111} \nonumber	
- \end{eqnarray}
- Thus, for a block size of $q$ qubits, we find a maximum probability of successfully applying a $\mbox{CNOT}_{first,last}$ gate composed of the operation in Table~\ref{Two Controls Four Targets} using measurement-assisted transformations to be
- \begin{equation}
- \label{2C4T Result}
- p = (0.00232161)^{2^{2q-4}}
- \end{equation}
- \subsection{The Entangling Operation in Table~\ref{Four Controls two Targets}}
- Haven't done this one yet - I should probably do this.
- \subsection{Total Results}
- We immediately observe an order of magnitude increase in success probability of applying the $\mbox{CNOT}_{first,last}$ gate as we increase the size of our sub-operation components; refer to Fig.~\ref{Figure - Block Encoding Results}. This is a promising trend for applying entangling operations between blocks of qubits of size $q=3,4$ etc. Even within the reach of our numerical simulations, we find an improvement over standard KLM for applying entangling operations within the context of some quantum algorithms. For example, we can look at the toy quantum circuit 
- \begin{eqnarray}
- \small & \mbox{CNOT}^3 = \\ \small \nonumber & (I \otimes I \otimes \mbox{CNOT}) \cdot (I \otimes  \mbox{CNOT} \otimes I) \cdot (\mbox{CNOT} \otimes I \otimes I)
- \end{eqnarray}
- acting on four qubits presented in Fig.~\ref{Three CNOTs}. Through the standard KLM protocol acting on qubits encoded in the dual-rail, each CNOT gate can be implemented with success probabilty $2/27$ using ancilla resources $N_a,M_a=2$. Thus, we find the total cost of the $\mbox{CNOT}^3$ gate; a success probability of $(2/27)^3$ using ancilla resources $ N_a,M_a = 6 $. Grouping these four qubits into two deterministic blocks of two qubits, $q=2$ we can apply the same operation with a success probability of $0.00232161$ using ancilla resources $ N_a,M_a=4 $. This is almost a six-fold improvement, while using less ancillas.
+Closing the Holevo bound here is prevented by two completely separate issues. First, $\rho$ may consist of a set of non-orthogonal states. Perfectly distinguishing a set of non-orthogonal states is a general problem in quantum mechanics and a number of solutions have been proposed~\cite{Hausladen,Lloyd,Lloyd Other,Ogawa,Nagaoka,Hayashi}. Second, we are often unable to construct, even for an ensemble of orthogonal states, the necessary linear optical operator $A(U)$ to rotate all states into  non-overlapping subspaces. Here, we will focus exclusively on this second problem and attempt to improve state discrimination of a set of orthogonal quantum states. In particular, we examine the Bell states encoded in the dual-rail, defined as
+\begin{eqnarray}
+\rho  = \sum_{i=1}^4 \frac{1}{4} \outerproduct{\psi_i}{\psi_i} \quad \quad \quad \quad \quad \\
+\ket{\psi_1} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} + \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
+\ket{\psi_2} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} - \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
+\ket{\psi_3} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} + \frac{1}{\sqrt{2}} \ket{0,1,1,0} \\
+\ket{\psi_4} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} - \frac{1}{\sqrt{2}} \ket{0,1,1,0}
+\end{eqnarray}
+For this ensemble, $S(\rho)$ and $H(X)$ are both fixed at 2 bits. Numerical minimization of Eq.~(\ref{Conditional Entropy}) with Eq.~(\ref{von Neumann conditional probability part 1}) and Eq.~(\ref{von Neumann conditional probability part 2}) suggests that the optimal von Neumann measurement one can apply to this system will extract $H(X:Y) = 1.5$ bits. This is accomplished by first applying the operator $A(U)$ where
+\begin{equation}
+\label{First U}
+U = \frac{1}{2} \begin{pmatrix} 1 & 1 & 1 & 1 \\ 1 & -1 & 1 & -1 \\ 1 & -1 & -1 & 1 \\ 1 & 1 & -1 & -1 \end{pmatrix}   
+\end{equation}
+and then performing a photon-counting measurement. Thus, the Bell states encoded in the dual rail form a simple, symmetric, quantum ensemble in which full state discrimination is not immediately possible. 
+\section{Augmenting the System with Ancilla Resources}
+\label{Augmenting Section}
+Previous work in linear optical quantum computing suggests that supplementing a system with ancilla photons and modes is known to improve control over a quantum state. In particular, the gate fidelity of a measurement-assisted CNOT~\cite{KLM} acting on qubits encoded in the dual-rail improves dramatically with the proper use of ancilla resources \cite{Uskov}. So we expect to see some benefit to incorporating ancilla states here, and that is indeed the case. Our numerical experiments consisted of minimizing Eq.~(\ref{Conditional Entropy}) with Eq.~(\ref{von Neumann conditional probability part 2}) but instead of using Eq.~(\ref{von Neumann conditional probability part 1}) to define $\ket{\psi_x^\prime}$, we set
+\begin{equation}
+\label{Matrix Vector Product Ancilla}
+\ket{\psi_x^\prime} = A(U) \ket{\psi_a} \otimes \ket{\psi_x}.
+\end{equation}
+In  Fig.~(\ref{Decoding Hardware Ancillas}) we present an illustration of the decoding apparatus described by Eq~(\ref{Matrix Vector Product Ancilla}). The ancilla state is defined as any Fock state constructed from $N_a$ ancilla photons and $M_a$ ancilla modes 
+\begin{eqnarray}
+& \ket{\psi_a} = c_1 \ket{N_a,0,\dots,0_{M_a}} + c_2 \ket{N_a-1,1,0,\dots, 0_{M_a}} + \nonumber \\ & \dots  + c_{d_{H_a}} \ket{0,0,\dots,(N_a)_{M_a}}	 \quad \quad \quad \quad
+\end{eqnarray}
+\begin{equation}
+d_{H_a} = \frac{(N_a+M_a-1)!}{N_a ! (M_a-1)!}
+\end{equation}
+Because we allow photons to freely cross the boundary between computational and ancilla modes under the application of $A(U)$, the tensor product in Eq.~(\ref{Matrix Vector Product Ancilla}) falls strictly within the larger physical Hilbert space. In other words, $A(U)$ is not a square matrix. In Table~\ref{Ancilla Resources Table} we present results of numerical optimization over the unitary operator, $U$ and ancilla state $\ket{\psi_a}$.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width= 0.5 \textwidth]{./ancillaMeasApp.pdf}
+	\caption{At the receiving end of a linear optical quantum channel, we build this measurement apparatus. Bell states arrive in the top four optical modes and we have a simple ancilla state prepared in the bottom set of modes. A linear optical transformation is applied, and then a photocounting measurement is performed.}
+	\label{Decoding Hardware Ancillas}
+\end{figure}
+\begin {table}[H]
+\begin{center}
+	\begin{tabular}{l*{6}{c}r} 
+		& & & &  $M_a$ \\
+		&       & \vline   & 0 & 1 & 2 & 3 & 4 \\
+		\cline{2-8}
+		&	0    & \vline  & 1.5 & 1.5 & 1.5 & 1.5 & 1.5 \\
+		&      1    & \vline & - & 1.5 & 1.5 & 1.5 & 1.5 \\
+		$N_a$ & 2 & \vline & - & 1.5 & 1.625 & 1.625 & 1.625 \\
+		& 3 & \vline & - & 1.5 & 1.625 & 1.625 & 1.625 \\
+		& 4 & \vline & - & 1.5 & 1.625 & 1.625 & 1.75 \\
+	\end{tabular}
+	\caption{Results for maximization of $H(X:Y)$ in bits over the operator $A(U)$ and states $\ket{\psi_a}$ for ancilla photons $N_a$ and ancilla modes $M_a$. In a perfect measurement, $H(X:Y) \rightarrow 2$ bits.\label{Ancilla Resources Table}}
+\end{center}
+\end{table}
+Table~\ref{Ancilla Resources Table} reports a discrete improvement in state discrimination with each additional pair of ancilla resources. We observe that all solutions converge to ancilla states $\ket{\psi_a}$ in a simple, classical state;
+\begin{equation}
+\ket{\psi_a} \equiv \ket{1,1,\dots,1_{M_a}}
+\end{equation} In particular we present results for $N_a,M_a=0$, $N_a,M_a=2$ and $N_a, M_a= 4$. Each of these solutions represents a family of solutions which are equivalent under symmetry (e.g. invariant permutations of columns since the labeling of output modes is arbitrary). 
+\newline
+
+
+		$ H(X:Y) = 1.5 $ bits
+		$$ \ket{\psi_a} = \ket{NULL} $$
+		\begin{equation}
+		\label{No Ancillas}
+		U = \frac{1}{2} \begin{pmatrix} 1 & 1 & 1 & 1 \\ 1 & -1 & 1 & -1 \\ 1 & -1 & -1 & 1 \\ 1 & 1 & -1 & -1 \end{pmatrix}   
+		\end{equation}
+		$$or$$
+		\begin{equation}
+		U = \frac{1}{\sqrt 2} \begin{pmatrix} 1 & 1 & 0 & 0 \\ 0 & 0 & 1 & 1 \\ 1 & -1 & 0 & 0 \\ 0 & 0 & 1 & -1 \end{pmatrix}   
+		\end{equation}
+
+		$ H(X:Y) = 1.625 $ bits
+		$$ \ket{\psi_a} = \ket{1,1} $$
+		\begin{equation}
+		\label{11 Ancilla}
+		U = \frac{1}{2} \begin{pmatrix} 
+		1 & 1 & 1 & 1 & 0 & 0 \\ 
+		1 & -1 & 1 & -1 & 0 & 0 \\ 
+		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & 1 & 1 \\ 
+		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & i & -i \\
+		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & -i & i \\
+		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & -1 & -1 \\
+		\end{pmatrix}   
+		\end{equation}
+		$$or$$
+		\begin{equation}
+		U = \frac{1}{2} \begin{pmatrix} 
+		1 & 1 & 1 & 1 & 0 & 0 \\ 
+		1 & -1 & 1 & -1 & 0 & 0 \\ 
+		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \sqrt 2 & 0 \\ 
+		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & 0 & -i \sqrt 2 \\
+		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & -\sqrt 2 & 0 \\
+		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & 0 & i \sqrt 2 \\
+		\end{pmatrix}   
+		\end{equation}
+		$$or$$
+		\begin{equation}
+		U = \frac{1}{2} \begin{pmatrix} 
+		1 & 1 & 1 & 1 & 0 & 0 \\ 
+		1 & -1 & 1 & -1 & 0 & 0 \\ 
+		1 & 0 & -1 & 0 & 1 & 1 \\
+		0 & 1 & 0 & -1 & -1 & 1 \\
+		1 & 0 & -1 & 0 & -1 & -1 \\
+		0 & 1 & 0 & -1 & 1 & -1 
+		\end{pmatrix}   
+		\end{equation}
+		$ H(X:Y) = 1.75 $ bits
+		\newline
+		$$ \ket{\psi_a} = \ket{1,1,1,1} $$
+		\newline
+		\begin{equation}
+		\label{1111 Ancilla}
+		U = \frac{1}{2} \begin{pmatrix} 
+		1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ 
+		1 & -1 & 1 & -1 & 0 & 0 & 0 & 0 \\ 
+		0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+		0 & 0 & 0 & 0 & 1 & -1 & 1 & -1 \\
+		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} \\ 
+		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} \\ 
+		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} \\ 
+		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} \\ 
+		\end{pmatrix}   
+		\end{equation}
+Restating our definition of a linear optical transformation
+\begin{equation}
+\hat{a}^\dagger_i \rightarrow \sum_j U_{i j} \hat{a}_j^\dagger
+\end{equation}
+and noting that all ancilla modes are ordered \textit{before} computational modes, our results seem to suggest a general trend of spreading each pair of additional ancilla modes over four of the output modes, with discrete phase differences of $\pi$. Extrapolating these solutions, one could guess
+\begin{eqnarray}
+&N_a = 6, M_a = 8 : \quad \ket{\psi_a} = \ket{1,1,1,1,1,1,0,0} \nonumber \\ & \quad H(X:Y) \rightarrow 1.875 \mbox{ bits} \nonumber
+\end{eqnarray}
+since the three pairs of ancilla photons would then have room to spread over 12 output modes. One could further extrapolate
+\begin{eqnarray}
+& N_a = 8, M_a = 12 : \quad \ket{\psi_a} = \ket{1,1,1,1,1,1,1,1,0,0,0,0} \nonumber \\  & \quad H(X:Y) \rightarrow 2.0 \mbox{ bits} \nonumber
+\end{eqnarray}
+since the four pairs of ancilla photons have room to spread over 16 output modes. 
+\newline
+\newline
+Unfortunately, while Eq.~(\ref{Fact 2}) allows for feasible numerical simulation of these physical systems, the large optimization space and overwhelming saturation of local minima within it prevent us from reaching a global solution. Minimization methods including BFGS, conjugate gradient descent, Levenberg-Marquardt, Nelder-Meade, and principal axis were all tried with no success. In addition, we optimized over non-unitary operators in the place of $U$ which was also unsuccessful. Pushing to simulations of this size, we recommend trying a method other than numerical optimization to find an optimal $U$.
+\section{Global Quantum Channel Optimization}
+In Section~\ref{Augmenting Section} we discussed using ancilla resources to improve the discrimination of states in a quantum ensemble at the receiving end of a linear optical quantum channel. We found that ancilla resources can help us to control and decode multi-photon states, though we were unable to find a protocol for perfect measurement.  Here, we finally attempt to optimize the \textit{total} capacity of a linear optical quantum channel using ancillas in the decoding phase. We allow Alice to perform a non-orthogonal encoding and we allow Bob to perform a von Neumann measurement with the help of ancilla resources, as in Fig.~\ref{Decoding Hardware Ancillas}. The full communication protocol is defined as follows;
+\newline
+\begin{center}
+	\begin{minipage}{20em}
+		(1) An entangled initial state, $\ket{\psi_1}$ is pre-distributed between Alice and Bob.
+		\newline
+		\newline
+		(2) Alice performs some operation, $A(U_x)$ with probability $p(x)$ where $U_1 = I$ and $U_2,U_3, \dots, U_{\abs{X}}$ are unitary matrices operating only on her modes.
+		\newline
+		\newline
+		(3) Alice's modes run to Bob, who now has possession of the entire state.
+		\newline
+		\newline
+		(4) Bob augments the system with some pre-generated ancilla state $\ket{\psi_a}$, applies an operation to all modes $A(U_B)$, and performs a photocounting measurement.
+	\end{minipage}
+\end{center}
+~
+\newline
+An illustration of the full device is presented in Fig.~(\ref{Total Quantum Channel Device}).
+Formally, we want to perform a projective measurement on the ensemble of states;
+\begin{equation}
+\rho = \sum_{x \in X}  p(x) \outerproduct{\psi_x^\prime}{\psi_x^\prime}
+\end{equation}
+\begin{equation}
+\ket{\psi_x^\prime} = A(U_B) A(U_x) \ket{\psi_1} \otimes \ket{\psi_a}.
+\end{equation}
+where according to Eq.~(\ref{Fact 1}),
+\begin{equation}
+A(U_B) A(U_x) = A(U_x U_B).
+\end{equation}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width= 0.5 \textwidth]{./GlobalApparatus.pdf}
+	\caption{Schematic for the total communication device. Alice and Bob each initially possess two modes. Alice acts on her modes with some operation $A(U_x)$ : $x \in X$. Alice's modes run to Bob, who augments the system with some ancilla state over two modes, applies the operation $A(U_B)$ and does a photocounting measurement.}
+	\label{Total Quantum Channel Device}
+\end{figure}
+\newline
+To quantify the success of Bob's photocounting measurement we use the mutual entropy as defined in Eq.~(\ref{Mutual Entropy Full}) and 
+\begin{equation}
+p(y|x) = \abs{\braket{\vec{n}_y}{\psi_x^\prime}}^2.
+\end{equation}
+Revisiting the key physical devices in~\cite{First Paper}, we incrementally increase the number of encoding symbols $\abs{X}$ and maximize the mutual entropy $H(X:Y)$. We then augment the systems with ancillas and attempt to close the Holevo bound. The reader should take note of our potentially confusing notation; $N_A$ and $M_A$ refer to the number of photons and modes initially in Alice's possession. $N_a$ and $M_a$ refer to the number of ancilla photons and modes that Bob augments to incoming states.
+\subsection{$N=2,M=4,M_A=2$}
+This system was of special interest in~\cite{First Paper} because Alice was able to achieve a maximum encoding by building an orthogonal ensemble of quantum states. We recall that in this case
+\begin{eqnarray}
+\abs{X} = 8 \quad \quad \quad \quad  \\
+S(\rho)_{max} = \log_2 d_S = \log_2 8 = 3 \mbox{ bits}
+\end{eqnarray}
 \section{Conclusion}
-\label{Section Conclusion}
- The trend in Fig.~\ref{Figure - Block Encoding Results} seems to suggest an order of magnitude improvement if we were able to simulate larger entangling operations between blocks. A realizable protocol for implementing $\mbox{CNOT}_{first,last}$ for $q \ge 3$ could have significant implications for LOQC.
+We'll see.
 \acknowledgments
-Nicholas G. Sparks, Joshwa Shipman and Er. Knutson. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
-\appendix
-\section{Proof of \textit{Fact 1}}
-\label{Proof of Fact 1}
-\textit{Fact 1} can be proved by induction. The base case is trivial; for a lone unitary matrix $U_1$,~(\ref{Fact 1}) reads
-\begin{equation}
-	A(U_1) = A(U_1)
-\end{equation}
-We can then assume
-\begin{equation}
-\label{Inductive Step}
-	A(U_{P-1}) A(U_{P-2}) \dots A(U_1) = A(U_1 U_2 \dots U_{P-1})
-\end{equation}
-That is, applying the left hand side of~(\ref{Inductive Step}) is equivalent to the total transformation
-\begin{equation}
-	\hat{a}^\dagger_\alpha \rightarrow \sum_\beta (U_1 U_2 \dots U_{P-1})_{\alpha,\beta} \enspace \hat{a}^\dagger_\beta
-\end{equation}
-Now we add one final optical component and apply the transformation $A(U_P)$. Our total transformation is now
-\begin{equation}
-	\hat{a}^\dagger_\alpha \rightarrow \sum_\beta (U_1 U_2 \dots U_{P-1})_{\alpha,\beta} \Big(\sum_\gamma U_{\beta,\gamma}^P \hat{a}^\dagger_\gamma \Big)
-\end{equation}
-where $U_{\beta,\gamma}^P$ are the $\beta,\gamma$ elements of $U_P$. Then,
-\begin{eqnarray}
-\hat{a}^\dagger_\alpha \rightarrow \sum_{\beta,\gamma} (U_1 U_2 \dots U_{P-1})_{\alpha,\beta} U^P_{\beta,\gamma} \hat{a}^\dagger_\gamma
-\\*
-\hat{a}^\dagger_\alpha \rightarrow \sum_\gamma (U_1 U_2 \dots U_P)_{\alpha,\gamma} \hat{a}^\dagger_\gamma \quad
-\end{eqnarray}
-which is equivalent to $A(U_1 U_2 \dots U_n). \quad \quad\blacksquare $
-\section{Proof of \textit{Fact 2}}
-\label{Proof of Fact 2}
-We can write~(\ref{LO State Fock Vec Basis}) in the $\ket{\vec{m}(\vec{n})}$ basis;
-\begin{equation}
-\ket{\psi} = \sum_{\vec{n}} c_{\vec{n}} \ket{\vec{m}(\vec{n})}
-\end{equation}
-We note that because photons are Bosons, and are indistinguishable, this change of basis is not well-defined. The same Fock state $\ket{\vec{n}}$ can map to multiple $\ket{\vec{m}(\vec{n})}$ states. This mapping is injective, however. No matter which mapping we choose for each basis state, no information about the state $\ket{\psi}$ is lost. Thus, we are free to pick any mapping we want for each basis Fock state. Then
-\begin{equation}
-\ket{\psi} = \sum_{\vec{n}} \frac{\vec{c}_n}{\prod_{p=1}^{M} \sqrt{n_p !}} \hat{a}_{m_1}^\dagger \hat{a}_{m_2}^\dagger \dots \hat{a}_{m_N}^\dagger \ket{\vec{0}}
-\end{equation}
-We define the vectors
-\begin{equation}
-\vec{U}_\alpha = (U_{\alpha 1},U_{\alpha 2},\dots U_{\alpha M})
-\end{equation}
-in the basis
-\begin{equation}
-\{ \hat{a}_{1}^\dagger,\hat{a}_{2}^\dagger, \dots, \hat{a}_{M}^\dagger \}
-\end{equation}
-then
-\begin{eqnarray}
-\label{Fact 2 Proof Checkpoint}
-& \ket{\psi^\prime} = A(U) \ket{\psi} =  \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ & \nonumber
-\sum_{\vec{n}} \frac{c_{\vec{n}}}{\prod_{p=1}^{M} \sqrt{n_p !}} \enspace \vec{U}_{m_1} \otimes \vec{U}_{m_2} \otimes \dots \otimes \vec{U}_{m_N} \ket{\vec{0}}
-\end{eqnarray}
-The tensor product in~(\ref{Fact 2 Proof Checkpoint}) will return a massive vector of $M^N$ entries. We can use the commutative property of the creation operators to compress it;
-\begin{equation}
-[\hat{a}_i ^ \dagger,\hat{a}_j ^ \dagger] = 0 \quad \forall \quad i,j
-\end{equation}
-\begin{eqnarray}
- \ket{\psi^\prime} = \sum_{\vec{n}} \frac{c_{\vec{n}}}{\prod_{p=1}^{M} \sqrt{n_p !}} \cdot \quad \quad \quad \quad \quad \quad \quad \quad \quad \\  \nonumber \sum_{\substack{m_1^\prime = 1\\
-		m_2^\prime = m_1^\prime\\
-		\vdots \\
-		m_N^\prime = m_{N-1}^\prime}}
-\left[ \sum_{perm(\vec{m}^\prime)} U_{m_1 m_1^\prime} \dots U_{m_N m_N^\prime} \right] \hat{a}_{m_1^\prime}^\dagger \dots \hat{a}_{m_N^\prime}^\dagger \ket{\vec{0}}
-\end{eqnarray}
-Finally, we define $\ket{\vec{n}^\prime(\vec{m}^\prime)}$ as the photo-counting result of $\hat{a}_{m_1^\prime}^\dagger \dots \hat{a}_{m_N^\prime}^\dagger \ket{\vec{0}}$, or the Fock state mapped to by each term in the outer summation over $\ket{\vec{m}^\prime}$
-\begin{eqnarray}
-\label{Fact 2 Proof Checkpoint 2}
-\ket{\psi^\prime} = \sum_{\vec{n}} c_{\vec{n}} \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{ \sqrt{n_p !}} \cdot \quad \quad \quad \quad \quad \quad \quad \quad \\ \sum_{\substack{m_1^\prime = 1\\
-		m_2^\prime = m_1^\prime\\
-		\vdots \\
-		m_N^\prime = m_{N-1}^\prime}}
-\left[ \sum_{perm(\vec{m}^\prime)} U_{m_1 m_1^\prime} \dots U_{m_N m_N^\prime} \right] \ket{\vec{n}^\prime (\vec{m}^\prime) } \nonumber
-\end{eqnarray}
-We recognize~(\ref{Fact 2 Proof Checkpoint 2}) as the result of a matrix vector product~(\ref{Matrix Vector Product}) if we define $A(U)$ as in~(\ref{Fact 2}).  $ \blacksquare $
-\section{Proof of Facts 3 \& 4}
-These are obvious statements that immediately follow from Eq.~(\ref{Matrix Vector Product})
-
+I want to thank my moms, yo. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
 \begin{thebibliography}{99}
+
+\bibitem{Jake Smith} (meeee) Other paper we're working on
+
+\bibitem{Holevo} A. S. Holevo, Probl. Peredachi Inf. \textbf{9}, 110 (1973).	
+
+\bibitem{First Paper} J. A. Smith, D.B. Uskov, L. Kaplan Phys. Rev. A \textbf{92}, 022324 (2015).
 
 \bibitem{KLM}  E. Knill, R. Laflamme, G. J. Milburn, Nature (London) 409, 46 (2001).
 
@@ -582,9 +396,18 @@ Phys. Rev. A 79, 042326 (2009).
 \bibitem{Review Paper} Kok Et. Al.
 Rev. Mod. Phys. 79, 135 (2007).
 
-\bibitem{Matiyasevich} Y. Matiyasevich, 1970.
+\bibitem{Hausladen} P. Hausladen, R. Jozsa, B. Schumacher, M. Westmoreland, and W. K. Wootters, Phys. Rev. A. \textbf{54}, 1869, (1996).
 
-\bibitem{EIGEN} http://eigen.tuxfamily.org/
+\bibitem{Lloyd} S. Lloyd, V. Giovannetti, and L. Maccone, Phys. Rev. Lett. \textbf{106}, 250501 (2011).
+
+\bibitem{Lloyd Other} V. Giovannetti, S. Lloyd, and L. Maccone, Phys. Rev. A \textbf{85}, 012302, (2012).
+
+
+\bibitem{Ogawa} T. Ogawa, IEEE Trans. Inf. Theory \textbf{45}, 2486 (1999).
+
+\bibitem{Nagaoka} T. Ogawa and H. Nagaoka, IEEE Trans. Inf. Theory \textbf{53}, 2261 (2007).
+
+\bibitem{Hayashi} M. Hayashi and H. Nagaoka, IEEE Trans. Inf. Theory \textbf{49}, 1753 (2003).
 
 \end{thebibliography}
 
