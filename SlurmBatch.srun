@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --qos=normal
+#SBATCH --job-name=Na2Ma4
+#SBATCH --time=0-11:59:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+export OMP_NUM_THREADS=10
+
+
+./Script
