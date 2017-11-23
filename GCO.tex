@@ -38,7 +38,7 @@
 \newcommand{\V}{\tilde{V}}
 
 
-\title{Improved State Discrimination of Optical Quantum Ensembles through the use of Ancillas}
+\title{Improved state discrimination of linear optical Bell states through the use of Ancillas}
 
 \author{Jake~A.~Smith}
 \affiliation{Tulane University, Department of Physics, New Orleans, Louisiana 70118, USA}
@@ -52,43 +52,41 @@
 \date{\today}
 \pacs{***}
 \maketitle
-
-\section{Basic Mathematical Principles}
+\section{Introduction}
 \label{Intro}
-An optical quantum state of $N$ photons contained in $M$ optical modes can be written in the Fock basis,
-\begin{eqnarray}
-	\label{LO State Fock Basis}
-	\ket{\psi} = c_1 \ket{N,0,\dots,0_M} + c_2 \ket{N-1,1,0,\dots, 0_M} + \\* \dots  + c_{d_H} \ket{0,0,\dots,N_M}	\nonumber \quad \quad \quad \quad
-\end{eqnarray}
-We note that the Hilbert space dimension of such a state is given by
-\begin{equation}
-\label{Hilbert Space Dimension}
-	d_H = \frac{(N+M-1)!}{N!(M-1)!}
-\end{equation}
-or the number of ways to order $N$ indistinguishable photons and $M-1$ partitions.
+In quantum information processing, the ability to perform proper measurements is imperative. Because of the effects of observation on superposition and entanglement, there is a fundamental difference between measurement at a quantum and macroscopic level. As a result, implementation of a quantum measurement can be non-trivial. In the linear optical quantum computing paradigm, even a seemingly simple Bell measurement has presented significant challenge. This is a problem; Bell state discrimination plays an important role in teleportation, which is a basic building-block for many quantum algorithms. Here, we attempt to use numerical techniques to design an efficient photonic Bell state analyzer using only deterministic linear optics and ancilla resources. 
 
-A linear optical operation acting on such a state is generally described by the transformation of creation operators:
+We can encode qubits into the polarization or spatial states of a single photon. Then, the Bell states are represented by a maximally entangled EPR pair of photons. In the Fock basis, this ensemble is written
+\begin{eqnarray}
+\label{Bell States Creation Operator 1}
+\ket{\psi_1} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger + \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
+\label{Bell States Creation Operator 2}
+\ket{\psi_2} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger - \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
+\label{Bell States Creation Operator 3}
+\ket{\psi_3} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_4^\dagger + \hat{a}_2^\dagger \hat{a}_3^\dagger) \ket{0} \\
+\label{Bell States Creation Operator 4}
+\ket{\psi_4} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_4^\dagger - \hat{a}_2^\dagger \hat{a}_3^\dagger) \ket{0} \\
+%\ket{\psi_1} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} + \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
+%\ket{\psi_2} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} - \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
+%\ket{\psi_3} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} + \frac{1}{\sqrt{2}} \ket{0,1,1,0} \\
+%\ket{\psi_4} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} - \frac{1}{\sqrt{2}} \ket{0,1,1,0} \\
+\label{Bell State Ensemble}
+\rho = \frac{1}{4} \sum_{x=1}^{4} \outerproduct{\psi_x}{\psi_x}. \quad  \enspace
+\end{eqnarray}
+The action of a linear optical quantum circuit on an optical state can generally be described by the transformation of creation operators~\cite{Reck}:
 \begin{equation}
 \label{LO Creation Operator Transformation}
 \hat{a}^\dagger_\alpha \rightarrow \sum_{\beta=1}^{M} U_{\alpha\beta} \hat{a}^\dagger_\beta
 \end{equation}
-where $U_{\alpha \beta}$ are the elements of some unitary complex matrix, $U$. Thus, one typically converts a state in the form of~(\ref{LO State Fock Basis}) into
-\begin{eqnarray}
-\ket{\psi} = \Big(c_1 \frac{(\hat{a}^\dagger_1)^N}{\sqrt{N!}} + c_2 \frac{ (\hat{a}^\dagger_1)^{N-1} \hat{a}^\dagger_2}{\sqrt{(N-1)!}} + \dots \\* + c_{d_H} \frac{(\hat{a}^\dagger_M)^N}{\sqrt{N!}}\Big) \ket{0,0,\dots,0_M} \quad \quad \nonumber
-\end{eqnarray}
-and applies the symbolic transformation~(\ref{LO Creation Operator Transformation}). This may be fine for an optical circuit of few components and small $N$ and $M$, but transforming the creation operators for large systems can otherwise become intractable. Instead, we use a numerical protocol to simulate this process, which we will discuss briefly in the following section.
+where $U_{\alpha \beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). Formally, there exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are severely restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail~\cite{Review Paper} demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
 
-Before we begin, we can define $A(U)$ as the complex matrix which represents the action of~(\ref{LO Creation Operator Transformation}) on a quantum state in the Fock basis~(\ref{LO State Fock Basis}). The output state of an optical circuit $\ket{\psi^\prime}$ will determined by standard matrix-vector multiplication
-\begin{equation}
-\label{Matrix Vector Product}
-\ket{\psi^\prime} = A(U) \ket{\psi}
-\end{equation}
-The matrix elements $U_{\alpha \beta}$ in~(\ref{LO Creation Operator Transformation}) are assumed to be the very same as those of $U$ in $A(U)$. If $N \ge 2$, the group of all linear optical operators, $ A(U) \in \textbf{A}$, is a proper (strict) subgroup of the general unitary group
-\begin{equation}
-\label{Proper Subgroup}
-\textbf{A} \subset \textbf{GU}(d_H).
-\end{equation}
-Thus, not all quantum logic operations on Fock states can be implemented via linear optical circuits.
+Unfortunately, a series of "no-go" theorems on optical state discrimination seemed to limit the benefit of using these extra tools in a  Bell state analyzer. First, it was demonstrated by L\"utkenhaus and Calsamiglia that a completely perfect measurement on an ensemble of Bell states using only linear components, multistage partial measurements and ancilla resources cannot exist~\cite{Lutkenhaus}. This theorem was later extended by~\cite{Carollo}; we apparently cannot implement a perfect measurement using these tools on \textit{any} set of indistinguishable orthonormal Fock states. Further, in the subclass of tools using only vacuum ancilla modes, it was shown that an analyzer cannot perfectly distinguish equi-probable Bell states (the ensemble in Eq.~(\ref{Bell State Ensemble})) more than half of the time~\cite{Calsamiglia}. However, it was shown by~\cite{Ewert} that this upper bound is lifted if we don't restrict our ancilla modes to be vacuum.
+
+These no-go theorems are, however, somewhat complicated by the fact that they don't provide an exact upper bound on distinguishability. A "perfect" measurement is a meaningless limit in the real world and an arbitrarily close-to-perfect measurement would be just as invaluable for practical applications in quantum information processing. In 2011,~\cite{Pavicic} presented a scheme for near-perfect Bell state discrimination, though this paper was later retracted. This is clearly a difficult problem with no easy solutions.
+
+Here, we use computational techniques to find a clear trend in linear improvement to Bell state measurements using only ancilla photons and vacuum modes (we find multistage measurements to be ineffectual). Extrapolating these results, we apply analytic techniques to learn what we can about effective linear optical analyzers. We've made some progress, which may be of use to others who are working on this problem.
+\section{Mathematical Background}
+
 \section{Simulating Linear Optical State Evolution}
 \label{Section of Facts}
 For an optical circuit of $K$ number of components,
@@ -380,6 +378,8 @@ We'll see.
 I want to thank my moms, yo. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
 \begin{thebibliography}{99}
 
+\bibitem{Reck} M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani, Phys. Rev. Lett. {\bf 73}, 58 (1994).
+
 \bibitem{Jake Smith} (meeee) Other paper we're working on
 
 \bibitem{Holevo} A. S. Holevo, Probl. Peredachi Inf. \textbf{9}, 110 (1973).	
@@ -402,12 +402,25 @@ Rev. Mod. Phys. 79, 135 (2007).
 
 \bibitem{Lloyd Other} V. Giovannetti, S. Lloyd, and L. Maccone, Phys. Rev. A \textbf{85}, 012302, (2012).
 
+\bibitem{KLM2} C. R. Myers and R. Laflamme, arXiv:quant-ph/0512104 (2005).
 
 \bibitem{Ogawa} T. Ogawa, IEEE Trans. Inf. Theory \textbf{45}, 2486 (1999).
 
 \bibitem{Nagaoka} T. Ogawa and H. Nagaoka, IEEE Trans. Inf. Theory \textbf{53}, 2261 (2007).
 
 \bibitem{Hayashi} M. Hayashi and H. Nagaoka, IEEE Trans. Inf. Theory \textbf{49}, 1753 (2003).
+
+\bibitem{Lutkenhaus} N. L\"utkenhaus, J. Calsamiglia, and K.-A. Suominen, Phys. Rev. A {\bf 59}, 3295 (1999).
+
+\bibitem{Carollo} A. Carollo and G. M. Palma, J. Mod. Opt. {\bf 49}, 1147 (2002).
+
+\bibitem{Pavicic} M. Pavi\v{c}i\'c, Phys. Rev. Lett. {\bf 107}, 080403 (2011) (retracted).
+
+\bibitem{Calsamiglia} J. Calsamiglia and N. L\"utkenhaus, Applied Physics B {\bf 72}, 67 (2001).
+
+\bibitem{Ewert} F. Ewert and P. Loock, Physical Review Letters, {\bf 113}, 140403 (2014).
+
+\bibitem{Jake} J. A. Smith and L. Kaplan, arXiv: https://arxiv.org/abs/1711.01319 (2017).
 
 \end{thebibliography}
 
