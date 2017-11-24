@@ -38,7 +38,7 @@
 \newcommand{\V}{\tilde{V}}
 
 
-\title{Improved state discrimination of linear optical Bell states through the use of Ancillas}
+\title{Approaching near-perfect state discrimination of photonic Bell states through the use of Ancillas}
 
 \author{Jake~A.~Smith}
 \affiliation{Tulane University, Department of Physics, New Orleans, Louisiana 70118, USA}
@@ -59,19 +59,19 @@ In quantum information processing, the ability to perform proper measurements is
 We can encode qubits into the polarization or spatial states of a single photon. Then, the Bell states are represented by a maximally entangled EPR pair of photons. In the Fock basis, this ensemble is written
 \begin{eqnarray}
 \label{Bell States Creation Operator 1}
-\ket{\psi_1} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger + \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
+\ket{\phi_1} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger + \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
 \label{Bell States Creation Operator 2}
-\ket{\psi_2} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger - \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
+\ket{\phi_2} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger - \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
 \label{Bell States Creation Operator 3}
-\ket{\psi_3} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_4^\dagger + \hat{a}_2^\dagger \hat{a}_3^\dagger) \ket{0} \\
+\ket{\phi_3} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_4^\dagger + \hat{a}_2^\dagger \hat{a}_3^\dagger) \ket{0} \\
 \label{Bell States Creation Operator 4}
-\ket{\psi_4} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_4^\dagger - \hat{a}_2^\dagger \hat{a}_3^\dagger) \ket{0} \\
+\ket{\phi_4} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_4^\dagger - \hat{a}_2^\dagger \hat{a}_3^\dagger) \ket{0} \\
 %\ket{\psi_1} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} + \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
 %\ket{\psi_2} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} - \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
 %\ket{\psi_3} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} + \frac{1}{\sqrt{2}} \ket{0,1,1,0} \\
 %\ket{\psi_4} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} - \frac{1}{\sqrt{2}} \ket{0,1,1,0} \\
 \label{Bell State Ensemble}
-\rho = \frac{1}{4} \sum_{x=1}^{4} \outerproduct{\psi_x}{\psi_x}. \quad  \enspace
+\rho = \frac{1}{4} \sum_{x=1}^{4} \outerproduct{\phi_x}{\phi_x}. \quad  \enspace
 \end{eqnarray}
 The action of a linear optical quantum circuit on an optical state can generally be described by the transformation of creation operators~\cite{Reck}:
 \begin{equation}
@@ -80,92 +80,114 @@ The action of a linear optical quantum circuit on an optical state can generally
 \end{equation}
 where $U_{\alpha \beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). Formally, there exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are severely restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail~\cite{Review Paper} demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
 
-Unfortunately, a series of "no-go" theorems on optical state discrimination seemed to limit the benefit of using these extra tools in a  Bell state analyzer. First, it was demonstrated by L\"utkenhaus and Calsamiglia that a completely perfect measurement on an ensemble of Bell states using only linear components, multistage partial measurements and ancilla resources cannot exist~\cite{Lutkenhaus}. This theorem was later extended by~\cite{Carollo}; we apparently cannot implement a perfect measurement using these tools on \textit{any} set of indistinguishable orthonormal Fock states. Further, in the subclass of tools using only vacuum ancilla modes, it was shown that an analyzer cannot perfectly distinguish equi-probable Bell states (the ensemble in Eq.~(\ref{Bell State Ensemble})) more than half of the time~\cite{Calsamiglia}. However, it was shown by~\cite{Ewert} that this upper bound is lifted if we don't restrict our ancilla modes to be vacuum.
+Unfortunately, a series of "no-go" theorems on optical state discrimination seemed to limit the benefit of using these extra tools in a Bell state analyzer. First, it was demonstrated by L\"utkenhaus and Calsamiglia that a completely perfect measurement on an ensemble of Bell states using only linear components, multistage partial measurements and ancilla resources cannot exist~\cite{Lutkenhaus}. This theorem was later extended by~\cite{Carollo}; we apparently cannot implement a perfect measurement using these tools on \textit{any} set of indistinguishable orthonormal Fock states. Further, in the subclass of tools using only vacuum ancilla modes, it was shown that an analyzer cannot perfectly distinguish equi-probable Bell states (the ensemble in Eq.~(\ref{Bell State Ensemble})) more than half of the time~\cite{Calsamiglia}. However, it was shown by~\cite{Ewert} that this upper bound is lifted if we don't restrict our ancilla modes to be vacuum.
 
-These no-go theorems are, however, somewhat complicated by the fact that they don't provide an exact upper bound on distinguishability. A "perfect" measurement is a meaningless limit in the real world and an arbitrarily close-to-perfect measurement would be just as invaluable for practical applications in quantum information processing. In 2011,~\cite{Pavicic} presented a scheme for near-perfect Bell state discrimination, though this paper was later retracted. This is clearly a difficult problem with no easy solutions.
+These no-go theorems are, however, somewhat complicated by the fact that they don't provide an exact upper bound on distinguishability. A "perfect" measurement is a meaningless limit in the real world and an arbitrarily close-to-perfect measurement would be  equally as invaluable for practical applications in quantum information processing. In 2011,~\cite{Pavicic} presented a scheme for near-perfect Bell state discrimination, though this paper was later retracted. This is clearly a difficult problem with no easy solutions.
 
-Here, we use computational techniques to find a clear trend in linear improvement to Bell state measurements using only ancilla photons and vacuum modes (we find multistage measurements to be ineffectual). Extrapolating these results, we apply analytic techniques to learn what we can about effective linear optical analyzers. We've made some progress, which may be of use to others who are working on this problem.
-\section{Mathematical Background}
-
-\section{Simulating Linear Optical State Evolution}
-\label{Section of Facts}
-For an optical circuit of $K$ number of components,
-\begin{equation}
-	\label{Fact 1}
-A(U_K) A(U_{K-1}) \dots A(U_1) = A(U_1 U_2 \dots U_K)
-\end{equation}
-Each component $U_k$ could be a simple beam splitter, phase shifter, or a general integrated circuit consisting of many low-level components.
-(\ref{Fact 1}) allows us to simulate the net effect of a series of low-level linear optical operations with efficiency. We can compile the $K$ optical hardware components via the matrix multiplication $U_1 U_2 \dots U_K$, rather than evolve the state in a series of discrete steps.
-
-Rewriting~(\ref{LO State Fock Basis}) as
+Here, we use computational techniques to find a clear trend in linear improvement to Bell state measurements using only ancilla photons and vacuum modes (we find using multistage measurements to be ineffectual). Extrapolating these results, we apply analytic techniques to learn what we can about effective linear optical analyzers. We've made some progress, which may be of use to others who are working on this problem.
+\section{Transforming the Bell states}
+An optical quantum state can be written as a complex vector
 \begin{equation}
 \label{LO State Fock Vec Basis}
-\ket{\psi} = \sum_{\vec{n}} c_{\vec{n}} \ket{\vec{n}}
+\ket{\psi} = \sum_{\vec{n}} c_{\vec{n}} \ket{\vec{n}} \,
 \end{equation}
 where
 \begin{equation}
 \ket{\vec{n}} = \ket{n_1,n_2,\dots,n_M}
 \end{equation}
-are the Fock states, we define
+are the Fock states. A general linear optical transformation described by Eq.~(\ref{LO Creation Operator Transformation}) can also be written in the form of a linear operator $\hat{A}(U)$,
+\begin{equation}
+	\ket{\psi^\prime} = \hat{A}(U) \ket{\psi}.
+\end{equation}
+We define
 \begin{equation}
 \label{m definition}
 \ket{\vec{m}(\vec{n})} = \ket{m_1,m_2,\dots,m_N}
 \end{equation}
-as \textit{any} vector where $m_\alpha$ is the mode-location of photon number $\alpha$. There can be many vectors $\ket{\vec{m}(\vec{n})}$ for each $\ket{\vec{n}}$, since photons are generally indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}(\vec{n})}$. Then the elements of $A(U)$ are given by
+where $m_\alpha$ is the mode-location of photon number $\alpha$ and $N$ is the total number of photons in the system. Of course the choice of vector $\ket{\vec{m}(\vec{n})}$ for a given $\ket{\vec{n}}$ is not unique, since photons are indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}(\vec{n})}$ for each $\ket{\vec{n}}$. Then the elements of the matrix representation of $\hat{A}(U)$ in the basis $\outerproduct{\vec{n}^\prime}{\vec{n}}$ are given by
 \begin{eqnarray}
-\label{Fact 2}
-A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{\sqrt{n_p !}} \left[\sum_{perm(\vec{m}^\prime)} U_{m_1 m_1^\prime} U_{m_2 m_2^\prime} \dots U_{m_N m_N^\prime} \right] \outerproduct{\vec{n}^\prime}{\vec{n}} 
+\label{A_U}
+A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{\sqrt{n_p !}} \left[\sum_{\textrm{perm}(\vec{m}^\prime)} U_{m_1 m_1^\prime} U_{m_2 m_2^\prime} \dots U_{m_N m_N^\prime} \right] \,,
 \end{eqnarray}
-where the summation is over all distinct permutations of integer entries in the vector $\vec{m}^\prime$. A more complete discussion of the numerical methods used here and proof of Eq.~\ref{Fact 1}-\ref{Fact 2} are available in~\cite{Jake Smith}.
-\section{The Classical Mutual Entropy}
-The purpose of our work here is to improve quantum state discrimination at the receiving end of a quantum communication channel. As a gauge for the success of the quantum measurement, we choose the classical mutual entropy $H(X:Y)$ which is defined as the amount of overlapping information encoded by the sender, Alice, and extracted by the receiver, Bob;
+where the summation is over all distinct permutations of integer entries in the vector $\vec{m}^\prime$. For proof of Eq.~(\ref{A_U}), see~\cite{Jake Smith}.
+
+Here, we allow the use of $N_a$ integer number of ancilla photons and define our Bell states in the Fock ($\ket{\vec{n}}$) basis
 \begin{equation}
-H(X:Y) = \sum_{x \in X} \sum_{y \in Y} p(x,y) \log_2 \frac{p(x,y)}{p(x) p(y)}
+\label{Bell States Phi}
+	\ket{\psi_x} = \ket{1,1,\dots,1_{N_a}} \otimes \ket{\phi_x}
 \end{equation}
-where $X$ is the encoding variable and $Y$ is the decoding variable.
-We can tailor this definition of the mutual information to better suit our needs. First, we can isolate the Shannon information of Alice's classical encoding, $H(X)$,
+e.g. the first Bell state is
 \begin{eqnarray}
-\small H(X:Y) = \sum_{x,y} p(x,y) \log_2 \frac{p(x,y)}{p(y)} \\
-- \sum_{x,y} p(x,y) \log_2 p(x) 
+	\ket{\psi_1} = \frac{1}{\sqrt{2}}  \ket{1,1,\dots,1_{N_a},1,0,1,0} \\
+	+ \frac{1}{\sqrt{2}} \ket{1,1,\dots,1_{N_a},0,1,0,1}. \nonumber 
 \end{eqnarray}
-and apply the law of total probability
+The reader should note the total number of photons and modes are now
 \begin{eqnarray}
-& -\sum_{x,y} p(x,y) \log_2 p(x) = -\sum_x \log_2 p(x) \sum_y p(x,y) \nonumber \\ & = -\sum_x p(x) \log_2 p(x)
+	& N = N_a + 2 \\
+	& M = N_a + 4.
 \end{eqnarray}
-Defining the classical Shannon entropy
+We allow a standard von Neumann measurement; Alice chooses one of the Bell states $\ket{\psi_x}$ and sends it to Bob who runs the state through his analyzer $U$ and performs a photon-counting measurement at every output mode.
+If Alice sends Bell state $\ket{\psi_x}$, the probability Bob measures state $\ket{\vec{n}_y}$ is
 \begin{equation}
-\label{Shannon Entropy}
-	H(X) = -\sum_{x \in X} p(x) \log_2 p(x)
+	\label{Probability of Measurment}
+	p( y | x ) = \abs{\bra{\vec{n}_y} \hat{A}(U) \ket{\psi_x}}^2 \, .
 \end{equation}
-leaves us with
+\section{The Classical Mutual Information}
+\label{Section on Mutual Entropy}
+To gauge the success of Bob's measurement device, we choose the classical mutual information, $H(X:Y)$. This quantity is bound from above by Holevo's theorem which is
+given by
 \begin{equation}
-\label{Mutual Entropy Full}
-\small
-	H(X:Y) = H(X) - \sum_{\substack{x \in X \\ y \in Y}} p(x) p(y|x) \log_2 \frac{\sum_{x^\prime} p(x^\prime) p(y|x^\prime)}{p(x) p(y|x)}.
+\label{Holevo Theorem}
+H(X:Y) \le S(\rho) \le H(X).
 \end{equation}
-To maximize the communication efficiency of a quantum channel, we can numerically maximize Eq.~\ref{Mutual Entropy Full}.
-For any ensemble where all $p(x) = 1/\abs{X}$, we can simplify the mutual entropy further,
+where $S(\rho)$ is the von Neumann entropy of a quantum ensemble and $H(X)$ is the classical Shannon entropy.
+For the ensemble defined in Eq.~(\ref{Bell State Ensemble}), these quantities are both fixed;
 \begin{equation}
-\label{Mutual Entropy}
-H(X:Y) = \log_2 \abs{X} - \frac{1}{\abs{X}} \sum_{x,y} p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)}
+	S(\rho) = H(X) = \mbox{2 bits}.
 \end{equation}
-The conditional entropy
+The higher the mutual entropy, the better Bob was able to distinguish the Bell states. We say a Bell analyzer is near-perfect if
+\begin{equation}
+	\label{Near Perfect Condition}
+	H(X:Y) = \lim\limits_{\epsilon \rightarrow 0} (2 - \epsilon) \mbox{ bits.}
+\end{equation}
+Formally, we define
+\begin{equation}
+	\label{Mutual Entropy}
+	H(X:Y) = H(X) - H(X|Y)
+\end{equation}
+where $H(X|Y)$ is the conditional information
 \begin{equation}
 \label{Conditional Entropy}
-\small H(X|Y) =  \frac{1}{\abs{X}} \sum_{\substack{x \in X \\ y \in Y}} p(y|x) \log_2 \frac{\sum_{x^\prime \in X} p(y|x^\prime)}{p(y|x)}
+\small
+H(X|Y) = \frac{1}{4} \sum_{y \in Y} \sum_{x \in X} p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)}\,.
 \end{equation}
-is sufficient to quantify the success of a quantum measurement in this case. 
-
-The Holevo bound~\cite{Holevo,Jake Smith}
+\section{Numerical Minimization of the conditional information}
+To test the capability of a linear optical Bell state analyzer, we can numerically minimize Eq.~(\ref{Conditional Entropy}) over the circuit design $U$. In general, $U$ is constrained to be unitary. Here, however, we find minimization convergence is improved if we allow $U$ to be \textit{sub-unitary}, meaning $U$ can be any complex matrix such that the singular values all satisfy $\lambda \le 1$. This is equivalent to allowing vacuum modes outside the space of our measurement modes on which we do not perform any measurement. We call these modes the garbage modes and need to add a term to Eq.~(\ref{Conditional Entropy}) to accommodate them
 \begin{equation}
-	H(X:Y) \le S(\rho) \le H(X)
+\label{Condition Information with Garbage modes}
+\small	\tilde{H}(X|Y) = H(X|Y) + \sum_{x \in X} \tilde{p}(y|x) \log_2 \frac{\sum_{x^\prime} \tilde{p}(y|x^\prime)}{\tilde{p}(y|x)}\,
 \end{equation}
-tells us that the mutual information shared between Alice and Bob is limited by the von Neumann entropy of the encoded states,
+where
 \begin{equation}
-	S(\rho) = - \tr( \rho \log_2 \rho )
+	\tilde{p}(y|x) = 1 - \sum_{y \in Y} p(y|x).
 \end{equation}
-We'll refer to this quantity as the channel encoding capacity.
+In other words, all measurement outcomes in which photons have leaked into the garbage modes are consolidated into one.
 
+We set $U$ to a general singular value decomposition,
+\begin{equation}
+	\label{Singular Value Decomposition}
+	U = V D W
+\end{equation}
+where
+\begin{eqnarray}
+	& V = e^{i \tilde{V}} \\
+	& W = e^{i \tilde{W}} \\
+	& D =  \begin{pmatrix} e^{-\lambda^2_1} & 0 & 0 & \hdots & 0 \\ 0 & e^{-\lambda^2_2} & 0 & \hdots & 0 \\ 0 & 0 & e^{-\lambda^2_3} & \hdots & 0 \\ \vdots
+	& \vdots & \vdots & \ddots & \vdots \\
+	0 & 0 & 0 & \hdots & e^{-\lambda^2_M} \end{pmatrix} 
+\end{eqnarray}
+and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermitian matrices $\tilde{V}$, $\tilde{W}$ and real numbers $\{\lambda_m\}$ using a quasi-Newton method without any constraints.
+UP TO HERE, PUT TABLE WITH RESULTS NOT IN ITS OWN SECTION
 \section{Discrimination of the Bell States Encoded in the Dual Rail}
 Previous work in maximizing the encoding capacity of an optical quantum channel~\cite{First Paper} revealed that imposing a \textit{linear optical} encoding (Alice uses only linear optical operations to encode information into a quantum ensemble) does not prevent her from achieving the true channel capacity. But any relationship counselor will tell you that real communication generally requires a good listener; just because Alice was able to optimally compress information into the channel, does not guarantee Bob will be able to extract it. In fact, we typically observe that Bob is not able to fully discriminate an a-priori set of optical quantum states if he is restricted to a linear optical photo-counting von Neumann measurement. Formally, we define our encoded ensemble of quantum states
 \begin{equation}
@@ -380,8 +402,6 @@ I want to thank my moms, yo. This research was supported in part using high perf
 
 \bibitem{Reck} M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani, Phys. Rev. Lett. {\bf 73}, 58 (1994).
 
-\bibitem{Jake Smith} (meeee) Other paper we're working on
-
 \bibitem{Holevo} A. S. Holevo, Probl. Peredachi Inf. \textbf{9}, 110 (1973).	
 
 \bibitem{First Paper} J. A. Smith, D.B. Uskov, L. Kaplan Phys. Rev. A \textbf{92}, 022324 (2015).
@@ -420,7 +440,7 @@ Rev. Mod. Phys. 79, 135 (2007).
 
 \bibitem{Ewert} F. Ewert and P. Loock, Physical Review Letters, {\bf 113}, 140403 (2014).
 
-\bibitem{Jake} J. A. Smith and L. Kaplan, arXiv: https://arxiv.org/abs/1711.01319 (2017).
+\bibitem{Jake Smith} J. A. Smith and L. Kaplan, arXiv: https://arxiv.org/abs/1711.01319 (2017).
 
 \end{thebibliography}
 
