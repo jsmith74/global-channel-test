@@ -102,9 +102,9 @@ are the Fock states. A general linear optical transformation described by Eq.~(\
 We define
 \begin{equation}
 \label{m definition}
-\ket{\vec{m}(\vec{n})} = \ket{m_1,m_2,\dots,m_N}
+\ket{\vec{m}} = \ket{m_1,m_2,\dots,m_N}
 \end{equation}
-where $m_\alpha$ is the mode-location of photon number $\alpha$ and $N$ is the total number of photons in the system. Of course the choice of vector $\ket{\vec{m}(\vec{n})}$ for a given $\ket{\vec{n}}$ is not unique, since photons are indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}(\vec{n})}$ for each $\ket{\vec{n}}$. Then the elements of the matrix representation of $\hat{A}(U)$ in the basis $\outerproduct{\vec{n}^\prime}{\vec{n}}$ are given by
+where $m_\alpha$ is the mode-location of photon number $\alpha$ and $N$ is the total number of photons in the system. Of course the choice of vector $\ket{\vec{m}}$ for a given $\ket{\vec{n}}$ is not unique, since photons are indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}}$ for each $\ket{\vec{n}}$. Then the elements of the matrix representation of $\hat{A}(U)$ in the basis $\outerproduct{\vec{n}^\prime}{\vec{n}}$ are given by
 \begin{eqnarray}
 \label{A_U}
 A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{\sqrt{n_p !}} \left[\sum_{\textrm{perm}(\vec{m}^\prime)} U_{m_1 m_1^\prime} U_{m_2 m_2^\prime} \dots U_{m_N m_N^\prime} \right] \,,
@@ -127,10 +127,10 @@ The reader should note the total number of photons and modes are now
 	& M = N_a + 4.
 \end{eqnarray}
 We allow a standard von Neumann measurement; Alice chooses one of the Bell states $\ket{\psi_x}$ and sends it to Bob who runs the state through his analyzer $U$ and performs a photon-counting measurement at every output mode.
-If Alice sends Bell state $\ket{\psi_x}$, the probability Bob measures state $\ket{\vec{n}_y}$ is
+If Alice sends Bell state $\ket{\psi_x}$, the probability Bob measures state $\ket{\vec{n}^y}$ is
 \begin{equation}
 	\label{Probability of Measurment}
-	p( y | x ) = \abs{\bra{\vec{n}_y} \hat{A}(U) \ket{\psi_x}}^2 \, .
+	p( y | x ) = \abs{\bra{\vec{n}^y} \hat{A}(U) \ket{\psi_x}}^2 \, .
 \end{equation}
 \section{The Classical Mutual Information}
 \label{Section on Mutual Entropy}
@@ -162,6 +162,7 @@ where $H(X|Y)$ is the conditional information
 H(X|Y) = \frac{1}{4} \sum_{y \in Y} \sum_{x \in X} p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)}\,.
 \end{equation}
 \section{Numerical Minimization of the conditional information}
+\label{Section on Numerical Minimization}
 To test the capability of a linear optical Bell state analyzer, we can numerically minimize Eq.~(\ref{Conditional Entropy}) over the circuit design $U$. In general, $U$ is constrained to be unitary. Here, however, we find minimization convergence is improved if we allow $U$ to be \textit{sub-unitary}, meaning $U$ can be any complex matrix such that the singular values all satisfy $\lambda \le 1$. This is equivalent to allowing vacuum modes outside the space of our measurement modes on which we do not perform any measurement. We call these modes the garbage modes and need to add a term to Eq.~(\ref{Conditional Entropy}) to accommodate them
 \begin{equation}
 \label{Condition Information with Garbage modes}
@@ -186,8 +187,47 @@ where
 	& \vdots & \vdots & \ddots & \vdots \\
 	0 & 0 & 0 & \hdots & e^{-\lambda^2_M} \end{pmatrix} 
 \end{eqnarray}
-and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermitian matrices $\tilde{V}$, $\tilde{W}$ and real numbers $\{\lambda_m\}$ using a quasi-Newton method without any constraints.
-UP TO HERE, PUT TABLE WITH RESULTS NOT IN ITS OWN SECTION
+and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermitian matrices $\tilde{V}$, $\tilde{W}$ and real numbers $\{\lambda_k\}$ using a quasi-Newton method without any constraints. Results are presented in Fig.~(\ref{Mutual Information Results}).
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width= 0.48 \textwidth]{./EntropyData.pdf}
+	\caption{ Maximum mutual information $H(X:Y)$ in bits as a function of ancilla photons, $N_a$. With every additional pair of ancilla photons, we observe a gain in the mutual information of 0.125 bits. }
+	\label{Mutual Information Results}
+\end{figure}
+We note that with every additional pair of ancilla photons, the mutual information appears to linearly approach a near-perfect measurement. If the trend continues, we expect a minimum ancilla resource of $N_a = 8$. For $N_a \ge 6$, the optimization routine becomes overwhelmed by local minima. We speculate the $N_a=6$ data point in Fig.~(\ref{Mutual Information Results}) is not a global solution for that case. We parallelized the construction of $\hat{A}(U)$ over hundreds of processes, using two Intel Xeon Phi Coprocessors. We tried BFGS, Levenberg-Marquardt, Nelder-Meade and principal axis minimization algorithms. With any of these methods, convergence still struggled for $N_a \ge 6$. In this regime, we recommend trying something other than numerical optimization.
+\section{Analysis of $U$}
+\label{Section on U Analysis}
+The numerical results in Sec.~\ref{Section on Numerical Minimization} seem to suggest a discrete improvement as we incorporate pairs of ancilla photons into our Bell state analyzer. We now approach the problem from another other direction; we try to solve for unitary $U$ directly \textit{assuming} a near-perfect measurement.
+We first define the complex numbers
+\begin{eqnarray}
+	 A_1 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+1,m^y_{N_a+1}} U_{N_a+3,m^y_{N_a+2}} \nonumber\\
+	 A_2 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+2,m^y_{N_a+1}} U_{N_a+4,m^y_{N_a+2}} \nonumber\\
+	 A_3 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+1,m^y_{N_a+1}} U_{N_a+4,m^y_{N_a+2}} \nonumber\\
+	 A_4 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+2,m^y_{N_a+1}} U_{N_a+3,m^y_{N_a+2}} \nonumber
+\end{eqnarray}
+then
+\begin{eqnarray}
+	& C = \frac{1}{2}\prod_{p=1}^{M} n^y_p! \nonumber \\
+	& p(y|1) = C \abs{A_1 + A_2}^2\nonumber \\
+	& p(y|2) = C \abs{A_1 - A_2}^2 \\
+	& p(y|3) = C \abs{A_3 + A_4}^2 \nonumber\\
+	& p(y|4) = C \abs{A_3 - A_4}^2 \nonumber\\
+	& \sum_{x \in X} p(y|x) = C(\abs{A_1}^2 + \abs{A_2}^2 + \abs{A_3}^2 + \abs{A_4}^2 ). \nonumber
+\end{eqnarray}
+Since 
+\begin{equation}
+	0 \le p(y|x) \le 1
+\end{equation}
+and
+\begin{equation}
+	\log_2 \frac{\sum_{x^\prime \in X} p(y|x^\prime)}{p(y|x)} \ge 0 \,,
+\end{equation}
+in a near-perfect measurement we need to find $U$ such that
+\begin{equation}
+	p(y|x) \log_2 \frac{\sum_{x^\prime \in X} p(y|x^\prime)}{p(y|x)} \approx 0 \quad \forall \enspace x,y
+\end{equation}
+according to Eq.~(\ref{Conditional Entropy}).
+UP TO HERE CONTINUE THIS LATER
 \section{Discrimination of the Bell States Encoded in the Dual Rail}
 Previous work in maximizing the encoding capacity of an optical quantum channel~\cite{First Paper} revealed that imposing a \textit{linear optical} encoding (Alice uses only linear optical operations to encode information into a quantum ensemble) does not prevent her from achieving the true channel capacity. But any relationship counselor will tell you that real communication generally requires a good listener; just because Alice was able to optimally compress information into the channel, does not guarantee Bob will be able to extract it. In fact, we typically observe that Bob is not able to fully discriminate an a-priori set of optical quantum states if he is restricted to a linear optical photo-counting von Neumann measurement. Formally, we define our encoded ensemble of quantum states
 \begin{equation}
