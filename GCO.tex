@@ -47,10 +47,9 @@
 \affiliation{Tulane University, Department of Physics, New Orleans, Louisiana 70118, USA}
 
  \begin{abstract}
- 	Finish the experiment first before writing abstract.
+ 	Bell measurements are an essential component of quantum information processing and implementing an optimal linear optical Bell state analyzer has thus been a longstanding problem in linear optical quantum computing. Despite well-established no-go theorems on a perfect Bell state analyzer, we find a numerical trend that appears to approach a \textit{near}-perfect measurement if we were to incorporate eight or more un-entangled ancilla photons into our device. Following this trend, we begin a promising inductive proof to build an ideal optical Bell measurement device. In the process, we determine that any Bell state analyzer that (even occasionally) bunches all photons into only two of the output modes cannot make an ideal measurement and we find a set of conditions on our linear optical circuit that prevent this outcome.
 \end{abstract}                                                               
 \date{\today}
-\pacs{***}
 \maketitle
 \section{Introduction}
 \label{Intro}
@@ -254,258 +253,284 @@ In this case
 	\end{eqnarray}
 	Thus, we find $(b)$ and $(c)$ cannot be satisfied for this measurement state $\ket{\vec{n}^y_{P=0}}$. $(a)$ is satisfied if and only if at least one condition holds:
 	\begin{flalign}
-	& (i) \enspace U_{S,L} = 0 \mbox{ for at least one } S \in \{1,\dots,N_a\} \nonumber \\
+	& (i) \enspace U_{S_j,L} = 0 \mbox{ for at least one } S_j \in \{1,\dots,N_a\} \nonumber \\
 	& (ii) \enspace U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{N_a+3,L} = U_{N_a+4,L} = 0. \nonumber
 	\end{flalign}
 	Of course, we need condition $(a)$ to be satisfied for \textit{all} measurement states $\ket{\vec{n}^y_{P=0}}$. Thus, $(i)$ or $(ii)$ or $(iii)$ must be satisfied for each column $L$ of $U$.
 	
-	We next look at the state where $P=1$
+	We next look at the measurement states where $P=1$;
 	\begin{eqnarray}
 	& \ket{\vec{n}^y_{P=1}} = \ket{0,\dots,(N-1)_L,\dots,0,1_l,0,\dots,0} \\ & \ket{\vec{m}^y_{P=1}} = \ket{L,L,\dots,L_{N-1},l}. \nonumber
 	\end{eqnarray}
 	For each column $L$ of $U$, we assume $(i)$, $(ii)$ or $(iii)$ is true, and determine any additional constraints that make $(a)$, $(b)$, or $(c)$ true for outcome state $\ket{\vec{n}^y_{P=1}}$. Through some simple algebra, we determine the conditions $(i)$, $(ii)$ and $(iii)$ must be revised; for each column $L$ of $U$, $(a)$ is satisfied if and only if at least one condition holds:
 	\begin{flalign}
-		& (i) \enspace U_{S,L} = 0 \mbox{ for at least 2 distinct } S \in \{1,\dots,N_a\} \nonumber \\
-		& (ii) \enspace U_{S,L} = 0 \mbox{ for at least one } S \in \{1,\dots,N_a\} \nonumber \\
-		& \quad \quad \quad \mbox{and }U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{S,L} = 0 \mbox{ for at least one } S \in \{1,\dots,N_a\} \nonumber \\
+		& (i) \enspace U_{S_j,L} = 0 \mbox{ for at least 2 distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+		& (ii) \enspace U_{S_j,L} = 0 \mbox{ for at least one } S_j \in \{1,\dots,N_a\} \nonumber \\
+		& \quad \quad \quad \mbox{and }U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{S_j,L} = 0 \mbox{ for at least one } S_j \in \{1,\dots,N_a\} \nonumber \\
 		& \quad \quad \quad \mbox{and }U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
 		& (iv) \enspace U_{N_a+1,L} = U_{N_a+2,L} = U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber
 	\end{flalign}
 	while conditions $(b)$ and $(c)$ cannot be satisfied for $\ket{\vec{n}^y_{P=1}}$.
 	
-	We repeat this process in a proof by induction, revising the conditions $(i), (ii), \dots$ as we increase $P$ in Eq.~(\ref{Measurement Outcome Bunched Two Modes}) to $N/2$. In all cases we find $(b)$ and $(c)$ can never be satisfied. $(a)$ is satisfied for all states $ 0 \le P \le N_a $ if and only if at least one one condition holds for each column $L$ of $U$:
+	We repeat this process in a proof by induction, revising the conditions $(i), (ii), \dots$ as we increase $P$ in Eq.~(\ref{Measurement Outcome Bunched Two Modes}) to $N/2$. In all cases we find $(b)$ and $(c)$ can never be satisfied. $(a)$ is satisfied for all states $ 0 \le P \le N/2 $ if and only if at least one one condition holds for each column $L$ of $U$:
 	\begin{flalign}
-	& \small(i) \enspace U_{S,L} = 0 \mbox{ for at least $N/2+1$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
-	& \small(ii) \enspace U_{S,L} = 0 \mbox{ for at least $N/2$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
-	& \small \quad \quad \quad \mbox{and }U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{S,L} = 0 \mbox{ for at least $N/2$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
-	& \small \quad \quad \quad \mbox{and }U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
-	& \small (iv) \enspace U_{S,L} = 0 \mbox{ for at least $N/2-1$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
-	& \small \quad \quad \quad \mbox{and } U_{N_a+1,L} = U_{N_a+2,L} = U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
-	& \small(v) \enspace U_{S,L} = 0 \mbox{ for at least three distinct } S \in \{1,\dots,N_a\} \nonumber \\
-	& \small \quad \quad \quad \mbox{and } \forall \quad l \ne L, \quad U_{S,l} = 0 \mbox{ for at least one } S\nonumber
+%	& \small(i) \enspace U_{S_j,L} = 0 \mbox{ for at least $\frac{N}{2}+1$ distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+%	& \small(ii) \enspace U_{S_j,L} = 0 \mbox{ for at least $\frac{N}{2}$ distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+%	& \small \quad \quad \quad \mbox{and }U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{S_j,L} = 0 \mbox{ for at least $\frac{N}{2}$ distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+%	& \small \quad \quad \quad \mbox{and }U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
+%	& \small (iv) \enspace U_{S_j,L} = 0 \mbox{ for at least $\frac{N}{2}-1$ distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+%	& \small \quad \quad \quad \mbox{and } U_{N_a+1,L} = U_{N_a+2,L} = U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
+	& \small(I) \enspace U_{S_j,L} = 0 \mbox{ for at least three distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+	& \small \quad \quad \quad \mbox{and } \forall \mbox{ } l \ne L, \mbox{ } U_{s_l,l} = 0 \mbox{ for at least one } s_l \in \{ S_1,\dots \} \nonumber
 	\end{flalign}
+	\begin{flalign}
+			& \small(II) \enspace U_{S_j,L} = 0 \mbox{ for at least two distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+			& \small \quad \quad \quad \mbox{and } U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & \small \quad \quad \quad \mbox{and }\forall \mbox{ } l \ne L, \mbox{ either} \nonumber \\
+			& \small \quad \quad \quad \enspace \enspace \enspace U_{N_a+1,l}=U_{N_a+2,l}=0 \nonumber \\
+			& \small \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \mbox{or} \nonumber \\
+			& \small \quad \quad \quad \enspace \enspace \enspace U_{s_l,l} = 0 \mbox{ for at least one } s_l \in \{ S_1,\dots \} \nonumber \\
+			& \small(III) \enspace U_{S_j,L} = 0 \mbox{ for at least two distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
+			& \small \quad \quad \quad \mbox{and } U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\ & \small \quad \quad \quad \mbox{and }\forall \mbox{ } l \ne L, \mbox{ either} \nonumber \\
+			& \small \quad \quad \quad \enspace \enspace \enspace U_{N_a+3,l}=U_{N_a+4,l}=0 \nonumber \\
+			& \small \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \mbox{or} \nonumber \\
+			& \small \quad \quad \quad \enspace \enspace \enspace U_{s_l,l} = 0 \mbox{ for at least one } s_l \in \{ S_1,\dots \} \nonumber \\
+			& \small(IV) \enspace U_{S_j,L} = 0 \mbox{ for at least one } S_j \in \{1,\dots,N_a\} \nonumber \\
+			& \small \quad \quad \mbox{and } U_{N_a+1,L} = U_{N_a+2,L} = U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\ & \small \quad \quad \mbox{and }\forall \mbox{ } l \ne L, \mbox{ either} \nonumber \\
+			& \small \quad \quad \quad \enspace \enspace \enspace U_{N_a+1,l}=U_{N_a+2,l}=0 \nonumber \\
+			& \small \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \mbox{or} \nonumber \\
+			& \small \quad \quad \quad \enspace \enspace \enspace U_{N_a+3,l}=U_{N_a+4,l}=0 \nonumber \\
+			& \small \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \mbox{or} \nonumber \\
+			& \small \quad \quad \quad \enspace \enspace \enspace U_{s_l,l} = 0 \mbox{ for at least one } s_l \in \{ S_1,\dots \} \nonumber
+	\end{flalign}
+Since these conditions hold for any pair of modes $L,l$, increasing $P$ to $N/2$ is sufficient for all measurement states of the form in Eq.~(\ref{Measurement Outcome Bunched Two Modes}). 
+	\section{Discussion}
+We are now ready to present a key result:
 \begin{center}
-	MAKE SURE TO CHANGE FROM EQUALS SIGN TO APPROX
+	\boxed{
 \begin{minipage}[t]{0.43\textwidth}
-		For any measurement outcome in the form of Eq.~(\ref{Measurement Outcome Bunched Two Modes}), neither $(b)$ nor $(c)$ can be satisfied and all measurement output states must satisfy $(a)$. This means ...
+		A perfect linear optical Bell state analyzer cannot produce a photo-counting measurement in which all $N$ photons are bunched into just two modes. If we measure a state of the form in Eq.~(\ref{Measurement Outcome Bunched Two Modes}), then we have not perfectly distinguished the Bell states and our analyzer is flawed.
 		\newline
 		\newline
-		To prevent photon bunching in just two modes, we find the following conditions
-		\begin{eqnarray}
-			(i) j
-		\end{eqnarray}
+		To prevent these measurement outcomes, we can impose conditions $(I-IV)$ on the matrix $U$. We allow some small numerical leniency for a near-perfect measurement.
 \end{minipage}
+}
 \end{center}
-	\section{Old Stuff}
-Previous work in maximizing the encoding capacity of an optical quantum channel~\cite{First Paper} revealed that imposing a \textit{linear optical} encoding (Alice uses only linear optical operations to encode information into a quantum ensemble) does not prevent her from achieving the true channel capacity. But any relationship counselor will tell you that real communication generally requires a good listener; just because Alice was able to optimally compress information into the channel, does not guarantee Bob will be able to extract it. In fact, we typically observe that Bob is not able to fully discriminate an a-priori set of optical quantum states if he is restricted to a linear optical photo-counting von Neumann measurement. Formally, we define our encoded ensemble of quantum states
+The next step is to examine measurement states in which all $N$ photons are bunched into three modes; states of the form
 \begin{equation}
-\{\ket{\psi_1},\ket{\psi_2},...\ket{\psi_{\abs{X}}}\},
-\end{equation}  
-each sent over the channel with probability $p_x$
-and photo-counting measurement operators
-\begin{equation}
-\{ \outerproduct{\vec{n}_1}{\vec{n}_1}, \outerproduct{\vec{n}_2}{\vec{n}_2}, \dots , \outerproduct{\vec{n}_{\abs{Y}}}{\vec{n}_{\abs{Y}} } \}.
-\end{equation}
-A photo-counting von Neumann measurement is defined here as a unitary linear optical transformation followed by a photo-counting measurement. The probability of measuring outcome $y$ assuming state $x$ was sent will be
-\begin{eqnarray}
-\label{von Neumann conditional probability part 1}
-\ket{\psi_x^\prime} = A(U) \ket{\psi_x} \\
-\label{von Neumann conditional probability part 2}
-p(y|x) = \abs{\braket{\vec{n}_y}{\psi_x^\prime}}^2.
-\end{eqnarray}
-Imposing this measurement scheme, the Holevo bound appears to become strict for any optical communication channel
-\begin{equation}
-	H(X:Y) < S(\rho).
-\end{equation}
-Closing the Holevo bound here is prevented by two completely separate issues. First, $\rho$ may consist of a set of non-orthogonal states. Perfectly distinguishing a set of non-orthogonal states is a general problem in quantum mechanics and a number of solutions have been proposed~\cite{Hausladen,Lloyd,Lloyd Other,Ogawa,Nagaoka,Hayashi}. Second, we are often unable to construct, even for an ensemble of orthogonal states, the necessary linear optical operator $A(U)$ to rotate all states into  non-overlapping subspaces. Here, we will focus exclusively on this second problem and attempt to improve state discrimination of a set of orthogonal quantum states. In particular, we examine the Bell states encoded in the dual-rail, defined as
-\begin{eqnarray}
-\rho  = \sum_{i=1}^4 \frac{1}{4} \outerproduct{\psi_i}{\psi_i} \quad \quad \quad \quad \quad \\
-\ket{\psi_1} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} + \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
-\ket{\psi_2} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} - \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
-\ket{\psi_3} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} + \frac{1}{\sqrt{2}} \ket{0,1,1,0} \\
-\ket{\psi_4} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} - \frac{1}{\sqrt{2}} \ket{0,1,1,0}
-\end{eqnarray}
-For this ensemble, $S(\rho)$ and $H(X)$ are both fixed at 2 bits. Numerical minimization of Eq.~(\ref{Conditional Entropy}) with Eq.~(\ref{von Neumann conditional probability part 1}) and Eq.~(\ref{von Neumann conditional probability part 2}) suggests that the optimal von Neumann measurement one can apply to this system will extract $H(X:Y) = 1.5$ bits. This is accomplished by first applying the operator $A(U)$ where
-\begin{equation}
-\label{First U}
-U = \frac{1}{2} \begin{pmatrix} 1 & 1 & 1 & 1 \\ 1 & -1 & 1 & -1 \\ 1 & -1 & -1 & 1 \\ 1 & 1 & -1 & -1 \end{pmatrix}   
-\end{equation}
-and then performing a photon-counting measurement. Thus, the Bell states encoded in the dual rail form a simple, symmetric, quantum ensemble in which full state discrimination is not immediately possible. 
-\section{Augmenting the System with Ancilla Resources}
-\label{Augmenting Section}
-Previous work in linear optical quantum computing suggests that supplementing a system with ancilla photons and modes is known to improve control over a quantum state. In particular, the gate fidelity of a measurement-assisted CNOT~\cite{KLM} acting on qubits encoded in the dual-rail improves dramatically with the proper use of ancilla resources \cite{Uskov}. So we expect to see some benefit to incorporating ancilla states here, and that is indeed the case. Our numerical experiments consisted of minimizing Eq.~(\ref{Conditional Entropy}) with Eq.~(\ref{von Neumann conditional probability part 2}) but instead of using Eq.~(\ref{von Neumann conditional probability part 1}) to define $\ket{\psi_x^\prime}$, we set
-\begin{equation}
-\label{Matrix Vector Product Ancilla}
-\ket{\psi_x^\prime} = A(U) \ket{\psi_a} \otimes \ket{\psi_x}.
-\end{equation}
-In  Fig.~(\ref{Decoding Hardware Ancillas}) we present an illustration of the decoding apparatus described by Eq~(\ref{Matrix Vector Product Ancilla}). The ancilla state is defined as any Fock state constructed from $N_a$ ancilla photons and $M_a$ ancilla modes 
-\begin{eqnarray}
-& \ket{\psi_a} = c_1 \ket{N_a,0,\dots,0_{M_a}} + c_2 \ket{N_a-1,1,0,\dots, 0_{M_a}} + \nonumber \\ & \dots  + c_{d_{H_a}} \ket{0,0,\dots,(N_a)_{M_a}}	 \quad \quad \quad \quad
-\end{eqnarray}
-\begin{equation}
-d_{H_a} = \frac{(N_a+M_a-1)!}{N_a ! (M_a-1)!}
-\end{equation}
-Because we allow photons to freely cross the boundary between computational and ancilla modes under the application of $A(U)$, the tensor product in Eq.~(\ref{Matrix Vector Product Ancilla}) falls strictly within the larger physical Hilbert space. In other words, $A(U)$ is not a square matrix. In Table~\ref{Ancilla Resources Table} we present results of numerical optimization over the unitary operator, $U$ and ancilla state $\ket{\psi_a}$.
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width= 0.5 \textwidth]{./ancillaMeasApp.pdf}
-	\caption{At the receiving end of a linear optical quantum channel, we build this measurement apparatus. Bell states arrive in the top four optical modes and we have a simple ancilla state prepared in the bottom set of modes. A linear optical transformation is applied, and then a photocounting measurement is performed.}
-	\label{Decoding Hardware Ancillas}
-\end{figure}
-\begin {table}[H]
-\begin{center}
-	\begin{tabular}{l*{6}{c}r} 
-		& & & &  $M_a$ \\
-		&       & \vline   & 0 & 1 & 2 & 3 & 4 \\
-		\cline{2-8}
-		&	0    & \vline  & 1.5 & 1.5 & 1.5 & 1.5 & 1.5 \\
-		&      1    & \vline & - & 1.5 & 1.5 & 1.5 & 1.5 \\
-		$N_a$ & 2 & \vline & - & 1.5 & 1.625 & 1.625 & 1.625 \\
-		& 3 & \vline & - & 1.5 & 1.625 & 1.625 & 1.625 \\
-		& 4 & \vline & - & 1.5 & 1.625 & 1.625 & 1.75 \\
-	\end{tabular}
-	\caption{Results for maximization of $H(X:Y)$ in bits over the operator $A(U)$ and states $\ket{\psi_a}$ for ancilla photons $N_a$ and ancilla modes $M_a$. In a perfect measurement, $H(X:Y) \rightarrow 2$ bits.\label{Ancilla Resources Table}}
-\end{center}
-\end{table}
-Table~\ref{Ancilla Resources Table} reports a discrete improvement in state discrimination with each additional pair of ancilla resources. We observe that all solutions converge to ancilla states $\ket{\psi_a}$ in a simple, classical state;
-\begin{equation}
-\ket{\psi_a} \equiv \ket{1,1,\dots,1_{M_a}}
-\end{equation} In particular we present results for $N_a,M_a=0$, $N_a,M_a=2$ and $N_a, M_a= 4$. Each of these solutions represents a family of solutions which are equivalent under symmetry (e.g. invariant permutations of columns since the labeling of output modes is arbitrary). 
-\newline
-
-
-		$ H(X:Y) = 1.5 $ bits
-		$$ \ket{\psi_a} = \ket{NULL} $$
-		\begin{equation}
-		\label{No Ancillas}
-		U = \frac{1}{2} \begin{pmatrix} 1 & 1 & 1 & 1 \\ 1 & -1 & 1 & -1 \\ 1 & -1 & -1 & 1 \\ 1 & 1 & -1 & -1 \end{pmatrix}   
-		\end{equation}
-		$$or$$
-		\begin{equation}
-		U = \frac{1}{\sqrt 2} \begin{pmatrix} 1 & 1 & 0 & 0 \\ 0 & 0 & 1 & 1 \\ 1 & -1 & 0 & 0 \\ 0 & 0 & 1 & -1 \end{pmatrix}   
-		\end{equation}
-
-		$ H(X:Y) = 1.625 $ bits
-		$$ \ket{\psi_a} = \ket{1,1} $$
-		\begin{equation}
-		\label{11 Ancilla}
-		U = \frac{1}{2} \begin{pmatrix} 
-		1 & 1 & 1 & 1 & 0 & 0 \\ 
-		1 & -1 & 1 & -1 & 0 & 0 \\ 
-		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & 1 & 1 \\ 
-		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & i & -i \\
-		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & -i & i \\
-		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & -1 & -1 \\
-		\end{pmatrix}   
-		\end{equation}
-		$$or$$
-		\begin{equation}
-		U = \frac{1}{2} \begin{pmatrix} 
-		1 & 1 & 1 & 1 & 0 & 0 \\ 
-		1 & -1 & 1 & -1 & 0 & 0 \\ 
-		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \sqrt 2 & 0 \\ 
-		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & 0 & -i \sqrt 2 \\
-		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & -\sqrt 2 & 0 \\
-		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & 0 & i \sqrt 2 \\
-		\end{pmatrix}   
-		\end{equation}
-		$$or$$
-		\begin{equation}
-		U = \frac{1}{2} \begin{pmatrix} 
-		1 & 1 & 1 & 1 & 0 & 0 \\ 
-		1 & -1 & 1 & -1 & 0 & 0 \\ 
-		1 & 0 & -1 & 0 & 1 & 1 \\
-		0 & 1 & 0 & -1 & -1 & 1 \\
-		1 & 0 & -1 & 0 & -1 & -1 \\
-		0 & 1 & 0 & -1 & 1 & -1 
-		\end{pmatrix}   
-		\end{equation}
-		$ H(X:Y) = 1.75 $ bits
-		\newline
-		$$ \ket{\psi_a} = \ket{1,1,1,1} $$
-		\newline
-		\begin{equation}
-		\label{1111 Ancilla}
-		U = \frac{1}{2} \begin{pmatrix} 
-		1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ 
-		1 & -1 & 1 & -1 & 0 & 0 & 0 & 0 \\ 
-		0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
-		0 & 0 & 0 & 0 & 1 & -1 & 1 & -1 \\
-		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} \\ 
-		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} \\ 
-		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} \\ 
-		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} \\ 
-		\end{pmatrix}   
-		\end{equation}
-Restating our definition of a linear optical transformation
-\begin{equation}
-\hat{a}^\dagger_i \rightarrow \sum_j U_{i j} \hat{a}_j^\dagger
-\end{equation}
-and noting that all ancilla modes are ordered \textit{before} computational modes, our results seem to suggest a general trend of spreading each pair of additional ancilla modes over four of the output modes, with discrete phase differences of $\pi$. Extrapolating these solutions, one could guess
-\begin{eqnarray}
-&N_a = 6, M_a = 8 : \quad \ket{\psi_a} = \ket{1,1,1,1,1,1,0,0} \nonumber \\ & \quad H(X:Y) \rightarrow 1.875 \mbox{ bits} \nonumber
-\end{eqnarray}
-since the three pairs of ancilla photons would then have room to spread over 12 output modes. One could further extrapolate
-\begin{eqnarray}
-& N_a = 8, M_a = 12 : \quad \ket{\psi_a} = \ket{1,1,1,1,1,1,1,1,0,0,0,0} \nonumber \\  & \quad H(X:Y) \rightarrow 2.0 \mbox{ bits} \nonumber
-\end{eqnarray}
-since the four pairs of ancilla photons have room to spread over 16 output modes. 
-\newline
-\newline
-Unfortunately, while Eq.~(\ref{Fact 2}) allows for feasible numerical simulation of these physical systems, the large optimization space and overwhelming saturation of local minima within it prevent us from reaching a global solution. Minimization methods including BFGS, conjugate gradient descent, Levenberg-Marquardt, Nelder-Meade, and principal axis were all tried with no success. In addition, we optimized over non-unitary operators in the place of $U$ which was also unsuccessful. Pushing to simulations of this size, we recommend trying a method other than numerical optimization to find an optimal $U$.
-\section{Global Quantum Channel Optimization}
-In Section~\ref{Augmenting Section} we discussed using ancilla resources to improve the discrimination of states in a quantum ensemble at the receiving end of a linear optical quantum channel. We found that ancilla resources can help us to control and decode multi-photon states, though we were unable to find a protocol for perfect measurement.  Here, we finally attempt to optimize the \textit{total} capacity of a linear optical quantum channel using ancillas in the decoding phase. We allow Alice to perform a non-orthogonal encoding and we allow Bob to perform a von Neumann measurement with the help of ancilla resources, as in Fig.~\ref{Decoding Hardware Ancillas}. The full communication protocol is defined as follows;
-\newline
-\begin{center}
-	\begin{minipage}{20em}
-		(1) An entangled initial state, $\ket{\psi_1}$ is pre-distributed between Alice and Bob.
-		\newline
-		\newline
-		(2) Alice performs some operation, $A(U_x)$ with probability $p(x)$ where $U_1 = I$ and $U_2,U_3, \dots, U_{\abs{X}}$ are unitary matrices operating only on her modes.
-		\newline
-		\newline
-		(3) Alice's modes run to Bob, who now has possession of the entire state.
-		\newline
-		\newline
-		(4) Bob augments the system with some pre-generated ancilla state $\ket{\psi_a}$, applies an operation to all modes $A(U_B)$, and performs a photocounting measurement.
-	\end{minipage}
-\end{center}
-~
-\newline
-An illustration of the full device is presented in Fig.~(\ref{Total Quantum Channel Device}).
-Formally, we want to perform a projective measurement on the ensemble of states;
-\begin{equation}
-\rho = \sum_{x \in X}  p(x) \outerproduct{\psi_x^\prime}{\psi_x^\prime}
-\end{equation}
-\begin{equation}
-\ket{\psi_x^\prime} = A(U_B) A(U_x) \ket{\psi_1} \otimes \ket{\psi_a}.
-\end{equation}
-where according to Eq.~(\ref{Fact 1}),
-\begin{equation}
-A(U_B) A(U_x) = A(U_x U_B).
-\end{equation}
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width= 0.5 \textwidth]{./GlobalApparatus.pdf}
-	\caption{Schematic for the total communication device. Alice and Bob each initially possess two modes. Alice acts on her modes with some operation $A(U_x)$ : $x \in X$. Alice's modes run to Bob, who augments the system with some ancilla state over two modes, applies the operation $A(U_B)$ and does a photocounting measurement.}
-	\label{Total Quantum Channel Device}
-\end{figure}
-\newline
-To quantify the success of Bob's photocounting measurement we use the mutual entropy as defined in Eq.~(\ref{Mutual Entropy Full}) and 
-\begin{equation}
-p(y|x) = \abs{\braket{\vec{n}_y}{\psi_x^\prime}}^2.
-\end{equation}
-Revisiting the key physical devices in~\cite{First Paper}, we incrementally increase the number of encoding symbols $\abs{X}$ and maximize the mutual entropy $H(X:Y)$. We then augment the systems with ancillas and attempt to close the Holevo bound. The reader should take note of our potentially confusing notation; $N_A$ and $M_A$ refer to the number of photons and modes initially in Alice's possession. $N_a$ and $M_a$ refer to the number of ancilla photons and modes that Bob augments to incoming states.
-\subsection{$N=2,M=4,M_A=2$}
-This system was of special interest in~\cite{First Paper} because Alice was able to achieve a maximum encoding by building an orthogonal ensemble of quantum states. We recall that in this case
-\begin{eqnarray}
-\abs{X} = 8 \quad \quad \quad \quad  \\
-S(\rho)_{max} = \log_2 d_S = \log_2 8 = 3 \mbox{ bits}
-\end{eqnarray}
-\section{Conclusion}
-We'll see.
+\label{Measurement Outcome Bunched Three Modes}
+\small 	\ket{\vec{n}^y} =\ket{0,\dots,(N-P)_L,\dots,(P-Q)_{l_1},\dots,Q_{l_2},\dots}.
+\end{equation} 
+Again, this can be done inductively by imposing and then revising conditions $(I-IV)$ at each step. With enough patience, one could carry this procedure through all measurement output states $\ket{\vec{n}^y}$ and find the true upper bound on the measurement ability of a linear Bell state analyzer. This is an enormous and tedious project that we leave for future work. Our numerical results in Fig.~(\ref{Mutual Information Results}) seems to suggest that a near-perfect Bell state measurement could be possible in the regime $N_a \ge 8$.
+%	\section{old stuff}
+%Previous work in maximizing the encoding capacity of an optical quantum channel~\cite{First Paper} revealed that imposing a \textit{linear optical} encoding (Alice uses only linear optical operations to encode information into a quantum ensemble) does not prevent her from achieving the true channel capacity. But any relationship counselor will tell you that real communication generally requires a good listener; just because Alice was able to optimally compress information into the channel, does not guarantee Bob will be able to extract it. In fact, we typically observe that Bob is not able to fully discriminate an a-priori set of optical quantum states if he is restricted to a linear optical photo-counting von Neumann measurement. Formally, we define our encoded ensemble of quantum states
+%\begin{equation}
+%\{\ket{\psi_1},\ket{\psi_2},...\ket{\psi_{\abs{X}}}\},
+%\end{equation}  
+%each sent over the channel with probability $p_x$
+%and photo-counting measurement operators
+%\begin{equation}
+%\{ \outerproduct{\vec{n}_1}{\vec{n}_1}, \outerproduct{\vec{n}_2}{\vec{n}_2}, \dots , \outerproduct{\vec{n}_{\abs{Y}}}{\vec{n}_{\abs{Y}} } \}.
+%\end{equation}
+%A photo-counting von Neumann measurement is defined here as a unitary linear optical transformation followed by a photo-counting measurement. The probability of measuring outcome $y$ assuming state $x$ was sent will be
+%\begin{eqnarray}
+%\label{von Neumann conditional probability part 1}
+%\ket{\psi_x^\prime} = A(U) \ket{\psi_x} \\
+%\label{von Neumann conditional probability part 2}
+%p(y|x) = \abs{\braket{\vec{n}_y}{\psi_x^\prime}}^2.
+%\end{eqnarray}
+%Imposing this measurement scheme, the Holevo bound appears to become strict for any optical communication channel
+%\begin{equation}
+%	H(X:Y) < S(\rho).
+%\end{equation}
+%Closing the Holevo bound here is prevented by two completely separate issues. First, $\rho$ may consist of a set of non-orthogonal states. Perfectly distinguishing a set of non-orthogonal states is a general problem in quantum mechanics and a number of solutions have been proposed~\cite{Hausladen,Lloyd,Lloyd Other,Ogawa,Nagaoka,Hayashi}. Second, we are often unable to construct, even for an ensemble of orthogonal states, the necessary linear optical operator $A(U)$ to rotate all states into  non-overlapping subspaces. Here, we will focus exclusively on this second problem and attempt to improve state discrimination of a set of orthogonal quantum states. In particular, we examine the Bell states encoded in the dual-rail, defined as
+%\begin{eqnarray}
+%\rho  = \sum_{i=1}^4 \frac{1}{4} \outerproduct{\psi_i}{\psi_i} \quad \quad \quad \quad \quad \\
+%\ket{\psi_1} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} + \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
+%\ket{\psi_2} = \frac{1}{\sqrt{2}} \ket{1,0,1,0} - \frac{1}{\sqrt{2}} \ket{0,1,0,1} \\
+%\ket{\psi_3} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} + \frac{1}{\sqrt{2}} \ket{0,1,1,0} \\
+%\ket{\psi_4} = \frac{1}{\sqrt{2}} \ket{1,0,0,1} - \frac{1}{\sqrt{2}} \ket{0,1,1,0}
+%\end{eqnarray}
+%For this ensemble, $S(\rho)$ and $H(X)$ are both fixed at 2 bits. Numerical minimization of Eq.~(\ref{Conditional Entropy}) with Eq.~(\ref{von Neumann conditional probability part 1}) and Eq.~(\ref{von Neumann conditional probability part 2}) suggests that the optimal von Neumann measurement one can apply to this system will extract $H(X:Y) = 1.5$ bits. This is accomplished by first applying the operator $A(U)$ where
+%\begin{equation}
+%\label{First U}
+%U = \frac{1}{2} \begin{pmatrix} 1 & 1 & 1 & 1 \\ 1 & -1 & 1 & -1 \\ 1 & -1 & -1 & 1 \\ 1 & 1 & -1 & -1 \end{pmatrix}   
+%\end{equation}
+%and then performing a photon-counting measurement. Thus, the Bell states encoded in the dual rail form a simple, symmetric, quantum ensemble in which full state discrimination is not immediately possible. 
+%\section{Augmenting the System with Ancilla Resources}
+%\label{Augmenting Section}
+%Previous work in linear optical quantum computing suggests that supplementing a system with ancilla photons and modes is known to improve control over a quantum state. In particular, the gate fidelity of a measurement-assisted CNOT~\cite{KLM} acting on qubits encoded in the dual-rail improves dramatically with the proper use of ancilla resources \cite{Uskov}. So we expect to see some benefit to incorporating ancilla states here, and that is indeed the case. Our numerical experiments consisted of minimizing Eq.~(\ref{Conditional Entropy}) with Eq.~(\ref{von Neumann conditional probability part 2}) but instead of using Eq.~(\ref{von Neumann conditional probability part 1}) to define $\ket{\psi_x^\prime}$, we set
+%\begin{equation}
+%\label{Matrix Vector Product Ancilla}
+%\ket{\psi_x^\prime} = A(U) \ket{\psi_a} \otimes \ket{\psi_x}.
+%\end{equation}
+%In  Fig.~(\ref{Decoding Hardware Ancillas}) we present an illustration of the decoding apparatus described by Eq~(\ref{Matrix Vector Product Ancilla}). The ancilla state is defined as any Fock state constructed from $N_a$ ancilla photons and $M_a$ ancilla modes 
+%\begin{eqnarray}
+%& \ket{\psi_a} = c_1 \ket{N_a,0,\dots,0_{M_a}} + c_2 \ket{N_a-1,1,0,\dots, 0_{M_a}} + \nonumber \\ & \dots  + c_{d_{H_a}} \ket{0,0,\dots,(N_a)_{M_a}}	 \quad \quad \quad \quad
+%\end{eqnarray}
+%\begin{equation}
+%d_{H_a} = \frac{(N_a+M_a-1)!}{N_a ! (M_a-1)!}
+%\end{equation}
+%Because we allow photons to freely cross the boundary between computational and ancilla modes under the application of $A(U)$, the tensor product in Eq.~(\ref{Matrix Vector Product Ancilla}) falls strictly within the larger physical Hilbert space. In other words, $A(U)$ is not a square matrix. In Table~\ref{Ancilla Resources Table} we present results of numerical optimization over the unitary operator, $U$ and ancilla state $\ket{\psi_a}$.
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width= 0.5 \textwidth]{./ancillaMeasApp.pdf}
+%	\caption{At the receiving end of a linear optical quantum channel, we build this measurement apparatus. Bell states arrive in the top four optical modes and we have a simple ancilla state prepared in the bottom set of modes. A linear optical transformation is applied, and then a photocounting measurement is performed.}
+%	\label{Decoding Hardware Ancillas}
+%\end{figure}
+%\begin {table}[H]
+%\begin{center}
+%	\begin{tabular}{l*{6}{c}r} 
+%		& & & &  $M_a$ \\
+%		&       & \vline   & 0 & 1 & 2 & 3 & 4 \\
+%		\cline{2-8}
+%		&	0    & \vline  & 1.5 & 1.5 & 1.5 & 1.5 & 1.5 \\
+%		&      1    & \vline & - & 1.5 & 1.5 & 1.5 & 1.5 \\
+%		$N_a$ & 2 & \vline & - & 1.5 & 1.625 & 1.625 & 1.625 \\
+%		& 3 & \vline & - & 1.5 & 1.625 & 1.625 & 1.625 \\
+%		& 4 & \vline & - & 1.5 & 1.625 & 1.625 & 1.75 \\
+%	\end{tabular}
+%	\caption{Results for maximization of $H(X:Y)$ in bits over the operator $A(U)$ and states $\ket{\psi_a}$ for ancilla photons $N_a$ and ancilla modes $M_a$. In a perfect measurement, $H(X:Y) \rightarrow 2$ bits.\label{Ancilla Resources Table}}
+%\end{center}
+%\end{table}
+%Table~\ref{Ancilla Resources Table} reports a discrete improvement in state discrimination with each additional pair of ancilla resources. We observe that all solutions converge to ancilla states $\ket{\psi_a}$ in a simple, classical state;
+%\begin{equation}
+%\ket{\psi_a} \equiv \ket{1,1,\dots,1_{M_a}}
+%\end{equation} In particular we present results for $N_a,M_a=0$, $N_a,M_a=2$ and $N_a, M_a= 4$. Each of these solutions represents a family of solutions which are equivalent under symmetry (e.g. invariant permutations of columns since the labeling of output modes is arbitrary). 
+%\newline
+%
+%
+%		$ H(X:Y) = 1.5 $ bits
+%		$$ \ket{\psi_a} = \ket{NULL} $$
+%		\begin{equation}
+%		\label{No Ancillas}
+%		U = \frac{1}{2} \begin{pmatrix} 1 & 1 & 1 & 1 \\ 1 & -1 & 1 & -1 \\ 1 & -1 & -1 & 1 \\ 1 & 1 & -1 & -1 \end{pmatrix}   
+%		\end{equation}
+%		$$or$$
+%		\begin{equation}
+%		U = \frac{1}{\sqrt 2} \begin{pmatrix} 1 & 1 & 0 & 0 \\ 0 & 0 & 1 & 1 \\ 1 & -1 & 0 & 0 \\ 0 & 0 & 1 & -1 \end{pmatrix}   
+%		\end{equation}
+%
+%		$ H(X:Y) = 1.625 $ bits
+%		$$ \ket{\psi_a} = \ket{1,1} $$
+%		\begin{equation}
+%		\label{11 Ancilla}
+%		U = \frac{1}{2} \begin{pmatrix} 
+%		1 & 1 & 1 & 1 & 0 & 0 \\ 
+%		1 & -1 & 1 & -1 & 0 & 0 \\ 
+%		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & 1 & 1 \\ 
+%		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & i & -i \\
+%		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & -i & i \\
+%		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & -1 & -1 \\
+%		\end{pmatrix}   
+%		\end{equation}
+%		$$or$$
+%		\begin{equation}
+%		U = \frac{1}{2} \begin{pmatrix} 
+%		1 & 1 & 1 & 1 & 0 & 0 \\ 
+%		1 & -1 & 1 & -1 & 0 & 0 \\ 
+%		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \sqrt 2 & 0 \\ 
+%		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & 0 & -i \sqrt 2 \\
+%		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & -\sqrt 2 & 0 \\
+%		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & 0 & i \sqrt 2 \\
+%		\end{pmatrix}   
+%		\end{equation}
+%		$$or$$
+%		\begin{equation}
+%		U = \frac{1}{2} \begin{pmatrix} 
+%		1 & 1 & 1 & 1 & 0 & 0 \\ 
+%		1 & -1 & 1 & -1 & 0 & 0 \\ 
+%		1 & 0 & -1 & 0 & 1 & 1 \\
+%		0 & 1 & 0 & -1 & -1 & 1 \\
+%		1 & 0 & -1 & 0 & -1 & -1 \\
+%		0 & 1 & 0 & -1 & 1 & -1 
+%		\end{pmatrix}   
+%		\end{equation}
+%		$ H(X:Y) = 1.75 $ bits
+%		\newline
+%		$$ \ket{\psi_a} = \ket{1,1,1,1} $$
+%		\newline
+%		\begin{equation}
+%		\label{1111 Ancilla}
+%		U = \frac{1}{2} \begin{pmatrix} 
+%		1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ 
+%		1 & -1 & 1 & -1 & 0 & 0 & 0 & 0 \\ 
+%		0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+%		0 & 0 & 0 & 0 & 1 & -1 & 1 & -1 \\
+%		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} \\ 
+%		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} \\ 
+%		\frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} \\ 
+%		\frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{1}{\sqrt 2} & \frac{-1}{\sqrt 2} \\ 
+%		\end{pmatrix}   
+%		\end{equation}
+%Restating our definition of a linear optical transformation
+%\begin{equation}
+%\hat{a}^\dagger_i \rightarrow \sum_j U_{i j} \hat{a}_j^\dagger
+%\end{equation}
+%and noting that all ancilla modes are ordered \textit{before} computational modes, our results seem to suggest a general trend of spreading each pair of additional ancilla modes over four of the output modes, with discrete phase differences of $\pi$. Extrapolating these solutions, one could guess
+%\begin{eqnarray}
+%&N_a = 6, M_a = 8 : \quad \ket{\psi_a} = \ket{1,1,1,1,1,1,0,0} \nonumber \\ & \quad H(X:Y) \rightarrow 1.875 \mbox{ bits} \nonumber
+%\end{eqnarray}
+%since the three pairs of ancilla photons would then have room to spread over 12 output modes. One could further extrapolate
+%\begin{eqnarray}
+%& N_a = 8, M_a = 12 : \quad \ket{\psi_a} = \ket{1,1,1,1,1,1,1,1,0,0,0,0} \nonumber \\  & \quad H(X:Y) \rightarrow 2.0 \mbox{ bits} \nonumber
+%\end{eqnarray}
+%since the four pairs of ancilla photons have room to spread over 16 output modes. 
+%\newline
+%\newline
+%Unfortunately, while Eq.~(\ref{Fact 2}) allows for feasible numerical simulation of these physical systems, the large optimization space and overwhelming saturation of local minima within it prevent us from reaching a global solution. Minimization methods including BFGS, conjugate gradient descent, Levenberg-Marquardt, Nelder-Meade, and principal axis were all tried with no success. In addition, we optimized over non-unitary operators in the place of $U$ which was also unsuccessful. Pushing to simulations of this size, we recommend trying a method other than numerical optimization to find an optimal $U$.
+%\section{Global Quantum Channel Optimization}
+%In Section~\ref{Augmenting Section} we discussed using ancilla resources to improve the discrimination of states in a quantum ensemble at the receiving end of a linear optical quantum channel. We found that ancilla resources can help us to control and decode multi-photon states, though we were unable to find a protocol for perfect measurement.  Here, we finally attempt to optimize the \textit{total} capacity of a linear optical quantum channel using ancillas in the decoding phase. We allow Alice to perform a non-orthogonal encoding and we allow Bob to perform a von Neumann measurement with the help of ancilla resources, as in Fig.~\ref{Decoding Hardware Ancillas}. The full communication protocol is defined as follows;
+%\newline
+%\begin{center}
+%	\begin{minipage}{20em}
+%		(1) An entangled initial state, $\ket{\psi_1}$ is pre-distributed between Alice and Bob.
+%		\newline
+%		\newline
+%		(2) Alice performs some operation, $A(U_x)$ with probability $p(x)$ where $U_1 = I$ and $U_2,U_3, \dots, U_{\abs{X}}$ are unitary matrices operating only on her modes.
+%		\newline
+%		\newline
+%		(3) Alice's modes run to Bob, who now has possession of the entire state.
+%		\newline
+%		\newline
+%		(4) Bob augments the system with some pre-generated ancilla state $\ket{\psi_a}$, applies an operation to all modes $A(U_B)$, and performs a photocounting measurement.
+%	\end{minipage}
+%\end{center}
+%~
+%\newline
+%An illustration of the full device is presented in Fig.~(\ref{Total Quantum Channel Device}).
+%Formally, we want to perform a projective measurement on the ensemble of states;
+%\begin{equation}
+%\rho = \sum_{x \in X}  p(x) \outerproduct{\psi_x^\prime}{\psi_x^\prime}
+%\end{equation}
+%\begin{equation}
+%\ket{\psi_x^\prime} = A(U_B) A(U_x) \ket{\psi_1} \otimes \ket{\psi_a}.
+%\end{equation}
+%where according to Eq.~(\ref{Fact 1}),
+%\begin{equation}
+%A(U_B) A(U_x) = A(U_x U_B).
+%\end{equation}
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width= 0.5 \textwidth]{./GlobalApparatus.pdf}
+%	\caption{Schematic for the total communication device. Alice and Bob each initially possess two modes. Alice acts on her modes with some operation $A(U_x)$ : $x \in X$. Alice's modes run to Bob, who augments the system with some ancilla state over two modes, applies the operation $A(U_B)$ and does a photocounting measurement.}
+%	\label{Total Quantum Channel Device}
+%\end{figure}
+%\newline
+%To quantify the success of Bob's photocounting measurement we use the mutual entropy as defined in Eq.~(\ref{Mutual Entropy Full}) and 
+%\begin{equation}
+%p(y|x) = \abs{\braket{\vec{n}_y}{\psi_x^\prime}}^2.
+%\end{equation}
+%Revisiting the key physical devices in~\cite{First Paper}, we incrementally increase the number of encoding symbols $\abs{X}$ and maximize the mutual entropy $H(X:Y)$. We then augment the systems with ancillas and attempt to close the Holevo bound. The reader should take note of our potentially confusing notation; $N_A$ and $M_A$ refer to the number of photons and modes initially in Alice's possession. $N_a$ and $M_a$ refer to the number of ancilla photons and modes that Bob augments to incoming states.
+%\subsection{$N=2,M=4,M_A=2$}
+%This system was of special interest in~\cite{First Paper} because Alice was able to achieve a maximum encoding by building an orthogonal ensemble of quantum states. We recall that in this case
+%\begin{eqnarray}
+%\abs{X} = 8 \quad \quad \quad \quad  \\
+%S(\rho)_{max} = \log_2 d_S = \log_2 8 = 3 \mbox{ bits}
+%\end{eqnarray}
+%\section{Conclusion}
+%We'll see.
 \acknowledgments
-I want to thank my moms, yo. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
+We are thankful for helpful discussions with M. Levenstien and R. Budin. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
 \begin{thebibliography}{99}
 
 \bibitem{Reck} M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani, Phys. Rev. Lett. {\bf 73}, 58 (1994).
