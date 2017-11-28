@@ -76,9 +76,9 @@ We can encode qubits into the polarization or spatial states of a single photon.
 The action of a linear optical quantum circuit on an optical state can generally be described by the transformation of creation operators~\cite{Reck}:
 \begin{equation}
 \label{LO Creation Operator Transformation}
-\hat{a}^\dagger_\alpha \rightarrow \sum_{\beta=1}^{M} U_{\alpha\beta} \hat{a}^\dagger_\beta
+\hat{a}^\dagger_\alpha \rightarrow \sum_{\beta=1}^{M} U_{\alpha,\beta} \hat{a}^\dagger_\beta
 \end{equation}
-where $U_{\alpha \beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). Formally, there exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are severely restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail~\cite{Review Paper} demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
+where $U_{\alpha,\beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). Formally, there exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are severely restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail~\cite{Review Paper} demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
 
 A series of "no-go" theorems on optical state discrimination seemed to limit the benefit of using these extra tools in a Bell state analyzer. First, it was demonstrated by L\"utkenhaus and Calsamiglia that a completely perfect measurement on an ensemble of Bell states using only linear components, multistage partial measurements and ancilla resources cannot exist~\cite{Lutkenhaus}. This theorem was later extended by~\cite{Carollo}; we apparently cannot implement a perfect measurement using these tools on \textit{any} set of indistinguishable orthonormal Fock states. Further, in the subclass of tools using only vacuum ancilla modes, it was shown that an analyzer cannot perfectly distinguish equi-probable Bell states (the ensemble in Eq.~(\ref{Bell State Ensemble})) more than half of the time~\cite{Calsamiglia}. However, it was shown by~\cite{Ewert} that this upper bound is lifted if we don't restrict our ancilla modes to be vacuum.
 
@@ -107,7 +107,7 @@ We define
 where $m_\alpha$ is the mode-location of photon number $\alpha$ and $N$ is the total number of photons in the system. Of course the choice of vector $\ket{\vec{m}}$ for a given $\ket{\vec{n}}$ is not unique, since photons are indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}}$ for each $\ket{\vec{n}}$. Then the elements of the matrix representation of $\hat{A}(U)$ in the basis $\outerproduct{\vec{n}^\prime}{\vec{n}}$ are given by
 \begin{eqnarray}
 \label{A_U}
-A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{\sqrt{n_p !}} \left[\sum_{\textrm{perm}(\vec{m}^\prime)} U_{m_1 m_1^\prime} U_{m_2 m_2^\prime} \dots U_{m_N m_N^\prime} \right] \,,
+A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{\sqrt{n_p !}} \left[\sum_{\textrm{perm}(\vec{m}^\prime)} U_{m_1, m_1^\prime} U_{m_2, m_2^\prime} \dots U_{m_N, m_N^\prime} \right] \,,
 \end{eqnarray}
 where the summation is over all distinct permutations of integer entries in the vector $\vec{m}^\prime$. For proof of Eq.~(\ref{A_U}), see~\cite{Jake Smith}.
 
@@ -197,7 +197,7 @@ and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermi
 We note that with every additional pair of ancilla photons, the mutual information appears to linearly approach a near-perfect measurement. If the trend continues, we expect a minimum ancilla resource of $N_a \ge 8$. For $N_a \ge 6$, the optimization routine becomes overwhelmed by local minima. We speculate the $N_a=6$ data point in Fig.~(\ref{Mutual Information Results}) is not a global solution for that case. We parallelized the construction of $\hat{A}(U)$ over hundreds of processes, using two Intel Xeon Phi Coprocessors. We tried BFGS, Levenberg-Marquardt, Nelder-Meade and principal axis minimization algorithms. With any of these methods, convergence still struggled for $N_a \ge 6$. In this regime, we recommend trying something other than numerical optimization.
 \section{Analysis of $U$}
 \label{Section on U Analysis}
-The numerical results in Sec.~\ref{Section on Numerical Minimization} seem to suggest a discrete improvement as we incorporate pairs of ancilla photons into our Bell state analyzer. We now approach the problem from another other direction; we try to solve for unitary $U$ directly \textit{assuming} a near-perfect measurement.
+The numerical results in Sec.~\ref{Section on Numerical Minimization} seem to suggest a discrete improvement as we incorporate pairs of ancilla photons into our Bell state analyzer. We now approach the problem from another other direction; we try to solve for unitary $U$ directly \textit{assuming} a perfect measurement is possible.
 We first define the complex variables
 \begin{eqnarray}
 	 A_1 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+1,m^y_{N_a+1}} U_{N_a+3,m^y_{N_a+2}} \nonumber\\
@@ -225,14 +225,14 @@ and
 according to Eq.~(\ref{Conditional Entropy}) we need to find $U$ such that
 \begin{equation}
 \label{Conditional Entropy Condition}
-	\forall \enspace x \enspace y , \quad p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)} \approx 0
+	\forall \enspace x \enspace y , \quad p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)} = 0
 \end{equation}
-in order to implement a near-perfect measurement. 
+in order to implement a perfect measurement. 
 With some algebra, we find the condition in~(\ref{Conditional Entropy Condition}) is satisfied if and only if:
 \begin{flalign}
 &	\forall \quad \ket{\vec{n}^y} \mbox{,    at least one condition holds:} \nonumber \\
-& (a) \enspace A_1 \approx A_2 \approx A_3 \approx A_4 \approx 0 \nonumber \\
-& (b) \enspace A_1 \approx \pm A_2 \mbox{ and } A_3 \approx A_4 \approx 0 \nonumber \\ & (c) \enspace A_3 \approx \pm A_4 \mbox{ and } A_1 \approx A_2 \approx 0. \nonumber
+& (a) \enspace A_1 = A_2 = A_3 = A_4 = 0 \nonumber \\
+& (b) \enspace A_1 = \pm A_2 \mbox{ and } A_3 = A_4 = 0 \nonumber \\ & (c) \enspace A_3 = \pm A_4 \mbox{ and } A_1 = A_2 = 0. \nonumber
 \end{flalign}
 So now, we can simply go through the output measurement states for $N_a \ge 8$, and find constraints on $U$ such that either (a),(b) or (c) is satisfied for each $\ket{\vec{n}^y}$.
 
@@ -252,32 +252,40 @@ In this case
 		& A_3 = U_{1,L} U_{2,L} \dots U_{N_a,L} U_{N_a+1,L} U_{N_a+4,L} \nonumber \\
 		& A_4 = U_{1,L} U_{2,L} \dots U_{N_a,L} U_{N_a+2,L} U_{N_a+3,L} \nonumber
 	\end{eqnarray}
-	Thus, we find $(b)$ and $(c)$ cannot be satisfied for this measurement state $\ket{\vec{n}^y_{P=0}}$. $(a)$ is satisfied if and only if
+	Thus, we find $(b)$ and $(c)$ cannot be satisfied for this measurement state $\ket{\vec{n}^y_{P=0}}$. $(a)$ is satisfied if and only if at least one condition holds:
 	\begin{flalign}
-	&\mbox{at least one condition holds:} \nonumber \\
-	& (i) \enspace U_{s,L} \approx 0 \mbox{ for one } s: 1 \le s \le N_a \nonumber \\
-	& (ii) \enspace U_{N_a+1,L} \approx U_{N_a+2,L} \approx 0 \nonumber \\ & (iii) \enspace U_{N_a+3,L} \approx U_{N_a+4,L} \approx 0. \nonumber
+	& (i) \enspace U_{S,L} = 0 \mbox{ for at least one } S \in \{1,\dots,N_a\} \nonumber \\
+	& (ii) \enspace U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{N_a+3,L} = U_{N_a+4,L} = 0. \nonumber
 	\end{flalign}
-	Of course, we need condition $(a),(b)$ or $(c)$ to apply to \textit{all} measurement states $\ket{\vec{n}^y_{P=0}}$; thus $(i)$,$(ii)$ or $(iii)$ must apply to \textit{all} columns $L$ of $U$.
+	Of course, we need condition $(a)$ to be satisfied for \textit{all} measurement states $\ket{\vec{n}^y_{P=0}}$. Thus, $(i)$ or $(ii)$ or $(iii)$ must be satisfied for each column $L$ of $U$.
 	
 	We next look at the state where $P=1$
 	\begin{eqnarray}
 	& \ket{\vec{n}^y_{P=1}} = \ket{0,\dots,(N-1)_L,\dots,0,1_l,0,\dots,0} \\ & \ket{\vec{m}^y_{P=1}} = \ket{L,L,\dots,L_{N-1},l}. \nonumber
 	\end{eqnarray}
-	For each column $L$ of $U$, we assume $(i)$, $(ii)$ or $(iii)$ is true, and determine any additional constraints that make $(a)$, $(b)$, or $(c)$ true for outcome state $\ket{\vec{n}^y_{P=1}}$. Through some simple algebra, we determine the conditions $(i)$, $(ii)$ and $(iii)$ must be revised; $(a)$ is satisfied if and only if
+	For each column $L$ of $U$, we assume $(i)$, $(ii)$ or $(iii)$ is true, and determine any additional constraints that make $(a)$, $(b)$, or $(c)$ true for outcome state $\ket{\vec{n}^y_{P=1}}$. Through some simple algebra, we determine the conditions $(i)$, $(ii)$ and $(iii)$ must be revised; for each column $L$ of $U$, $(a)$ is satisfied if and only if at least one condition holds:
 	\begin{flalign}
-	    &\mbox{at least one condition holds:} \nonumber \\
-		& (i) \enspace U_{s,L} \approx 0 \mbox{ for two distinct } s: 1 \le s \le N_a \nonumber \\
-		& (ii) \enspace U_{s,L} \approx 0 \mbox{ for one } s: 1 \le s \le N_a \nonumber \\
-		& \quad \quad \quad \mbox{and }U_{N_a+1,L} \approx U_{N_a+2,L} \approx 0 \nonumber \\ & (iii) \enspace U_{s,L} \approx 0 \mbox{ for one } s: 1 \le s \le N_a \nonumber \\
-		& \quad \quad \quad \mbox{and }U_{N_a+3,L} \approx U_{N_a+4,L} \approx 0 \nonumber \\
-		& (iv) \enspace U_{N_a+1,L} \approx U_{N_a+2,L} \approx U_{N_a+3,L} \approx U_{N_a+4,L} \approx 0 \nonumber
+		& (i) \enspace U_{S,L} = 0 \mbox{ for at least 2 distinct } S \in \{1,\dots,N_a\} \nonumber \\
+		& (ii) \enspace U_{S,L} = 0 \mbox{ for at least one } S \in \{1,\dots,N_a\} \nonumber \\
+		& \quad \quad \quad \mbox{and }U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{S,L} = 0 \mbox{ for at least one } S \in \{1,\dots,N_a\} \nonumber \\
+		& \quad \quad \quad \mbox{and }U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
+		& (iv) \enspace U_{N_a+1,L} = U_{N_a+2,L} = U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber
 	\end{flalign}
 	while conditions $(b)$ and $(c)$ cannot be satisfied for $\ket{\vec{n}^y_{P=1}}$.
 	
-	We repeat this process in a proof by induction, revising the conditions $(i), (ii), \dots$ as we increase $P$ to $N/2$. In all cases we find $(b)$ and $(c)$ can never be satisfied. At the end, we impose the fact that  $(i), (ii), \dots$ must hold for all measurement states $P \le N/2$ (with any choice of modes $L$ and $l$) and we are left with the following results:
-\newline
+	We repeat this process in a proof by induction, revising the conditions $(i), (ii), \dots$ as we increase $P$ in Eq.~(\ref{Measurement Outcome Bunched Two Modes}) to $N/2$. In all cases we find $(b)$ and $(c)$ can never be satisfied. $(a)$ is satisfied for all states $ 0 \le P \le N_a $ if and only if at least one one condition holds for each column $L$ of $U$:
+	\begin{flalign}
+	& \small(i) \enspace U_{S,L} = 0 \mbox{ for at least $N/2+1$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
+	& \small(ii) \enspace U_{S,L} = 0 \mbox{ for at least $N/2$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
+	& \small \quad \quad \quad \mbox{and }U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{S,L} = 0 \mbox{ for at least $N/2$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
+	& \small \quad \quad \quad \mbox{and }U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
+	& \small (iv) \enspace U_{S,L} = 0 \mbox{ for at least $N/2-1$ distinct } S \in \{1,\dots,N_a\} \nonumber \\
+	& \small \quad \quad \quad \mbox{and } U_{N_a+1,L} = U_{N_a+2,L} = U_{N_a+3,L} = U_{N_a+4,L} = 0 \nonumber \\
+	& \small(v) \enspace U_{S,L} = 0 \mbox{ for at least three distinct } S \in \{1,\dots,N_a\} \nonumber \\
+	& \small \quad \quad \quad \mbox{and } \forall \quad l \ne L, \quad U_{S,l} = 0 \mbox{ for at least one } S\nonumber
+	\end{flalign}
 \begin{center}
+	MAKE SURE TO CHANGE FROM EQUALS SIGN TO APPROX
 \begin{minipage}[t]{0.43\textwidth}
 		For any measurement outcome in the form of Eq.~(\ref{Measurement Outcome Bunched Two Modes}), neither $(b)$ nor $(c)$ can be satisfied and all measurement output states must satisfy $(a)$. This means ...
 		\newline
