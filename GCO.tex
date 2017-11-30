@@ -191,7 +191,7 @@ and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermi
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width= 0.48 \textwidth]{./EntropyData.pdf}
-	\caption{ Maximum mutual information $H(X:Y)$ in bits as a function of ancilla photons, $N_a$. With every additional pair of ancilla photons, we observe a gain in the mutual information of 0.125 bits. A mutual entropy of $H(X:Y) = 2$ bits corresponds to a perfect measurement.}
+	\caption{ Maximum mutual information $H(X:Y)$ in bits as a function of ancilla photons, $N_a$. With every additional pair of un-entangled ancilla photons, we observe a gain in the mutual information of 0.125 bits. A mutual entropy of $H(X:Y) = 2$ bits corresponds to a perfect measurement.}
 	\label{Mutual Information Results}
 \end{figure}
 We note that with every additional pair of ancilla photons, the mutual information appears to linearly approach a near-perfect measurement. If the trend continues, we expect a minimum ancilla resource of $N_a \ge 8$. For $N_a \ge 6$, the optimization routine becomes overwhelmed by local minima. We speculate the $N_a=6$ data point in Fig.~(\ref{Mutual Information Results}) is not a global solution for that case. We parallelized the construction of $\hat{A}(U)$ over hundreds of processes, using two Intel Xeon Phi Coprocessors. We tried BFGS, Levenberg-Marquardt, Nelder-Meade and principal axis minimization algorithms. With any of these methods, convergence still struggled for $N_a \ge 6$.
