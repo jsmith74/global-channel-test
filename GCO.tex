@@ -47,15 +47,15 @@
 \affiliation{Tulane University, Department of Physics, New Orleans, Louisiana 70118, USA}
 
  \begin{abstract}
- 	Reliable Bell measurements are an essential component of quantum information processing. Unfortunately, implementing a deterministic linear optical Bell measurement on photonic states has thus been a longstanding unsolved problem in linear optical quantum computing. Despite well-established no-go theorems on a perfect linear optical Bell state analyzer, we find a numerical trend that appears to approach a \textit{near}-perfect measurement if we were to incorporate eight or more un-entangled ancilla photons into our device. Following this trend, we begin a promising inductive proof to build an ideal optical Bell measurement device. In the process, we determine that any Bell state analyzer that (even occasionally) bunches all photons into only two of the output modes cannot make an ideal measurement and we find a set of conditions on our linear optical circuit that prevent this outcome.
+ 	Reliable Bell measurements are an essential component of quantum information processing. Still, implementing a deterministic linear optical Bell measurement on photonic states has been a longstanding unsolved problem in linear optical quantum computing. Despite well-established no-go theorems on a perfect linear optical Bell state analyzer, we find a numerical trend that appears to approach a \textit{near}-perfect measurement if we were to incorporate eight or more un-entangled ancilla photons into our device. Following this trend, we begin a promising inductive proof to build an ideal optical Bell measurement device. In the process, we determine that any Bell state analyzer that (even occasionally) bunches all photons into only two of the output modes cannot make an ideal measurement and we find a set of conditions on our linear optical circuit that prevent this outcome.
 \end{abstract}                                                               
 \date{\today}
 \maketitle
 \section{Introduction}
 \label{Intro}
-In quantum information processing, the ability to perform proper measurements is imperative. Because of the effects of observation on superposition and entanglement, there is a fundamental difference between measurement at a quantum and macroscopic level. As a result, implementation of a quantum measurement can be non-trivial. In the linear optical quantum computing paradigm, even a seemingly simple Bell measurement has presented significant challenge. This is a serious problem; Bell state discrimination plays a critical role in quantum teleportation, which is a fundamental task in quantum information processing~\cite{Chuang}. Here, we attempt to make some progress in designing an efficient photonic Bell state analyzer using only deterministic linear optics and ancilla resources. 
+In quantum information processing, the ability to perform proper measurements is imperative. Because of the effects of observation on superposition and entanglement, there is a fundamental difference between measurement at a quantum and macroscopic level. As a result, implementation of a quantum measurement can be non-trivial. In the linear optical quantum computing paradigm, even a seemingly simple Bell measurement has presented significant challenge. This is an important problem because Bell state discrimination plays a critical role in quantum teleportation which is a fundamental task in quantum information processing~\cite{Chuang}. Here, we make some progress in designing an efficient photonic Bell state analyzer using only deterministic linear optics and ancilla resources. 
 
-In the standard dual-rail encoding, a qubit is represented by the polarization or spatial states of a single photon. Then, the Bell states are represented by a maximally entangled EPR pair of photons. If all four Bell states are equiprobable, this ensemble is written
+In the standard dual-rail encoding~\cite{Review Paper}, a qubit is represented by the polarization or spatial states of a single photon. Then, the Bell states are represented by a maximally entangled EPR pair of photons. If all four Bell states are equiprobable, this ensemble is written
 \begin{eqnarray}
 \label{Bell States Creation Operator 1}
 \ket{\phi_1} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger + \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
@@ -78,13 +78,13 @@ The action of a linear optical quantum circuit on an optical state can generally
 \label{LO Creation Operator Transformation}
 \hat{a}^\dagger_\alpha \rightarrow \sum_{\beta=1}^{M} U_{\alpha,\beta} \hat{a}^\dagger_\beta
 \end{equation}
-where $U_{\alpha,\beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). Formally, there exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail~\cite{Review Paper} demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
+where $U_{\alpha,\beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). There exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
 
 A series of "no-go" theorems on optical state discrimination seemed to limit the benefit of using these extra tools in a Bell state analyzer. First, it was demonstrated by L\"utkenhaus and Calsamiglia that a completely perfect measurement on an ensemble of Bell states using only linear components, multistage partial measurements and ancilla resources cannot exist~\cite{Lutkenhaus}. This theorem was later extended by~\cite{Carollo}; we apparently cannot implement a perfect measurement using these tools on \textit{any} set of indistinguishable orthonormal photonic states. Further, in the subset of tools using only vacuum ancilla modes, it was shown that an analyzer cannot perfectly distinguish equi-probable Bell states (the ensemble in Eq.~(\ref{Bell State Ensemble})) more than half of the time~\cite{Calsamiglia}. However, it was shown by~\cite{Ewert} that this upper bound is lifted if we don't restrict our ancilla modes to be vacuum.
 
-These no-go theorems are, however, complicated by the fact that they don't provide an exact upper bound on distinguishability. A "perfect" measurement is a meaningless limit in the real world and an arbitrarily close-to-perfect measurement would be  equally as invaluable for practical applications in quantum information processing. In 2011,~\cite{Pavicic} presented a scheme for near-perfect Bell state discrimination, though this paper was later retracted. This is clearly a difficult problem with no easy solutions.
+These no-go theorems, however, do not provide an exact upper bound on distinguishability. A "perfect" measurement is a meaningless limit in the real world and an arbitrarily close-to-perfect measurement would be  equally as invaluable for practical applications in quantum information processing. In 2011,~\cite{Pavicic} presented a scheme for near-perfect Bell state discrimination, though this paper was later retracted. This is clearly a difficult problem with no easy solutions.
 
-Here, we use computational techniques to find a clear trend in linear improvement to Bell state measurements using only ancilla photons and vacuum modes (we find using multistage measurements to be minimally beneficial). Extrapolating these results, we apply analytic techniques to learn what we can about effective linear optical analyzers. We determine any device that bunches all photons into two or less modes under any circumstances cannot make a perfect measurement. Finally, we present a set of conditions on $U$ that prevent this outcome. With enough patience, this proof could be extended to develop an optimal Bell state analyzer. 
+Here, we use computational techniques to find a clear trend in linear improvement to Bell state measurements using only ancilla photons and vacuum modes (we find using multistage measurements to be minimally beneficial). Extrapolating these results, we try to learn what we can about effective linear optical analyzers. We determine any device that bunches all photons into two or less modes under any circumstances cannot make a perfect measurement. Finally, we present a set of conditions on $U$ that prevent this outcome. With enough patience, this proof could be extended to develop an optimal linear optical Bell state analyzer and determine an exact upper bound on measurability. 
 \section{Transforming the Bell states}
 An optical quantum state can be written as a complex vector
 \begin{equation}
@@ -134,7 +134,7 @@ If Alice sends Bell state $\ket{\psi_x}$, the probability Bob measures state $\k
 \end{equation}
 \section{The Classical Mutual Information}
 \label{Section on Mutual Entropy}
-To gauge the success of Bob's measurement device, we choose the classical mutual information, $H(X:Y)$. This quantity is bound from above by Holevo's theorem~\cite{Holevo} which is
+To gauge the success of Bob's measurement device, we choose the classical mutual information, $H(X:Y)$. This quantity is bound from above by Holevo's theorem~\cite{Holevo,Hausladen} which is
 given by
 \begin{equation}
 \label{Holevo Theorem}
@@ -172,7 +172,7 @@ where
 \begin{equation}
 	\tilde{p}(y|x) = 1 - \sum_{y \in Y} p(y|x).
 \end{equation}
-In other words, all measurement outcomes in which photons have leaked into the garbage modes are consolidated into one. Optimal results thus tend to be unitary; convergence is improved because our optimization routine is allowed to pass through the middle of a unitary hyper-sphere, rather than be restricted to move along the surface.
+In other words, all measurement outcomes in which photons have leaked into the garbage modes are consolidated into one. An optimal $U$ thus tends to be unitary; photon leakage into the garbage modes should be avoided. Still, convergence is improved because our optimization routine is allowed to pass through the middle of a unitary hyper-sphere, rather than be restricted to move along the surface.
 
 We set $U$ to a general singular value decomposition,
 \begin{equation}
@@ -230,7 +230,7 @@ according to Eq.~(\ref{Conditional Entropy}) we need to find unitary $U$ such th
 in order to implement a perfect measurement. 
 With some algebra, we find the condition in~(\ref{Conditional Entropy Condition}) is satisfied if and only if:
 \begin{flalign}
-&	\forall \quad \ket{\vec{n}^y} \mbox{,    at least one condition holds:} \nonumber \\
+&	\mbox{For each } \ket{\vec{n}^y} \mbox{,    at least one condition holds:} \nonumber \\
 & (a) \enspace A_1 = A_2 = A_3 = A_4 = 0 \nonumber \\
 & (b) \enspace A_1 = \pm A_2 \mbox{ and } A_3 = A_4 = 0 \nonumber \\ & (c) \enspace A_3 = \pm A_4 \mbox{ and } A_1 = A_2 = 0. \nonumber
 \end{flalign}
@@ -559,14 +559,14 @@ Rev. Mod. Phys. 79, 135 (2007).
 
 \bibitem{Holevo} A. S. Holevo, Probl. Peredachi Inf. \textbf{9}, 110 (1973).	
 
+\bibitem{Hausladen} P. Hausladen, R. Jozsa, B. Schumacher, M. Westmoreland, and W. K. Wootters, Phys. Rev. A. \textbf{54}, 1869, (1996).
+
 \bibitem{First Paper} J. A. Smith, D.B. Uskov, L. Kaplan Phys. Rev. A \textbf{92}, 022324 (2015).
 
 \bibitem{Uskov} Uskov Et. Al.
 Phys. Rev. A 79, 042326 (2009).
 
 \bibitem{Adami} https://arxiv.org/abs/quant-ph/9806048
-
-\bibitem{Hausladen} P. Hausladen, R. Jozsa, B. Schumacher, M. Westmoreland, and W. K. Wootters, Phys. Rev. A. \textbf{54}, 1869, (1996).
 
 \bibitem{Lloyd} S. Lloyd, V. Giovannetti, and L. Maccone, Phys. Rev. Lett. \textbf{106}, 250501 (2011).
 
