@@ -47,15 +47,15 @@
 \affiliation{Tulane University, Department of Physics, New Orleans, Louisiana 70118, USA}
 
  \begin{abstract}
- 	Bell measurements are an essential component of quantum information processing and implementing an optimal linear optical Bell state analyzer has thus been a longstanding problem in linear optical quantum computing. Despite well-established no-go theorems on a perfect Bell state analyzer, we find a numerical trend that appears to approach a \textit{near}-perfect measurement if we were to incorporate eight or more un-entangled ancilla photons into our device. Following this trend, we begin a promising inductive proof to build an ideal optical Bell measurement device. In the process, we determine that any Bell state analyzer that (even occasionally) bunches all photons into only two of the output modes cannot make an ideal measurement and we find a set of conditions on our linear optical circuit that prevent this outcome.
+ 	Reliable Bell measurements are an essential component of quantum information processing. Unfortunately, implementing a deterministic linear optical Bell measurement on photonic states has thus been a longstanding unsolved problem in linear optical quantum computing. Despite well-established no-go theorems on a perfect linear optical Bell state analyzer, we find a numerical trend that appears to approach a \textit{near}-perfect measurement if we were to incorporate eight or more un-entangled ancilla photons into our device. Following this trend, we begin a promising inductive proof to build an ideal optical Bell measurement device. In the process, we determine that any Bell state analyzer that (even occasionally) bunches all photons into only two of the output modes cannot make an ideal measurement and we find a set of conditions on our linear optical circuit that prevent this outcome.
 \end{abstract}                                                               
 \date{\today}
 \maketitle
 \section{Introduction}
 \label{Intro}
-In quantum information processing, the ability to perform proper measurements is imperative. Because of the effects of observation on superposition and entanglement, there is a fundamental difference between measurement at a quantum and macroscopic level. As a result, implementation of a quantum measurement can be non-trivial. In the linear optical quantum computing paradigm, even a seemingly simple Bell measurement has presented significant challenge. This is a problem; Bell state discrimination plays an important role in teleportation, which is a basic building-block for many quantum algorithms. Here, we attempt to use numerical techniques to design an efficient photonic Bell state analyzer using only deterministic linear optics and ancilla resources. 
+In quantum information processing, the ability to perform proper measurements is imperative. Because of the effects of observation on superposition and entanglement, there is a fundamental difference between measurement at a quantum and macroscopic level. As a result, implementation of a quantum measurement can be non-trivial. In the linear optical quantum computing paradigm, even a seemingly simple Bell measurement has presented significant challenge. This is a serious problem; Bell state discrimination plays a critical role in quantum teleportation, which is a fundamental task in quantum information processing~\cite{Chuang}. Here, we attempt to make some progress in designing an efficient photonic Bell state analyzer using only deterministic linear optics and ancilla resources. 
 
-We can encode qubits into the polarization or spatial states of a single photon. Then, the Bell states are represented by a maximally entangled EPR pair of photons. In the Fock basis, this ensemble is written
+In the standard dual-rail encoding, a qubit is represented by the polarization or spatial states of a single photon. Then, the Bell states are represented by a maximally entangled EPR pair of photons. If all four Bell states are equiprobable, this ensemble is written
 \begin{eqnarray}
 \label{Bell States Creation Operator 1}
 \ket{\phi_1} = \frac{1}{\sqrt{2}} (\hat{a}_1^\dagger \hat{a}_3^\dagger + \hat{a}_2^\dagger \hat{a}_4^\dagger) \ket{0} \\
@@ -72,18 +72,19 @@ We can encode qubits into the polarization or spatial states of a single photon.
 \label{Bell State Ensemble}
 \rho = \frac{1}{4} \sum_{x=1}^{4} \outerproduct{\phi_x}{\phi_x}. \quad  \enspace
 \end{eqnarray}
-The action of a linear optical quantum circuit on an optical state can generally be described by the transformation of creation operators~\cite{Reck}:
+
+The action of a linear optical quantum circuit on an optical state can generally be described by the transformation of creation operators~\cite{Review Paper,Reck}:
 \begin{equation}
 \label{LO Creation Operator Transformation}
 \hat{a}^\dagger_\alpha \rightarrow \sum_{\beta=1}^{M} U_{\alpha,\beta} \hat{a}^\dagger_\beta
 \end{equation}
-where $U_{\alpha,\beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). Formally, there exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are severely restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail~\cite{Review Paper} demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
+where $U_{\alpha,\beta}$ are the elements of some unitary complex matrix $U$ and $M$ is the total integer number of optical modes. As it turns out, we cannot implement a perfect von Neumann measurement in applying Eq.~(\ref{LO Creation Operator Transformation}) to Eq.~(\ref{Bell States Creation Operator 1}-\ref{Bell States Creation Operator 4}). Formally, there exists no unitary matrix $U$ such that using perfect photon-number resolving detectors at each of the four circuit output modes allows a perfectly unambiguous measurement; at least two of the Bell states will always be indistinguishable. The crux of the problem is that linearly accessible entangling operations between photons allowed by Eq.~(\ref{LO Creation Operator Transformation}) are restricted to bosonic interference~\cite{Review Paper} and we are thus unable rotate the Bell states into non-overlapping Fock spaces for a photo-counting measurement. In 2001, the KLM~\cite{KLM,KLM2} scheme for implementing a CNOT gate between two qubits encoded in the in the dual rail~\cite{Review Paper} demonstrated that incorporating probabilistic partial measurements and ancilla resources into linear optical circuits allowed a new profitable set of transformations beyond those of Eq.~(\ref{LO Creation Operator Transformation}). 
 
-A series of "no-go" theorems on optical state discrimination seemed to limit the benefit of using these extra tools in a Bell state analyzer. First, it was demonstrated by L\"utkenhaus and Calsamiglia that a completely perfect measurement on an ensemble of Bell states using only linear components, multistage partial measurements and ancilla resources cannot exist~\cite{Lutkenhaus}. This theorem was later extended by~\cite{Carollo}; we apparently cannot implement a perfect measurement using these tools on \textit{any} set of indistinguishable orthonormal Fock states. Further, in the subclass of tools using only vacuum ancilla modes, it was shown that an analyzer cannot perfectly distinguish equi-probable Bell states (the ensemble in Eq.~(\ref{Bell State Ensemble})) more than half of the time~\cite{Calsamiglia}. However, it was shown by~\cite{Ewert} that this upper bound is lifted if we don't restrict our ancilla modes to be vacuum.
+A series of "no-go" theorems on optical state discrimination seemed to limit the benefit of using these extra tools in a Bell state analyzer. First, it was demonstrated by L\"utkenhaus and Calsamiglia that a completely perfect measurement on an ensemble of Bell states using only linear components, multistage partial measurements and ancilla resources cannot exist~\cite{Lutkenhaus}. This theorem was later extended by~\cite{Carollo}; we apparently cannot implement a perfect measurement using these tools on \textit{any} set of indistinguishable orthonormal photonic states. Further, in the subset of tools using only vacuum ancilla modes, it was shown that an analyzer cannot perfectly distinguish equi-probable Bell states (the ensemble in Eq.~(\ref{Bell State Ensemble})) more than half of the time~\cite{Calsamiglia}. However, it was shown by~\cite{Ewert} that this upper bound is lifted if we don't restrict our ancilla modes to be vacuum.
 
-These no-go theorems are, however, somewhat complicated by the fact that they don't provide an exact upper bound on distinguishability. A "perfect" measurement is a meaningless limit in the real world and an arbitrarily close-to-perfect measurement would be  equally as invaluable for practical applications in quantum information processing. In 2011,~\cite{Pavicic} presented a scheme for near-perfect Bell state discrimination, though this paper was later retracted. This is clearly a difficult problem with no easy solutions.
+These no-go theorems are, however, complicated by the fact that they don't provide an exact upper bound on distinguishability. A "perfect" measurement is a meaningless limit in the real world and an arbitrarily close-to-perfect measurement would be  equally as invaluable for practical applications in quantum information processing. In 2011,~\cite{Pavicic} presented a scheme for near-perfect Bell state discrimination, though this paper was later retracted. This is clearly a difficult problem with no easy solutions.
 
-Here, we use computational techniques to find a clear trend in linear improvement to Bell state measurements using only ancilla photons and vacuum modes (we find using multistage measurements to be ineffectual). Extrapolating these results, we apply analytic techniques to learn what we can about effective linear optical analyzers. We've made some progress, which may be of use to others who are working on this problem.
+Here, we use computational techniques to find a clear trend in linear improvement to Bell state measurements using only ancilla photons and vacuum modes (we find using multistage measurements to be minimally beneficial). Extrapolating these results, we apply analytic techniques to learn what we can about effective linear optical analyzers. We determine any device that bunches all photons into two or less modes under any circumstances cannot make a perfect measurement. Finally, we present a set of conditions on $U$ that prevent this outcome. With enough patience, this proof could be extended to develop an optimal Bell state analyzer. 
 \section{Transforming the Bell states}
 An optical quantum state can be written as a complex vector
 \begin{equation}
@@ -120,7 +121,7 @@ e.g. the first Bell state is
 	\ket{\psi_1} = \frac{1}{\sqrt{2}}  \ket{1,1,\dots,1_{N_a},1,0,1,0} \\
 	+ \frac{1}{\sqrt{2}} \ket{1,1,\dots,1_{N_a},0,1,0,1}. \nonumber 
 \end{eqnarray}
-The reader should note the total number of photons and modes are now
+The total number of photons and modes are now
 \begin{eqnarray}
 	& N = N_a + 2 \\
 	& M = N_a + 4.
@@ -133,7 +134,7 @@ If Alice sends Bell state $\ket{\psi_x}$, the probability Bob measures state $\k
 \end{equation}
 \section{The Classical Mutual Information}
 \label{Section on Mutual Entropy}
-To gauge the success of Bob's measurement device, we choose the classical mutual information, $H(X:Y)$. This quantity is bound from above by Holevo's theorem which is
+To gauge the success of Bob's measurement device, we choose the classical mutual information, $H(X:Y)$. This quantity is bound from above by Holevo's theorem~\cite{Holevo} which is
 given by
 \begin{equation}
 \label{Holevo Theorem}
@@ -162,7 +163,7 @@ H(X|Y) = \frac{1}{4} \sum_{y \in Y} \sum_{x \in X} p(y|x) \log_2 \frac{\sum_{x^\
 \end{equation}
 \section{Numerical Minimization of the conditional information}
 \label{Section on Numerical Minimization}
-To test the capability of a linear optical Bell state analyzer, we can numerically minimize Eq.~(\ref{Conditional Entropy}) over the circuit design $U$. In general, $U$ is constrained to be unitary. Here, however, we find minimization convergence is improved if we allow $U$ to be \textit{sub-unitary}, meaning $U$ can be any complex matrix such that the singular values all satisfy $\lambda \le 1$. This is equivalent to allowing vacuum modes outside the space of our measurement modes on which we do not perform any measurement. We call these modes the garbage modes and need to add a term to Eq.~(\ref{Conditional Entropy}) to accommodate them
+To test the capability of a linear optical Bell state analyzer, we can numerically minimize Eq.~(\ref{Conditional Entropy}) over the circuit design $U$. In general, $U$ is constrained to be unitary. Here, however, we find minimization convergence is improved if we allow $U$ to be \textit{sub-unitary}, meaning $U$ can be any complex matrix such that the singular values are are less than or equal to one. This is equivalent to allowing vacuum modes outside the space of our measurement modes on which we do not perform any measurement. We call these modes the garbage modes and need to add a term to Eq.~(\ref{Conditional Entropy}) to accommodate them
 \begin{equation}
 \label{Condition Information with Garbage modes}
 \small	\tilde{H}(X|Y) = H(X|Y) + \sum_{x \in X} \tilde{p}(y|x) \log_2 \frac{\sum_{x^\prime} \tilde{p}(y|x^\prime)}{\tilde{p}(y|x)}\,
@@ -171,7 +172,7 @@ where
 \begin{equation}
 	\tilde{p}(y|x) = 1 - \sum_{y \in Y} p(y|x).
 \end{equation}
-In other words, all measurement outcomes in which photons have leaked into the garbage modes are consolidated into one.
+In other words, all measurement outcomes in which photons have leaked into the garbage modes are consolidated into one. Optimal results thus tend to be unitary; convergence is improved because our optimization routine is allowed to pass through the middle of a unitary hyper-sphere, rather than be restricted to move along the surface.
 
 We set $U$ to a general singular value decomposition,
 \begin{equation}
@@ -186,20 +187,20 @@ where
 	& \vdots & \vdots & \ddots & \vdots \\
 	0 & 0 & 0 & \hdots & e^{-\lambda^2_M} \end{pmatrix} 
 \end{eqnarray}
-and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermitian matrices $\tilde{V}$, $\tilde{W}$ and real numbers $\{\lambda_k\}$ using a quasi-Newton method without any constraints. Results are presented in Fig.~(\ref{Mutual Information Results}).
+and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermitian matrices $\tilde{V}$, $\tilde{W}$ and real numbers $\{\lambda_k\}$ using a quasi-Newton method without any constraints; results are presented in Fig.~(\ref{Mutual Information Results}).
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width= 0.48 \textwidth]{./EntropyData.pdf}
-	\caption{ Maximum mutual information $H(X:Y)$ in bits as a function of ancilla photons, $N_a$. With every additional pair of ancilla photons, we observe a gain in the mutual information of 0.125 bits. }
+	\caption{ Maximum mutual information $H(X:Y)$ in bits as a function of ancilla photons, $N_a$. With every additional pair of ancilla photons, we observe a gain in the mutual information of 0.125 bits. A mutual entropy of $H(X:Y) = 2$ bits corresponds to a perfect measurement.}
 	\label{Mutual Information Results}
 \end{figure}
-We note that with every additional pair of ancilla photons, the mutual information appears to linearly approach a near-perfect measurement. If the trend continues, we expect a minimum ancilla resource of $N_a \ge 8$. For $N_a \ge 6$, the optimization routine becomes overwhelmed by local minima. We speculate the $N_a=6$ data point in Fig.~(\ref{Mutual Information Results}) is not a global solution for that case. We parallelized the construction of $\hat{A}(U)$ over hundreds of processes, using two Intel Xeon Phi Coprocessors. We tried BFGS, Levenberg-Marquardt, Nelder-Meade and principal axis minimization algorithms. With any of these methods, convergence still struggled for $N_a \ge 6$. In this regime, we recommend trying something other than numerical optimization.
+We note that with every additional pair of ancilla photons, the mutual information appears to linearly approach a near-perfect measurement. If the trend continues, we expect a minimum ancilla resource of $N_a \ge 8$. For $N_a \ge 6$, the optimization routine becomes overwhelmed by local minima. We speculate the $N_a=6$ data point in Fig.~(\ref{Mutual Information Results}) is not a global solution for that case. We parallelized the construction of $\hat{A}(U)$ over hundreds of processes, using two Intel Xeon Phi Coprocessors. We tried BFGS, Levenberg-Marquardt, Nelder-Meade and principal axis minimization algorithms. With any of these methods, convergence still struggled for $N_a \ge 6$.
 \section{Analysis of $U$}
 \label{Section on U Analysis}
-The numerical results in Sec.~\ref{Section on Numerical Minimization} seem to suggest a discrete improvement as we incorporate pairs of ancilla photons into our Bell state analyzer. We now approach the problem from another other direction; we try to solve for unitary $U$ directly \textit{assuming} a perfect measurement is possible.
+The numerical results in Sec.~\ref{Section on Numerical Minimization} seem to suggest a discrete improvement in state distinguishability as we incorporate un-entangled pairs of ancilla photons into our Bell state analyzer. Extrapolating this trend, we can try to solve for a unitary $U$ assuming a perfect measurement is possible. 
 We first define the complex variables
 \begin{eqnarray}
-	 A_1 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+1,m^y_{N_a+1}} U_{N_a+3,m^y_{N_a+2}} \nonumber\\
+	\small{ A_1 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+1,m^y_{N_a+1}} U_{N_a+3,m^y_{N_a+2}}} \nonumber\\
 	 A_2 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+2,m^y_{N_a+1}} U_{N_a+4,m^y_{N_a+2}} \nonumber\\
 	 A_3 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+1,m^y_{N_a+1}} U_{N_a+4,m^y_{N_a+2}} \nonumber\\
 	 A_4 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+2,m^y_{N_a+1}} U_{N_a+3,m^y_{N_a+2}} \nonumber
@@ -221,7 +222,7 @@ and
 \begin{equation}
 	\log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)} \ge 0 \,,
 \end{equation}
-according to Eq.~(\ref{Conditional Entropy}) we need to find $U$ such that
+according to Eq.~(\ref{Conditional Entropy}) we need to find unitary $U$ such that
 \begin{equation}
 \label{Conditional Entropy Condition}
 	\forall \enspace x \enspace y , \quad p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)} = 0
@@ -240,7 +241,7 @@ We start with output states where photons are bunched into two modes; states of 
 \label{Measurement Outcome Bunched Two Modes}
 	\ket{\vec{n}^y} = \ket{0,\dots,0,(N-P)_L,0,\dots,P_l,\dots,0}.
 \end{equation}
-Starting with the case of $P=0$ and $N$ photons in the $L^{th}$ mode
+Beginning with the case of $P=0$ and $N$ photons in the $L^{th}$ mode, our measurement state is
 \begin{equation}
 	\ket{\vec{n}^y_{P=0}} = \ket{0,\dots,N_L,\dots,0} \quad \ket{\vec{m}^y_{P=0}} = \ket{L,\dots,L_N}. \nonumber
 \end{equation}
@@ -272,7 +273,7 @@ In this case
 	\end{flalign}
 	while conditions $(b)$ and $(c)$ cannot be satisfied for $\ket{\vec{n}^y_{P=1}}$.
 	
-	We repeat this process in a proof by induction, revising the conditions $(i), (ii), \dots$ as we increase $P$ in Eq.~(\ref{Measurement Outcome Bunched Two Modes}) to $N/2$. In all cases we find $(b)$ and $(c)$ can never be satisfied. $(a)$ is satisfied for all states $ 0 \le P \le N/2 $ if and only if at least one one condition holds for each column $L$ of $U$:
+	We repeat this process in a proof by induction, revising the conditions $(i), (ii), \dots$ as we increase $P$ in Eq.~(\ref{Measurement Outcome Bunched Two Modes}) to $N/2$. In all cases we find $(b)$ and $(c)$ can never be satisfied. Thus, a measurement outcome in the form of Eq.~(\ref{Measurement Outcome Bunched Two Modes}) is guaranteed to be ambiguous. $(a)$ is satisfied for all states $ 0 \le P \le N/2 $ if and only if at least one one condition holds for each column $L$ of $U$:
 	\begin{flalign}
 %	& \small(i) \enspace U_{S_j,L} = 0 \mbox{ for at least $\frac{N}{2}+1$ distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
 %	& \small(ii) \enspace U_{S_j,L} = 0 \mbox{ for at least $\frac{N}{2}$ distinct } S_j \in \{1,\dots,N_a\} \nonumber \\
@@ -303,7 +304,7 @@ In this case
 			& \small \quad \quad \quad \enspace \enspace \enspace U_{s_l,l} = 0 \mbox{ for at least one } s_l \in \{ S_1,\dots \} \nonumber
 	\end{flalign}
 Since these conditions hold for any pair of modes $L,l$, increasing $P$ to $N/2$ is sufficient for all measurement states of the form in Eq.~(\ref{Measurement Outcome Bunched Two Modes}). 
-	\section{Discussion}
+	\section{Conclusion}
 We are now ready to present a key result:
 \begin{center}
 	\boxed{
@@ -532,22 +533,38 @@ Again, this can be done inductively by imposing and then revising conditions $(I
 \acknowledgments
 We are thankful for helpful discussions with M. Levenstien and R. Budin. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
 \begin{thebibliography}{99}
+	
+\bibitem{Chuang} D. Gottesman and I. Chuang, Nature {\bf 402}, 390-393 (1999)
+
+\bibitem{Review Paper} Kok Et. Al.
+Rev. Mod. Phys. 79, 135 (2007).
 
 \bibitem{Reck} M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani, Phys. Rev. Lett. {\bf 73}, 58 (1994).
+
+\bibitem{KLM}  E. Knill, R. Laflamme, G. J. Milburn, Nature (London) 409, 46 (2001).
+
+\bibitem{KLM2} C. R. Myers and R. Laflamme, arXiv:quant-ph/0512104 (2005).
+
+\bibitem{Lutkenhaus} N. L\"utkenhaus, J. Calsamiglia, and K.-A. Suominen, Phys. Rev. A {\bf 59}, 3295 (1999).
+
+\bibitem{Carollo} A. Carollo and G. M. Palma, J. Mod. Opt. {\bf 49}, 1147 (2002).
+
+\bibitem{Calsamiglia} J. Calsamiglia and N. L\"utkenhaus, Applied Physics B {\bf 72}, 67 (2001).
+
+\bibitem{Ewert} F. Ewert and P. Loock, Physical Review Letters, {\bf 113}, 140403 (2014).
+
+\bibitem{Pavicic} M. Pavi\v{c}i\'c, Phys. Rev. Lett. {\bf 107}, 080403 (2011) (retracted).
+
+\bibitem{Jake Smith} J. A. Smith and L. Kaplan, arXiv: https://arxiv.org/abs/1711.01319 (2017).
 
 \bibitem{Holevo} A. S. Holevo, Probl. Peredachi Inf. \textbf{9}, 110 (1973).	
 
 \bibitem{First Paper} J. A. Smith, D.B. Uskov, L. Kaplan Phys. Rev. A \textbf{92}, 022324 (2015).
 
-\bibitem{KLM}  E. Knill, R. Laflamme, G. J. Milburn, Nature (London) 409, 46 (2001).
-
 \bibitem{Uskov} Uskov Et. Al.
 Phys. Rev. A 79, 042326 (2009).
 
 \bibitem{Adami} https://arxiv.org/abs/quant-ph/9806048
-
-\bibitem{Review Paper} Kok Et. Al.
-Rev. Mod. Phys. 79, 135 (2007).
 
 \bibitem{Hausladen} P. Hausladen, R. Jozsa, B. Schumacher, M. Westmoreland, and W. K. Wootters, Phys. Rev. A. \textbf{54}, 1869, (1996).
 
@@ -555,25 +572,11 @@ Rev. Mod. Phys. 79, 135 (2007).
 
 \bibitem{Lloyd Other} V. Giovannetti, S. Lloyd, and L. Maccone, Phys. Rev. A \textbf{85}, 012302, (2012).
 
-\bibitem{KLM2} C. R. Myers and R. Laflamme, arXiv:quant-ph/0512104 (2005).
-
 \bibitem{Ogawa} T. Ogawa, IEEE Trans. Inf. Theory \textbf{45}, 2486 (1999).
 
 \bibitem{Nagaoka} T. Ogawa and H. Nagaoka, IEEE Trans. Inf. Theory \textbf{53}, 2261 (2007).
 
 \bibitem{Hayashi} M. Hayashi and H. Nagaoka, IEEE Trans. Inf. Theory \textbf{49}, 1753 (2003).
-
-\bibitem{Lutkenhaus} N. L\"utkenhaus, J. Calsamiglia, and K.-A. Suominen, Phys. Rev. A {\bf 59}, 3295 (1999).
-
-\bibitem{Carollo} A. Carollo and G. M. Palma, J. Mod. Opt. {\bf 49}, 1147 (2002).
-
-\bibitem{Pavicic} M. Pavi\v{c}i\'c, Phys. Rev. Lett. {\bf 107}, 080403 (2011) (retracted).
-
-\bibitem{Calsamiglia} J. Calsamiglia and N. L\"utkenhaus, Applied Physics B {\bf 72}, 67 (2001).
-
-\bibitem{Ewert} F. Ewert and P. Loock, Physical Review Letters, {\bf 113}, 140403 (2014).
-
-\bibitem{Jake Smith} J. A. Smith and L. Kaplan, arXiv: https://arxiv.org/abs/1711.01319 (2017).
 
 \end{thebibliography}
 
