@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      5847,        164]
-NotebookOptionsPosition[      5534,        148]
-NotebookOutlinePosition[      5875,        163]
-CellTagsIndexPosition[      5832,        160]
+NotebookDataLength[      5937,        169]
+NotebookOptionsPosition[      5506,        151]
+NotebookOutlinePosition[      5841,        166]
+CellTagsIndexPosition[      5798,        163]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -38,7 +38,7 @@ Cell[BoxData[{
      RowBox[{"{", 
       RowBox[{"5", ",", "1.75"}], "}"}], ",", 
      RowBox[{"{", 
-      RowBox[{"6", ",", "1.763"}], "}"}]}], "}"}]}], 
+      RowBox[{"6", ",", "1.76364623755789"}], "}"}]}], "}"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{"ListPlot", "[", 
   RowBox[{"data", ",", 
@@ -83,72 +83,75 @@ Cell[BoxData[{
    3.720535529100506*^9, {3.720535572283578*^9, 3.720535617074651*^9}, {
    3.720535664678069*^9, 3.720535705823923*^9}, {3.720535768197659*^9, 
    3.720535794887073*^9}, {3.720535849061427*^9, 3.720535915342764*^9}, {
-   3.720535985350933*^9, 3.720535985697398*^9}}],
+   3.720535985350933*^9, 3.720535985697398*^9}, 3.721137485972754*^9, 
+   3.721137533923913*^9},ExpressionUUID->"68faf859-7d10-44cc-8b29-\
+f9fc244d4d35"],
 
 Cell[BoxData[
- FormBox[
-  GraphicsBox[{{}, {
-     {RGBColor[0.368417, 0.506779, 0.709798], AbsolutePointSize[6], 
-      AbsoluteThickness[1.6], GeometricTransformationBox[InsetBox[
-        StyleBox["\[FilledSquare]",
-         StripOnInput->False,
-         FontSize->30], {0., 0.}], {{{0., 1.5}}, {{1., 1.5}}, {{2., 
-       1.625}}, {{3., 1.625}}, {{4., 1.75}}, {{5., 1.75}}, {{6., 
-       1.763}}}]}, {}}, {}, {}, {{}, {}}},
-   AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
-   Axes->{True, True},
-   AxesLabel->{
-     FormBox[
-      SubscriptBox["\"N\"", "\"a\""], TraditionalForm], 
-     FormBox["\"H(X:Y)\"", TraditionalForm]},
-   AxesOrigin->{-0.5, 1.45},
-   DisplayFunction->Identity,
-   Frame->{{False, False}, {False, False}},
-   FrameLabel->{{None, None}, {None, None}},
-   FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
-   GridLines->{None, None},
-   GridLinesStyle->Directive[
-     GrayLevel[0.5, 0.4]],
-   ImagePadding->All,
-   ImageSize->{702., Automatic},
-   LabelStyle->{FontSize -> 30},
-   Method->{"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
-         (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
-          Part[#, 1]], 
-         (Part[{{Identity, Identity}, {Identity, Identity}}, 2, 2][#]& )[
-          Part[#, 2]]}& ), "CopiedValueFunction" -> ({
-         (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
-          Part[#, 1]], 
-         (Part[{{Identity, Identity}, {Identity, Identity}}, 2, 2][#]& )[
-          Part[#, 2]]}& )}},
-   PlotRange->{{-1, 6.5}, {1.4, 1.8}},
-   PlotRangeClipping->True,
-   PlotRangePadding->{{0, 0}, {0, 0}},
-   Ticks->{{{0, 
-       FormBox["0", TraditionalForm]}, {1, 
-       FormBox["1", TraditionalForm]}, {2, 
-       FormBox["2", TraditionalForm]}, {3, 
-       FormBox["3", TraditionalForm]}, {4, 
-       FormBox["4", TraditionalForm]}, {5, 
-       FormBox["5", TraditionalForm]}, {6, 
-       FormBox["6", TraditionalForm]}}, {{1.5, 
-       FormBox["1.5`", TraditionalForm]}, {1.625, 
-       FormBox["1.625`", TraditionalForm]}, {1.75, 
-       FormBox["1.75`", TraditionalForm]}, {1.875, 
-       FormBox["1.875`", TraditionalForm]}, {2., 
-       FormBox["2.`", TraditionalForm]}}}], TraditionalForm]], "Output",
+ GraphicsBox[{{}, {
+    {RGBColor[0.368417, 0.506779, 0.709798], AbsolutePointSize[6], 
+     AbsoluteThickness[1.6], GeometricTransformationBox[InsetBox[
+       StyleBox["\[FilledSquare]",
+        StripOnInput->False,
+        FontSize->30], {0., 0.}], {{{0., 1.5}}, {{1., 1.5}}, {{2., 1.625}}, {{
+      3., 1.625}}, {{4., 1.75}}, {{5., 1.75}}, {{6., 
+      1.76364623755789}}}]}, {}}, {}, {}, {{}, {}}, {{}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{
+    FormBox[
+     SubscriptBox["\"N\"", "\"a\""], TraditionalForm], 
+    FormBox["\"H(X:Y)\"", TraditionalForm]},
+  AxesOrigin->{-0.5, 1.45},
+  DisplayFunction->Identity,
+  Frame->{{False, False}, {False, False}},
+  FrameLabel->{{None, None}, {None, None}},
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImagePadding->All,
+  ImageSize->{702., Automatic},
+  LabelStyle->{FontSize -> 30},
+  Method->{"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& )}},
+  PlotRange->{{-1, 6.5}, {1.4, 1.8}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{0, 0}, {0, 0}},
+  Ticks->{{{0, 
+      FormBox["0", TraditionalForm]}, {1, 
+      FormBox["1", TraditionalForm]}, {2, 
+      FormBox["2", TraditionalForm]}, {3, 
+      FormBox["3", TraditionalForm]}, {4, 
+      FormBox["4", TraditionalForm]}, {5, 
+      FormBox["5", TraditionalForm]}, {6, 
+      FormBox["6", TraditionalForm]}}, {{1.5, 
+      FormBox["1.5`", TraditionalForm]}, {1.625, 
+      FormBox["1.625`", TraditionalForm]}, {1.75, 
+      FormBox["1.75`", TraditionalForm]}, {1.875, 
+      FormBox["1.875`", TraditionalForm]}, {2., 
+      FormBox["2.`", TraditionalForm]}}}]], "Output",
  CellChangeTimes->{
   3.720535047891526*^9, 3.720535102068345*^9, {3.720535139427002*^9, 
    3.7205351578529*^9}, 3.7205352110263577`*^9, {3.720535251580948*^9, 
    3.720535274499308*^9}, 3.7205355300683193`*^9, {3.720535586756109*^9, 
    3.720535617721468*^9}, 3.720535706331273*^9, {3.720535768917252*^9, 
    3.7205357954039383`*^9}, {3.7205358611058407`*^9, 3.720535915819169*^9}, 
-   3.720535986151993*^9}]
+   3.720535986151993*^9, 3.721137488789234*^9, 
+   3.721137535843704*^9},ExpressionUUID->"0d6ead6a-9d8e-462e-b080-\
+527e354f858b"]
 }, Open  ]]
 },
 WindowSize->{935, 754},
-WindowMargins->{{Automatic, 179}, {-23, Automatic}},
-FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
+WindowMargins->{{Automatic, 179}, {0, Automatic}},
+FrontEndVersion->"11.1 for Linux x86 (64-bit) (April 18, 2017)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -163,8 +166,10 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 2290, 63, 103, "Input"],
-Cell[2873, 87, 2645, 58, 473, "Output"]
+Cell[580, 22, 2406, 65, 103, "Input", "ExpressionUUID" -> \
+"68faf859-7d10-44cc-8b29-f9fc244d4d35"],
+Cell[2989, 89, 2501, 59, 473, "Output", "ExpressionUUID" -> \
+"0d6ead6a-9d8e-462e-b080-527e354f858b"]
 }, Open  ]]
 }
 ]
