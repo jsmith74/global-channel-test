@@ -107,7 +107,7 @@ We define
 where $m_\alpha$ is the mode-location of photon number $\alpha$ and $N$ is the total number of photons in the system. Of course the choice of vector $\ket{\vec{m}}$ for a given $\ket{\vec{n}}$ is not unique, since photons are indistinguishable and labeling them is an arbitrary process. We simply need to choose \textit{some} labeling and pick any valid $\ket{\vec{m}}$ for each $\ket{\vec{n}}$. Then the elements of the matrix representation of $\hat{A}(U)$ in the basis $\outerproduct{\vec{n}^\prime}{\vec{n}}$ are given by
 \begin{eqnarray}
 \label{A_U}
-A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{p=1}^{M} \frac{\sqrt{n_p^\prime !}}{\sqrt{n_p !}} \left[\sum_{\textrm{perm}(\vec{m}^\prime)} U_{m_1, m_1^\prime} U_{m_2, m_2^\prime} \dots U_{m_N, m_N^\prime} \right] \,,
+A(U)_{\vec{n}^\prime,\vec{n}} = \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \\ \small \nonumber \prod_{k=1}^{M} \frac{\sqrt{n_k^\prime !}}{\sqrt{n_k !}} \left[\sum_{\textrm{perm}(\vec{m}^\prime)} U_{m_1, m_1^\prime} U_{m_2, m_2^\prime} \dots U_{m_N, m_N^\prime} \right] \,,
 \end{eqnarray}
 where the summation is over all distinct permutations of integer entries in the vector $\vec{m}^\prime$. For proof of Eq.~(\ref{A_U}), see~\cite{Jake Smith}.
 
@@ -166,7 +166,7 @@ H(X|Y) = \frac{1}{4} \sum_{y \in Y} \sum_{x \in X} p(y|x) \log_2 \frac{\sum_{x^\
 To test the capability of a linear optical Bell state analyzer, we can numerically minimize Eq.~(\ref{Conditional Entropy}) over the circuit design $U$. In general, $U$ is constrained to be unitary. Here, however, we find minimization convergence is improved if we allow $U$ to be \textit{sub-unitary}, meaning $U$ can be any complex matrix such that the singular values are are less than or equal to one. This is equivalent to allowing vacuum modes outside the space of our measurement modes on which we do not perform any measurement. We call these modes the garbage modes and need to add a term to Eq.~(\ref{Conditional Entropy}) to accommodate them
 \begin{equation}
 \label{Condition Information with Garbage modes}
-\small	\tilde{H}(X|Y) = H(X|Y) + \sum_{x \in X} \tilde{p}(y|x) \log_2 \frac{\sum_{x^\prime} \tilde{p}(y|x^\prime)}{\tilde{p}(y|x)}\,
+\small	\tilde{H}(X|Y) = H(X|Y) +  \frac{1}{4} \sum_{x \in X} \tilde{p}(y|x) \log_2 \frac{\sum_{x^\prime} \tilde{p}(y|x^\prime)}{\tilde{p}(y|x)}\,
 \end{equation}
 where
 \begin{equation}
@@ -183,9 +183,9 @@ where
 \begin{eqnarray}
 	& V = e^{i \tilde{V}} \\
 	& W = e^{i \tilde{W}} \\
-	& D =  \begin{pmatrix} e^{-\lambda^2_1} & 0 & 0 & \hdots & 0 \\ 0 & e^{-\lambda^2_2} & 0 & \hdots & 0 \\ 0 & 0 & e^{-\lambda^2_3} & \hdots & 0 \\ \vdots
+	& D =  \begin{pmatrix} e^{-(\lambda_1)^2} & 0 & 0 & \hdots & 0 \\ 0 & e^{-(\lambda_2)^2} & 0 & \hdots & 0 \\ 0 & 0 & e^{-(\lambda_3)^2} & \hdots & 0 \\ \vdots
 	& \vdots & \vdots & \ddots & \vdots \\
-	0 & 0 & 0 & \hdots & e^{-\lambda^2_M} \end{pmatrix} 
+	0 & 0 & 0 & \hdots & e^{-(\lambda_M)^2} \end{pmatrix} 
 \end{eqnarray}
 and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermitian matrices $\tilde{V}$, $\tilde{W}$ and real numbers $\{\lambda_k\}$ using a quasi-Newton method without any constraints; results are presented in Fig.~(\ref{Mutual Information Results}).
 \begin{figure}[ht]
@@ -198,7 +198,7 @@ We note that with every additional pair of ancilla photons, the mutual informati
 \section{Analysis of $U$}
 \label{Section on U Analysis}
 The numerical results in Sec.~\ref{Section on Numerical Minimization} seem to suggest a discrete improvement in state distinguishability as we incorporate un-entangled pairs of ancilla photons into our Bell state analyzer. Extrapolating this trend, we can try to solve for a unitary $U$ assuming a perfect measurement is possible. 
-We first define the complex variables
+We first define the complex numbers
 \begin{eqnarray}
 	\small{ A_1 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+1,m^y_{N_a+1}} U_{N_a+3,m^y_{N_a+2}}} \nonumber\\
 	 A_2 = \sum\limits_{\textrm{perm}(\vec{m}^y)} U_{1,m^y_1} \dots U_{N_a,m^y_{N_a}} U_{N_a+2,m^y_{N_a+1}} U_{N_a+4,m^y_{N_a+2}} \nonumber\\
@@ -207,12 +207,12 @@ We first define the complex variables
 \end{eqnarray}
 then
 \begin{eqnarray}
-	& C = \frac{1}{2}\prod_{p=1}^{M} n^y_p! \nonumber \\
+	& C = \frac{1}{2}\prod_{k=1}^{M} n^y_k! \nonumber \\
 	& p(y|1) = C \abs{A_1 + A_2}^2\nonumber \\
 	& p(y|2) = C \abs{A_1 - A_2}^2 \\
 	& p(y|3) = C \abs{A_3 + A_4}^2 \nonumber\\
 	& p(y|4) = C \abs{A_3 - A_4}^2 \nonumber\\
-	& \sum_{x \in X} p(y|x) = C(\abs{A_1}^2 + \abs{A_2}^2 + \abs{A_3}^2 + \abs{A_4}^2 ). \nonumber
+	& \sum_{x \in X} p(y|x) = 2 C(\abs{A_1}^2 + \abs{A_2}^2 + \abs{A_3}^2 + \abs{A_4}^2 ). \nonumber
 \end{eqnarray}
 Because 
 \begin{equation}
@@ -225,14 +225,14 @@ and
 according to Eq.~(\ref{Conditional Entropy}) we need to find unitary $U$ such that
 \begin{equation}
 \label{Conditional Entropy Condition}
-	\forall \enspace x \enspace y , \quad p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)} = 0
+	 p(y|x) \log_2 \frac{\sum_{x^\prime} p(y|x^\prime)}{p(y|x)} = 0 \quad \forall \enspace x,y
 \end{equation}
 in order to implement a perfect measurement. 
 With some algebra, we find the condition in~(\ref{Conditional Entropy Condition}) is satisfied if and only if:
 \begin{flalign}
 &	\mbox{For each } \ket{\vec{n}^y} \mbox{,    at least one condition holds:} \nonumber \\
 & (a) \enspace A_1 = A_2 = A_3 = A_4 = 0 \nonumber \\
-& (b) \enspace A_1 = \pm A_2 \mbox{ and } A_3 = A_4 = 0 \nonumber \\ & (c) \enspace A_3 = \pm A_4 \mbox{ and } A_1 = A_2 = 0. \nonumber
+& (b) \enspace A_1 = \pm A_2 \ne 0 \mbox{ and } A_3 = A_4 = 0 \nonumber \\ & (c) \enspace A_3 = \pm A_4 \ne 0 \mbox{ and } A_1 = A_2 = 0. \nonumber
 \end{flalign}
 So now, we can simply go through the output measurement states for $N_a \ge 8$, and find constraints on $U$ such that either (a),(b) or (c) is satisfied for each $\ket{\vec{n}^y}$.
 
@@ -257,7 +257,7 @@ In this case
 	& (i) \enspace U_{S_j,L} = 0 \mbox{ for at least one } S_j \in \{1,\dots,N_a\} \nonumber \\
 	& (ii) \enspace U_{N_a+1,L} = U_{N_a+2,L} = 0 \nonumber \\ & (iii) \enspace U_{N_a+3,L} = U_{N_a+4,L} = 0. \nonumber
 	\end{flalign}
-	Of course, we need condition $(a)$ to be satisfied for \textit{all} measurement states $\ket{\vec{n}^y_{P=0}}$. Thus, $(i)$ or $(ii)$ or $(iii)$ must be satisfied for each column $L$ of $U$.
+	Of course, we need condition $(a)$ to be satisfied for \textit{all} mode choices $L$ in the measurement states $\ket{\vec{n}^y_{P=0}}$. Thus, $(i)$ or $(ii)$ or $(iii)$ must be satisfied for each column $L$ of $U$.
 	
 	We next look at the measurement states where $P=1$;
 	\begin{eqnarray}
