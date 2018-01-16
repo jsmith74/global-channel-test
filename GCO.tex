@@ -191,10 +191,10 @@ and minimize Eq.~(\ref{Condition Information with Garbage modes}) over all hermi
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width= 0.48 \textwidth]{./EntropyData.pdf}
-	\caption{ Maximum mutual information $H(X:Y)$ in bits as a function of ancilla photons, $N_a$. With every additional pair of un-entangled ancilla photons, we observe a gain in the mutual information of 0.125 bits. A mutual entropy of $H(X:Y) = 2$ bits corresponds to a perfect measurement.}
+	\caption{ Maximized mutual information $H(X:Y)$ in bits as a function of ancilla photons, $N_a$. With every additional pair of un-entangled ancilla photons, we observe a gain in the mutual information of 0.125 bits. A mutual entropy of $H(X:Y) = 2$ bits corresponds to a perfect measurement.}
 	\label{Mutual Information Results}
 \end{figure}
-We note that with every additional pair of ancilla photons, the mutual information appears to linearly approach a near-perfect measurement. If the trend continues, we expect a minimum ancilla resource of $N_a \ge 8$. For $N_a \ge 6$, the optimization routine becomes overwhelmed by local minima. We speculate the $N_a=6$ data point in Fig.~(\ref{Mutual Information Results}) is not a global solution for that case. We parallelized the construction of $\hat{A}(U)$ over hundreds of processes, using two Intel Xeon Phi Coprocessors. We tried BFGS, Levenberg-Marquardt, Nelder-Meade and principal axis minimization algorithms. With any of these methods, convergence still struggled for $N_a \ge 6$.
+We note that with every additional pair of ancilla photons, the mutual information appears to linearly approach a near-perfect measurement. If the trend continues, we expect a minimum ancilla resource of $N_a \ge 8$. For $N_a \ge 6$, the optimization routine becomes overwhelmed by local minima. We speculate the $N_a=6$ data point in Fig.~(\ref{Mutual Information Results}) is not a global solution for that case. We parallelized the construction of $\hat{A}(U)$ over hundreds of processors, using two Intel Xeon Phi Coprocessors. We tried BFGS, Levenberg-Marquardt, Nelder-Meade and principal axis minimization algorithms. With any of these methods, convergence still struggled for $N_a \ge 6$.
 \section{Analysis of $U$}
 \label{Section on U Analysis}
 The numerical results in Sec.~\ref{Section on Numerical Minimization} seem to suggest a discrete improvement in state distinguishability as we incorporate un-entangled pairs of ancilla photons into our Bell state analyzer. Extrapolating this trend, we can try to solve for a unitary $U$ assuming a perfect measurement is possible. 
@@ -312,16 +312,26 @@ We are now ready to present a key result:
 		A perfect linear optical Bell state analyzer cannot produce a photo-counting measurement in which all $N$ photons are bunched into just two modes. If we measure a state of the form in Eq.~(\ref{Measurement Outcome Bunched Two Modes}), then we have not perfectly distinguished the Bell states and our analyzer is flawed.
 		\newline
 		\newline
-		To prevent these measurement outcomes, we can impose conditions $(I-IV)$ on the matrix $U$. We allow some small numerical leniency for a near-perfect measurement.
+		To prevent these measurement outcomes, we can impose one of the conditions $(I,II,III,IV)$ on each column of the matrix $U$. We allow some small numerical leniency for a near-perfect measurement.
 \end{minipage}
 }
 \end{center}
+
+As a simple numerical check, we compare the mutual entropy of a Bell state analyzer with general random unitary $U$ to random unitary $U$ satisfying conditions $(I- IV)$ for $\mathcal{O}( 1000 )$ trials. Results are presented in Fig.~(\ref{Conditioned vs Uncondition Check}).
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width= 0.48 \textwidth]{./ConditionVsUncondition.pdf}
+	\caption{ Mutual entropy $H(X:Y)$ of a linear optical measurement (an application of Eq.~(\ref{LO Creation Operator Transformation}) followed by photo-counting measurement) on the Bell states as defined in Eq.~(\ref{Bell States Phi}) in the case $N_a,M_a = 6$. We compare random general unitary $U$ to random unitary $U$ satisfying conditions $(I-IV)$. }
+	\label{Conditioned vs Uncondition Check}
+\end{figure}
+
 The next step is to examine measurement states in which all $N$ photons are bunched into three modes; states of the form
 \begin{equation}
 \label{Measurement Outcome Bunched Three Modes}
 \small 	\ket{\vec{n}^y} =\ket{0,\dots,(N-P)_L,\dots,(P-Q)_{l_1},\dots,Q_{l_2},\dots}.
 \end{equation} 
 Again, this can be done inductively by imposing and then revising conditions $(I-IV)$ at each step. With enough patience, one could carry this procedure through all measurement output states $\ket{\vec{n}^y}$ and find the true upper bound on the measurement ability of a linear Bell state analyzer. This is an enormous and tedious project that we leave for future work. Our numerical results in Fig.~(\ref{Mutual Information Results}) seems to suggest that a near-perfect Bell state measurement could be possible in the regime $N_a \ge 8$.
+
 %	\section{old stuff}
 %Previous work in maximizing the encoding capacity of an optical quantum channel~\cite{First Paper} revealed that imposing a \textit{linear optical} encoding (Alice uses only linear optical operations to encode information into a quantum ensemble) does not prevent her from achieving the true channel capacity. But any relationship counselor will tell you that real communication generally requires a good listener; just because Alice was able to optimally compress information into the channel, does not guarantee Bob will be able to extract it. In fact, we typically observe that Bob is not able to fully discriminate an a-priori set of optical quantum states if he is restricted to a linear optical photo-counting von Neumann measurement. Formally, we define our encoded ensemble of quantum states
 %\begin{equation}
@@ -531,7 +541,7 @@ Again, this can be done inductively by imposing and then revising conditions $(I
 %\section{Conclusion}
 %We'll see.
 \acknowledgments
-We are thankful for helpful discussions with M. Levenstien and R. Budin. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
+We are thankful for helpful discussions with M. Levenstien, R. Budin and F. Christian. This research was supported in part using high performance computing (HPC) resources and services provided by Technology Services at Tulane University, New Orleans, LA.
 \begin{thebibliography}{99}
 	
 \bibitem{Chuang} D. Gottesman and I. Chuang, Nature {\bf 402}, 390-393 (1999)
@@ -555,7 +565,7 @@ Rev. Mod. Phys. 79, 135 (2007).
 
 \bibitem{Pavicic} M. Pavi\v{c}i\'c, Phys. Rev. Lett. {\bf 107}, 080403 (2011) (retracted).
 
-\bibitem{Jake Smith} J. A. Smith and L. Kaplan, arXiv: https://arxiv.org/abs/1711.01319 (2017).
+\bibitem{Jake Smith} J. A. Smith and L. Kaplan, Phys. Rev. A {\bf 97}, 012320 (2018).
 
 \bibitem{Holevo} A. S. Holevo, Probl. Peredachi Inf. \textbf{9}, 110 (1973).	
 
@@ -566,7 +576,7 @@ Rev. Mod. Phys. 79, 135 (2007).
 \bibitem{Uskov} Uskov Et. Al.
 Phys. Rev. A 79, 042326 (2009).
 
-\bibitem{Adami} https://arxiv.org/abs/quant-ph/9806048
+\bibitem{Adami} N. J. Cerf, C. Adami, and P. G. Kwiat, Phys. Rev. A {\bf 57}, R1477(R) (1998).
 
 \bibitem{Lloyd} S. Lloyd, V. Giovannetti, and L. Maccone, Phys. Rev. Lett. \textbf{106}, 250501 (2011).
 
